@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Entrega - TRANS CK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 30px; color: #333; }
+        .guia-box { border: 2px solid #1a237e; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; }
+        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #1a237e; padding-bottom: 10px; }
+        .logo { color: #1a237e; font-weight: 800; font-size: 24px; }
+        .info-seccion { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; }
+        .label { font-weight: bold; color: #1a237e; display: block; }
+        .tabla-productos { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        .tabla-productos th { background: #1a237e; color: white; padding: 10px; text-align: left; font-size: 12px; }
+        .tabla-productos td { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .firma-container { margin-top: 50px; display: flex; justify-content: space-around; text-align: center; }
+        .espacio-firma { border-top: 1px solid #333; width: 150px; margin-top: 40px; padding-top: 5px; font-size: 11px; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="guia-box" id="contenidoGuia">
+        <div class="header">
+            <div class="logo">TRANS CK</div>
+            <div style="text-align: right;">
+                <div style="font-weight: bold;">GUÍA DE ENTREGA</div>
+                <div id="gFecha"></div>
+            </div>
+        </div>
+
+        <div class="info-seccion">
+            <div><span class="label">REMITENTE:</span> <span id="gRemi"></span></div>
+            <div><span class="label">GUÍA Nº:</span> <span id="gNum"></span></div>
+            <div><span class="label">CONSIGNATARIO:</span> <span id="gCons"></span></div>
+            <div><span class="label">CAMIÓN:</span> <span id="gPlaca"></span></div>
+            <div style="grid-column: span 2;"><span class="label">RUTA:</span> <span id="gRuta"></span></div>
+        </div>
+
+        <table class="tabla-productos">
+            <thead>
+                <tr>
+                    <th>DESCRIPCIÓN DE CARGA</th>
+                    <th>CANT.</th>
+                </tr>
+            </thead>
+            <tbody id="listaItems"></tbody>
+        </table>
+
+        <div class="firma-container">
+            <div class="espacio-firma">Entregado por</div>
+            <div class="espacio-firma">Recibido conforme (Firma/Sello)</div>
+        </div>
+    </div>
+
+    <div class="no-print" style="text-align:center; margin-top:20px;">
+        <button onclick="window.print()" style="padding:15px 30px; background:#1a237e; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">IMPRIMIR / PDF</button>
+        <button onclick="window.history.back()" style="background:none; border:none; color:gray; cursor:pointer; display:block; margin: 15px auto;">Volver</button>
+    </div>
+
+    <script>
+        const datos = JSON.parse(localStorage.getItem('facturaActual'));
+        if(datos) {
+            document.getElementById('gFecha').innerText = new Date().toLocaleDateString();
+            document.getElementById('gNum').innerText = datos.guia;
+            document.getElementById('gRemi').innerText = datos.remi;
+            document.getElementById('gCons').innerText = datos.cons;
+            document.getElementById('gPlaca').innerText = datos.placa;
+            document.getElementById('gRuta').innerText = datos.ruta;
+            
+            document.getElementById('listaItems').innerHTML = datos.items.map(i => `
+                <tr>
+                    <td>${i.n}</td>
+                    <td>${i.c}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

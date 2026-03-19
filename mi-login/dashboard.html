@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANS CK - Dashboard Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f4f7fe; margin: 0; padding: 20px; color: #1a237e; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .btn-menu { background: #1a237e; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 20px; cursor: pointer; }
+        
+        .card-grafico { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
+        #graficoRentabilidad { max-height: 200px; margin: 0 auto; }
+
+        .acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn-add { background: #1a237e; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .btn-excel { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        .busqueda { background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .busqueda input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; outline: none; }
+
+        .card-tabla { background: white; border-radius: 20px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 850px; }
+        th { text-align: left; color: #888; font-size: 11px; padding-bottom: 12px; text-transform: uppercase; }
+        td { padding: 15px 5px; border-top: 1px solid #eee; font-size: 13px; }
+        
+        .m-ingreso { color: #1a237e; font-weight: 600; }
+        .m-gasto { color: #ff4757; font-weight: 600; }
+        .m-neto { color: #2ecc71; font-weight: 800; }
+
+        .btn-accion { border: none; padding: 8px 10px; border-radius: 8px; cursor: pointer; color: white; margin-right: 2px; }
+        .btn-ver { background: #00d2ff; }
+        .btn-guia { background: #6c5ce7; }
+        .btn-fin { background: #2ed573; }
+        .btn-x { background: #ff4757; margin-left: 10px; }
+
+        .sidebar { position: fixed; left: -100%; top: 0; width: 280px; height: 100%; background: #1a237e; color: white; padding: 25px; transition: 0.3s; z-index: 1000; box-sizing: border-box; }
+        .sidebar.active { left: 0; }
+        .sidebar a { color: white; text-decoration: none; display: block; padding: 15px; border-radius: 12px; margin-bottom: 8px; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .overlay.active { display: block; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 10px; }
+        .modal-cont { background: white; padding: 25px; border-radius: 25px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
+        .section-title { font-size: 11px; font-weight: 800; color: #1a237e; margin: 15px 0 8px 0; text-transform: uppercase; border-bottom: 1px solid #f1f2f6; padding-bottom: 3px; display: flex; justify-content: space-between; align-items: center; }
+        input, select { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
+        
+        /* Estilos para múltiples productos */
+        .fila-producto { display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 5px; align-items: center; margin-bottom: 5px; }
+        .btn-mas { background: #1a237e; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; }
+        .btn-borrar-fila { background: #ff4757; color: white; border: none; border-radius: 8px; cursor: pointer; height: 40px; }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="sidebar" id="sidebar">
+        <h2 style="font-weight: 800;">🚛 TRANS CK</h2>
+        <hr style="opacity: 0.1; margin: 20px 0;">
+        <a href="dashboard.html">📦 Registro de Carga</a>
+        <a href="camiones.html">🚛 Gestión de Camiones</a>
+    </nav>
+
+    <div class="header">
+        <button class="btn-menu" onclick="toggleMenu()">☰</button>
+        <h1 style="font-size: 20px; font-weight: 800; margin: 0;">Panel TRANS CK</h1>
+    </div>
+
+    <div class="card-grafico">
+        <h3 style="font-size: 13px; margin: 0 0 10px 0;">GANANCIA VS GASTOS (MES)</h3>
+        <canvas id="graficoRentabilidad"></canvas>
+    </div>
+
+    <div class="acciones">
+        <button class="btn-add" onclick="abrirModal()">+ NUEVA CARGA</button>
+        <button class="btn-excel" onclick="exportarExcel()">📊 EXCEL PRO</button>
+    </div>
+
+    <div class="busqueda">
+        <input type="text" id="filtro" onkeyup="filtrarTabla()" placeholder="Buscar cliente, placa, ruta o fecha...">
+    </div>
+
+    <div class="card-tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Guía</th>
+                    <th>Camión</th>
+                    <th>Ingreso</th>
+                    <th>Gastos</th>
+                    <th>Neto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCarga"></tbody>
+        </table>
+    </div>
+
+    <div class="modal" id="modalCarga">
+        <form class="modal-cont" id="formRegistro" onsubmit="event.preventDefault(); guardar();">
+            <h3 style="margin:0 0 10px 0;">Registro #<span id="numFact"></span></h3>
+            
+            <div class="section-title">Logística</div>
+            <select id="gPlaca" required></select>
+            <input type="text" id="gRemi" placeholder="Remitente" required>
+            <input type="text" id="gCons" placeholder="Consignatario" required>
+            <div style="display: flex; gap: 8px;"><input type="text" id="gOri" placeholder="Origen" required><input type="text" id="gDes" placeholder="Destino" required></div>
+            
+            <div class="section-title">
+                Flete (Productos)
+                <button type="button" class="btn-mas" onclick="agregarFilaProducto()" title="Añadir otro producto">+</button>
+            </div>
+            <div id="contenedorProductos">
+                </div>
+
+            <div class="section-title">Gastos del Viaje</div>
+            <div style="display: flex; gap: 8px;"><input type="number" id="gDiesel" placeholder="Diésel Bs." step="any" value="0"><input type="number" id="gPeajes" placeholder="Peajes Bs." step="any" value="0"></div>
+            <input type="number" id="gOtros" placeholder="Otros (Viáticos) Bs." step="any" value="0">
+            
+            <button type="submit" style="width:100%; padding:15px; background:#1a237e; color:white; border:none; border-radius:15px; font-weight:bold; cursor:pointer; margin-top:15px;">REGISTRAR VIAJE</button>
+            <button type="button" onclick="cerrarModal()" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Cancelar</button>
+        </form>
+    </div>
+
+    <script>
+        let cargas = JSON.parse(localStorage.getItem('misCargas')) || [];
+        let chartInstance = null;
+
+        function toggleMenu() { 
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function agregarFilaProducto() {
+            const container = document.getElementById('contenedorProductos');
+            const div = document.createElement('div');
+            div.className = 'fila-producto';
+            div.innerHTML = `
+                <input type="text" class="p-nombre" placeholder="Carga" required>
+                <input type="number" class="p-cantidad" placeholder="Cant." step="any" required>
+                <input type="number" class="p-precio" placeholder="Bs/U." step="any" required>
+                <button type="button" class="btn-borrar-fila" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function abrirModal() {
+            document.getElementById('formRegistro').reset();
+            document.getElementById('contenedorProductos').innerHTML = '';
+            agregarFilaProducto(); // Iniciar con una fila siempre
+            
+            const listaCamiones = JSON.parse(localStorage.getItem('misCamiones')) || [];
+            const disponibles = listaCamiones.filter(c => c.estado === 'disponible');
+            let html = '<option value="">Seleccionar Camión</option>';
+            disponibles.forEach(c => html += `<option value="${c.placa}">${c.placa} (${c.chofer})</option>`);
+            document.getElementById('gPlaca').innerHTML = html;
+            
+            document.getElementById('numFact').innerText = (cargas.length + 1).toString().padStart(3, '0');
+            document.getElementById('modalCarga').style.display = 'flex';
+        }
+
+        function cerrarModal() { document.getElementById('modalCarga').style.display = 'none'; }
+
+        function guardar() {
+            const placa = document.getElementById('gPlaca').value;
+            const diesel = parseFloat(document.getElementById('gDiesel').value) || 0;
+            const peajes = parseFloat(document.getElementById('gPeajes').value) || 0;
+            const otros = parseFloat(document.getElementById('gOtros').value) || 0;
+            const gas = diesel + peajes + otros;
+
+            // Recolectar productos y sumar ingresos
+            let totalIngreso = 0;
+            let listaProductos = [];
+            const nombres = document.querySelectorAll('.p-nombre');
+            const cants = document.querySelectorAll('.p-cantidad');
+            const precios = document.querySelectorAll('.p-precio');
+
+            nombres.forEach((n, i) => {
+                const c = parseFloat(cants[i].value) || 0;
+                const p = parseFloat(precios[i].value) || 0;
+                const sub = c * p;
+                totalIngreso += sub;
+                listaProductos.push({ n: n.value, c: c, u: p });
+            });
+
+            const fechaHoy = new Date();
+            const nuevaCarga = {
+                guia: document.getElementById('numFact').innerText,
+                fecha: fechaHoy.toLocaleDateString(),
+                timestamp: fechaHoy.getTime(),
+                placa: placa,
+                remi: document.getElementById('gRemi').value,
+                cons: document.getElementById('gCons').value,
+                ruta: `${document.getElementById('gOri').value} a ${document.getElementById('gDes').value}`,
+                ingreso: totalIngreso.toFixed(2),
+                gastos: gas.toFixed(2),
+                neto: (totalIngreso - gas).toFixed(2),
+                items: listaProductos
+            };
+
+            let camiones = JSON.parse(localStorage.getItem('misCamiones')) || [];
+            const idx = camiones.findIndex(c => c.placa === placa);
+            if(idx > -1) camiones[idx].estado = 'en-viaje';
+            
+            cargas.push(nuevaCarga);
+            localStorage.setItem('misCargas', JSON.stringify(cargas));
+            localStorage.setItem('misCamiones', JSON.stringify(camiones));
+            location.reload();
+        }
+
+        function eliminarCarga(i) {
+            if(confirm("¿Eliminar este registro permanentemente?")) {
+                const placa = cargas[i].placa;
+                let camiones = JSON.parse(localStorage.getItem('misCamiones')) || [];
+                const idx = camiones.findIndex(c => c.placa === placa);
+                if(idx > -1) camiones[idx].estado = 'disponible';
+                localStorage.setItem('misCamiones', JSON.stringify(camiones));
+                cargas.splice(i, 1);
+                localStorage.setItem('misCargas', JSON.stringify(cargas));
+                dibujarTabla();
+            }
+        }
+
+        function dibujarTabla(datos = cargas) {
+            const ordenados = [...datos].sort((a,b) => b.timestamp - a.timestamp);
+            document.getElementById('tablaCarga').innerHTML = ordenados.map((c, i) => `
+                <tr>
+                    <td>${c.fecha}</td>
+                    <td><b>#${c.guia}</b></td>
+                    <td>🚛 ${c.placa}</td>
+                    <td class="m-ingreso">Bs. ${c.ingreso}</td>
+                    <td class="m-gasto">Bs. ${c.gastos}</td>
+                    <td class="m-neto">Bs. ${c.neto}</td>
+                    <td>
+                        <button class="btn-accion btn-ver" onclick="ver(${i},'factura')">📄</button>
+                        <button class="btn-accion btn-guia" onclick="ver(${i},'guia')">📝</button>
+                        <button class="btn-accion btn-x" onclick="eliminarCarga(${i})">❌</button>
+                    </td>
+                </tr>
+            `).join('');
+            actualizarGrafico();
+        }
+
+        function actualizarGrafico() {
+            let tGas = 0, tNet = 0;
+            cargas.forEach(c => {
+                tGas += parseFloat(c.gastos) || 0;
+                tNet += parseFloat(c.neto) || 0;
+            });
+            if(chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('graficoRentabilidad').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gastos', 'Neto'],
+                    datasets: [{ data: [tGas, tNet], backgroundColor: ['#ff4757', '#2ecc71'], borderWidth: 0 }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } }, cutout: '70%' }
+            });
+        }
+
+        function ver(i, tipo) {
+            const item = cargas[i];
+            item.monto = item.ingreso; 
+            localStorage.setItem('facturaActual', JSON.stringify(item));
+            window.location.href = (tipo === 'guia') ? 'guia.html' : 'factura.html';
+        }
+
+        function filtrarTabla() {
+            const texto = document.getElementById('filtro').value.toLowerCase();
+            const filtrados = cargas.filter(c => c.remi.toLowerCase().includes(texto) || c.placa.toLowerCase().includes(texto));
+            dibujarTabla(filtrados);
+        }
+
+        function exportarExcel() {
+            if(cargas.length === 0) return alert("Sin datos.");
+            let tIng = 0, tGas = 0, tNet = 0, filas = "";
+            cargas.forEach(c => {
+                const ing = parseFloat(c.ingreso), gas = parseFloat(c.gastos), net = parseFloat(c.neto);
+                tIng += ing; tGas += gas; tNet += net;
+                filas += `<Row><Cell><Data ss:Type="String">${c.fecha}</Data></Cell><Cell><Data ss:Type="String">${c.guia}</Data></Cell><Cell><Data ss:Type="String">${c.placa}</Data></Cell><Cell><Data ss:Type="String">${c.remi}</Data></Cell><Cell><Data ss:Type="String">${c.ruta}</Data></Cell><Cell><Data ss:Type="Number">${ing}</Data></Cell><Cell><Data ss:Type="Number">${gas}</Data></Cell><Cell><Data ss:Type="Number">${net}</Data></Cell></Row>`;
+            });
+            const xml = `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Styles><Style ss:ID="H"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1A237E" ss:Pattern="Solid"/><Alignment ss:Horizontal="Center"/></Style><Style ss:ID="T"><Font ss:Bold="1" ss:Size="14" ss:Color="#1A237E"/></Style></Styles><Worksheet ss:Name="Reporte"><Table><Column ss:Width="80"/><Column ss:Width="60"/><Column ss:Width="80"/><Column ss:Width="160"/><Column ss:Width="160"/><Column ss:Width="100"/><Column ss:Width="100"/><Column ss:Width="100"/><Row ss:Height="25"><Cell ss:StyleID="T"><Data ss:Type="String">TRANS CK - REPORTE PRO</Data></Cell></Row><Row><Cell ss:StyleID="H"><Data ss:Type="String">FECHA</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">GUIA</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">PLACA</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">REMITENTE</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">RUTA</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">INGRESO (Bs)</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">GASTOS (Bs)</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="String">NETO (Bs)</Data></Cell></Row>${filas}<Row></Row><Row><Cell ss:Index="5" ss:StyleID="H"><Data ss:Type="String">TOTALES</Data></Cell><Cell><Data ss:Type="Number">${tIng}</Data></Cell><Cell><Data ss:Type="Number">${tGas}</Data></Cell><Cell ss:StyleID="H"><Data ss:Type="Number">${tNet}</Data></Cell></Row></Table><AutoFilter xmlns="urn:schemas-microsoft-com:office:excel" x:Range="R2C1:R2C8"/></Worksheet></Workbook>`;
+            const blob = new Blob([xml], { type: "application/vnd.ms-excel" });
+            const a = document.createElement("a");
+            a.href = window.URL.createObjectURL(blob);
+            a.download = `Reporte_TRANS_CK.xls`;
+            a.click();
+        }
+
+        dibujarTabla();
+    </script>
+</body>
+</html>

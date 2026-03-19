@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANS CK - Camiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f4f7fe; margin: 0; padding: 20px; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .btn-back { background: #1a237e; color: white; border: none; padding: 10px; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; }
+        
+        .btn-add { background: #1a237e; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-bottom: 20px; cursor: pointer; }
+        
+        /* DISEÑO DE TARJETAS */
+        .contenedor-camiones { display: grid; gap: 15px; }
+        .card-camion { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 8px solid #ddd; /* Color por defecto */
+        }
+        
+        /* COLORES POR ESTADO */
+        .card-camion.disponible { border-left-color: #2ed573; }
+        .card-camion.en-viaje { border-left-color: #ffa502; }
+        .card-camion.mantenimiento { border-left-color: #ff4757; }
+
+        .info h3 { margin: 0; font-size: 18px; color: #1a237e; }
+        .info p { margin: 5px 0 0; color: #888; font-size: 14px; }
+        
+        .btn-edit-card { background: #f1f2f6; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1a237e; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-cont { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="btn-back" onclick="window.location.href='dashboard.html'">⬅</button>
+        <h1 style="font-size: 22px; margin: 0;">Mis Camiones</h1>
+        <div></div>
+    </div>
+
+    <button class="btn-add" onclick="abrirModal()">+ Agregar Camión</button>
+
+    <div class="contenedor-camiones" id="listaCards">
+        </div>
+
+    <div class="modal" id="modalCamion">
+        <div class="modal-cont">
+            <h3 id="modalTitulo">Nuevo Camión</h3>
+            <input type="hidden" id="editIndex" value="-1">
+            <input type="text" id="cPlaca" placeholder="Placa (Ej: 2455-LPX)">
+            <input type="text" id="cChofer" placeholder="Nombre del Chofer">
+            <select id="cEstado">
+                <option value="disponible">✅ Disponible</option>
+                <option value="en-viaje">🚚 En Viaje</option>
+                <option value="mantenimiento">🔧 Mantenimiento</option>
+            </select>
+            <button onclick="guardarCamion()" style="width:100%; padding:15px; background:#1a237e; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer;">GUARDAR</button>
+            <button onclick="cerrarModal()" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        let camiones = JSON.parse(localStorage.getItem('misCamiones')) || [];
+
+        function abrirModal(index = -1) {
+            if(index > -1) {
+                document.getElementById('modalTitulo').innerText = "Editar Camión";
+                document.getElementById('editIndex').value = index;
+                document.getElementById('cPlaca').value = camiones[index].placa;
+                document.getElementById('cChofer').value = camiones[index].chofer;
+                document.getElementById('cEstado').value = camiones[index].estado;
+            } else {
+                document.getElementById('modalTitulo').innerText = "Nuevo Camión";
+                document.getElementById('editIndex').value = -1;
+                document.getElementById('cPlaca').value = "";
+                document.getElementById('cChofer').value = "";
+                document.getElementById('cEstado').value = "disponible";
+            }
+            document.getElementById('modalCamion').style.display = 'flex';
+        }
+
+        function cerrarModal() { document.getElementById('modalCamion').style.display = 'none'; }
+
+        function guardarCamion() {
+            const placa = document.getElementById('cPlaca').value.toUpperCase();
+            const chofer = document.getElementById('cChofer').value;
+            const estado = document.getElementById('cEstado').value;
+            const index = document.getElementById('editIndex').value;
+
+            if(placa && chofer) {
+                if(index > -1) camiones[index] = { placa, chofer, estado };
+                else camiones.push({ placa, chofer, estado });
+                
+                localStorage.setItem('misCamiones', JSON.stringify(camiones));
+                cerrarModal();
+                dibujarCards();
+            }
+        }
+
+        function dibujarCards() {
+            document.getElementById('listaCards').innerHTML = camiones.map((c, i) => `
+                <div class="card-camion ${c.estado}">
+                    <div class="info">
+                        <h3>🚛 ${c.placa}</h3>
+                        <p>Chofer: ${c.chofer}</p>
+                        <small style="text-transform: uppercase; font-weight:bold;">${c.estado.replace("-"," ")}</small>
+                    </div>
+                    <button class="btn-edit-card" onclick="abrirModal(${i})">✏️ Editar</button>
+                </div>
+            `).join('');
+        }
+        dibujarCards();
+    </script>
+</body>
+</html>
