@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Menú - TRANS CK</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #ffffff; }
+        h1 { color: #4dabf7; margin-top: 20px; font-size: 28px; letter-spacing: 1px; }
+        .container { width: 100%; max-width: 500px; margin-top: 30px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-menu { background: #1e1e1e; padding: 30px 10px; border-radius: 20px; text-decoration: none; color: #e0e0e0; font-weight: bold; display: flex; flex-direction: column; align-items: center; border: 1px solid #333; transition: 0.3s; }
+        .btn-menu:active { transform: scale(0.95); border-color: #4dabf7; }
+        .icon { font-size: 40px; margin-bottom: 10px; }
+        .btn-salir { margin-top: 40px; padding: 12px 25px; background: #ff5252; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>TRANS CK</h1>
+    <p style="color: #aaa;">Panel de Control</p>
+    
+    <div class="container">
+        <div class="menu-grid">
+            <a href="dashboard.html" class="btn-menu">
+                <span class="icon">📝</span><span>Registro</span>
+            </a>
+            <a href="camiones.html" class="btn-menu">
+                <span class="icon">🚛</span><span>Camiones</span>
+            </a>
+            <a href="factura.html" class="btn-menu">
+                <span class="icon">📄</span><span>Facturas</span>
+            </a>
+            <a href="guia.html" class="btn-menu">
+                <span class="icon">📦</span><span>Guías</span>
+            </a>
+        </div>
+    </div>
+    
+    <a href="index.html" class="btn-salir">Cerrar Sesión</a>
+</body>
+</html>

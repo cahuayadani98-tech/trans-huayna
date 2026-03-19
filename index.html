@@ -3,52 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Panel TRANS CK</title>
+    <title>Login - TRANS CK</title>
     <style>
-        :root { --azul: #1a237e; --blanco: #ffffff; --gris: #f4f7fe; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--gris); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        h1 { color: var(--azul); margin-top: 20px; font-size: 28px; letter-spacing: 2px; }
-        .container { width: 100%; max-width: 500px; margin-top: 30px; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-menu { 
-            background: var(--blanco); padding: 30px 10px; border-radius: 25px; 
-            text-decoration: none; color: var(--azul); font-weight: bold; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; 
-            flex-direction: column; align-items: center; transition: 0.3s;
-            border: 2px solid transparent;
-        }
-        .btn-menu:active { transform: scale(0.95); border-color: var(--azul); }
-        .icon { font-size: 40px; margin-bottom: 10px; }
-        .footer { margin-top: 50px; color: #888; font-size: 12px; }
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background-color: #121212; height: 100vh; display: flex; justify-content: center; align-items: center; color: #ffffff; }
+        .login-card { background: #1e1e1e; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 350px; text-align: center; border: 1px solid #333; }
+        .logo { font-size: 50px; margin-bottom: 10px; }
+        h1 { color: #4dabf7; margin-bottom: 5px; font-size: 26px; }
+        p { color: #aaa; margin-bottom: 30px; font-size: 14px; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #444; border-radius: 12px; box-sizing: border-box; background: #2a2a2a; color: white; font-size: 16px; }
+        input:focus { outline: none; border-color: #4dabf7; }
+        .btn-entrar { display: block; width: 100%; padding: 15px; background: #4dabf7; color: #121212; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 18px; transition: 0.3s; }
+        .btn-entrar:active { transform: scale(0.95); background: #3bc9db; }
     </style>
 </head>
 <body>
-
-    <h1>TRANS CK</h1>
-    <p style="color: #666;">Logística y Transporte</p>
-
-    <div class="container">
-        <div class="menu-grid">
-            <a href="dashboard.html" class="btn-menu">
-                <span class="icon">📝</span>
-                <span>Nuevo Registro</span>
-            </a>
-            <a href="camiones.html" class="btn-menu">
-                <span class="icon">🚛</span>
-                <span>Camiones</span>
-            </a>
-            <a href="factura.html" class="btn-menu">
-                <span class="icon">📄</span>
-                <span>Facturas</span>
-            </a>
-            <a href="guia.html" class="btn-menu">
-                <span class="icon">📦</span>
-                <span>Guías</span>
-            </a>
-        </div>
+    <div class="login-card">
+        <div class="logo">🚛</div>
+        <h1>TRANS CK</h1>
+        <p>Sistema de Gestión Logística</p>
+        <form>
+            <input type="text" placeholder="Usuario" required>
+            <input type="password" placeholder="Contraseña" required>
+            <a href="menu.html" class="btn-entrar">ENTRAR</a>
+        </form>
     </div>
-
-    <div class="footer">© 2026 Sistema de Gestión Logística</div>
-
 </body>
 </html>

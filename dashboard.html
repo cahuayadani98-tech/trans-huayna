@@ -5,62 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro - TRANS CK</title>
     <style>
-        :root { --azul: #1a237e; --gris: #f4f7fe; --rojo: #ff5252; }
-        body { font-family: sans-serif; background: var(--gris); margin: 0; padding: 15px; }
-        .card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
-        h2 { color: var(--azul); text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: var(--azul); font-size: 13px; text-transform: uppercase; }
-        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; }
-        
-        /* Ajuste para que los cuadros no se amontonen */
+        body { font-family: sans-serif; background: #121212; margin: 0; padding: 15px; color: #e0e0e0; }
+        .card { background: #1e1e1e; border-radius: 20px; padding: 20px; max-width: 500px; margin: 0 auto; border: 1px solid #333; }
+        h2 { color: #4dabf7; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #aaa; font-size: 13px; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #444; border-radius: 10px; box-sizing: border-box; font-size: 16px; background: #2a2a2a; color: white; }
+        input:focus, select:focus { outline: none; border-color: #4dabf7; }
         .fila-flex { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
         .fila-flex input { flex: 1 1 calc(50% - 5px); min-width: 120px; }
-
-        .seccion-productos { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px dashed #ccc; }
-        .fila-producto { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        
+        .seccion-productos { background: #252525; padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px dashed #555; }
+        .fila-producto { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .in-carga { flex: 2 1 100%; }
         .in-cant, .in-precio { flex: 1 1 70px; }
-        .btn-del { flex: 0 0 40px; height: 40px; background: var(--rojo); color: white; border: none; border-radius: 10px; font-weight: bold; }
-
-        .btn-main { width: 100%; background: var(--azul); color: white; padding: 16px; border: none; border-radius: 15px; margin-top: 25px; font-size: 16px; font-weight: bold; box-shadow: 0 5px 10px rgba(26, 35, 126, 0.3); }
-        .btn-volver { display: block; text-align: center; margin-top: 15px; color: #888; text-decoration: none; font-size: 14px; }
+        .btn-del { flex: 0 0 40px; height: 40px; background: #ff5252; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        
+        .btn-main { width: 100%; background: #4dabf7; color: #121212; padding: 16px; border: none; border-radius: 12px; margin-top: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-volver { display: block; text-align: center; margin-bottom: 15px; color: #aaa; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <a href="index.html" class="btn-volver">← Volver al Menú</a>
-    <h2>Nuevo Registro</h2>
-    
-    <label>Logística</label>
-    <select><option>Seleccionar Camión</option></select>
-    <input type="text" placeholder="Remitente">
-    <input type="text" placeholder="Consignatario">
-    
-    <div class="fila-flex">
-        <input type="text" placeholder="Origen">
-        <input type="text" placeholder="Destino">
-    </div>
-
-    <label>Flete y Productos</label>
-    <div class="seccion-productos">
-        <div class="fila-producto">
-            <input type="text" class="in-carga" placeholder="Carga/Producto">
-            <input type="number" class="in-cant" placeholder="Cant.">
-            <input type="number" class="in-precio" placeholder="Bs/U.">
-            <button class="btn-del">X</button>
+    <div class="card">
+        <a href="menu.html" class="btn-volver">← Volver al Menú</a>
+        <h2>Nuevo Registro</h2>
+        
+        <label>Logística</label>
+        <select><option>Seleccionar Camión</option></select>
+        <input type="text" placeholder="Remitente">
+        <input type="text" placeholder="Consignatario">
+        
+        <div class="fila-flex">
+            <input type="text" placeholder="Origen">
+            <input type="text" placeholder="Destino">
         </div>
+
+        <label>Flete y Productos</label>
+        <div class="seccion-productos">
+            <div class="fila-producto">
+                <input type="text" class="in-carga" placeholder="Carga/Producto">
+                <input type="number" class="in-cant" placeholder="Cant.">
+                <input type="number" class="in-precio" placeholder="Bs/U.">
+                <button class="btn-del">X</button>
+            </div>
+        </div>
+
+        <label>Gastos</label>
+        <div class="fila-flex">
+            <input type="number" placeholder="Diésel (Bs)">
+            <input type="number" placeholder="Peajes (Bs)">
+            <input type="number" placeholder="Otros">
+        </div>
+
+        <button class="btn-main">REGISTRAR VIAJE</button>
     </div>
-
-    <label>Gastos</label>
-    <div class="fila-flex">
-        <input type="number" placeholder="Diésel">
-        <input type="number" placeholder="Peajes">
-        <input type="number" placeholder="Otros">
-    </div>
-
-    <button class="btn-main">REGISTRAR VIAJE</button>
-</div>
-
 </body>
 </html>
