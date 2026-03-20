@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Registro Automático - TRANS CK</title>
+    <title>Registro Independiente - TRANS CK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --azul: #2a3b4e; --celeste: #8ac9d8; --fondo: #f4f7f6; }
@@ -11,36 +11,42 @@
         .section-card { background: white; padding: 20px; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 15px; }
         h3 { margin-top: 0; color: var(--azul); font-size: 17px; border-left: 4px solid var(--celeste); padding-left: 10px; }
         .grid-docs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .auto-num { background: #eef2f3; font-weight: 800; color: var(--azul); border: 1px solid var(--celeste); }
+        .auto-num { background: #eef2f3; font-weight: 800; color: var(--azul); border: 1px solid var(--celeste); text-align: center; }
         input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 14px; }
-        label { font-size: 11px; font-weight: 700; color: #7f8c8d; }
+        label { font-size: 11px; font-weight: 700; color: #7f8c8d; text-transform: uppercase; display: block; }
         .prod-entry { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 5px; }
         .btn-add { background: var(--celeste); color: var(--azul); border: none; padding: 12px; border-radius: 10px; font-weight: 800; width: 100%; margin: 10px 0; }
-        .temp-item { font-size: 13px; padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-        .btn-save { background: var(--azul); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 800; width: 100%; font-size: 16px; margin-top: 10px; }
+        .temp-item { font-size: 13px; padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .btn-save { background: var(--azul); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 800; width: 100%; font-size: 16px; margin-top: 10px; box-shadow: 0 8px 15px rgba(42,59,78,0.2); }
     </style>
 </head>
 <body>
 
-    <button onclick="location.href='menu.html'" style="margin-bottom:10px; border:none; background:none; font-weight:800; color:var(--azul);">← VOLVER</button>
+    <button onclick="location.href='menu.html'" style="margin-bottom:10px; border:none; background:none; font-weight:800; color:var(--azul); cursor:pointer;">← VOLVER AL MENÚ</button>
 
     <div class="section-card">
-        <h3>Documentación Correlativa</h3>
+        <h3>Folios de Control</h3>
         <div class="grid-docs">
-            <div><label>N° Guía (Auto)</label><input type="text" id="nroGuia" class="auto-num" readonly></div>
-            <div><label>N° Factura (Auto)</label><input type="text" id="nroFactura" class="auto-num" readonly></div>
+            <div>
+                <label>Próxima Guía</label>
+                <input type="text" id="nroGuia" class="auto-num" readonly>
+            </div>
+            <div>
+                <label>Próxima Factura</label>
+                <input type="text" id="nroFactura" class="auto-num" readonly>
+            </div>
         </div>
     </div>
 
     <div class="section-card">
         <h3>Información del Envío</h3>
-        <input type="text" id="remitente" placeholder="Remitente">
-        <input type="text" id="consignatario" placeholder="Consignatario">
-        <input type="text" id="destino" placeholder="Destino Final">
+        <input type="text" id="remitente" placeholder="Nombre Remitente">
+        <input type="text" id="consignatario" placeholder="Nombre Consignatario">
+        <input type="text" id="destino" placeholder="Ciudad / Destino Final">
     </div>
 
     <div class="section-card">
-        <h3>Detalle de Productos</h3>
+        <h3>Detalle de Carga</h3>
         <div class="prod-entry">
             <input type="text" id="pNombre" placeholder="Producto">
             <input type="number" id="pCant" placeholder="Cant.">
@@ -48,10 +54,12 @@
         </div>
         <button class="btn-add" id="btnAdd">+ AGREGAR PRODUCTO</button>
         <div id="listaVisual"></div>
-        <div style="text-align: right; font-weight: 800; margin-top: 10px;">TOTAL: Bs. <span id="totalVenta">0.00</span></div>
+        <div style="text-align: right; font-weight: 800; margin-top: 15px; font-size: 18px;">
+            TOTAL: Bs. <span id="totalVenta" style="color:#27ae60;">0.00</span>
+        </div>
     </div>
 
-    <button class="btn-save" id="btnFinalizar">GUARDAR Y REGISTRAR</button>
+    <button class="btn-save" id="btnFinalizar">GUARDAR REGISTRO COMPLETO</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -67,33 +75,42 @@
         const db = getFirestore(initializeApp(firebaseConfig));
         let carrito = [];
 
-        // --- LÓGICA DE AUTO-LLENADO ---
+        // --- LÓGICA DE CORRELATIVOS INDEPENDIENTES ---
         async function generarCorrelativos() {
-            const q = query(collection(db, "servicios"), orderBy("fecha", "desc"), limit(1));
+            const q = query(collection(db, "servicios"), orderBy("fecha", "desc"), limit(50)); // Revisamos los últimos registros
             const querySnapshot = await getDocs(q);
             
-            let ultimoNro = 0;
+            let maxGuia = 0;
+            let maxFactura = 0;
+
             querySnapshot.forEach((doc) => {
-                // Extraemos el número de la última guía y lo convertimos a entero
-                ultimoNro = parseInt(doc.data().nroGuia) || 0;
+                const data = doc.data();
+                const g = parseInt(data.nroGuia) || 0;
+                const f = parseInt(data.nroFactura) || 0;
+                
+                if (g > maxGuia) maxGuia = g;
+                if (f > maxFactura) maxFactura = f;
             });
 
-            const nuevoNro = (ultimoNro + 1).toString().padStart(4, '0'); // Formato 0001
-            document.getElementById('nroGuia').value = nuevoNro;
-            document.getElementById('nroFactura').value = nuevoNro; // Siguen la misma secuencia
+            // Asignar nuevos números formateados (ej: 0001)
+            document.getElementById('nroGuia').value = (maxGuia + 1).toString().padStart(4, '0');
+            document.getElementById('nroFactura').value = (maxFactura + 1).toString().padStart(4, '0');
         }
 
         generarCorrelativos();
 
-        // Agregar a la lista
+        // Agregar al carrito visual
         document.getElementById('btnAdd').onclick = () => {
             const nombre = document.getElementById('pNombre').value;
             const cant = parseFloat(document.getElementById('pCant').value);
             const precio = parseFloat(document.getElementById('pPrecio').value);
-            if(nombre && cant > 0) {
+            
+            if(nombre && cant > 0 && precio > 0) {
                 carrito.push({ nombre, cant, precio, subtotal: cant * precio });
                 render();
-                document.getElementById('pNombre').value = ""; document.getElementById('pCant').value = ""; document.getElementById('pPrecio').value = "";
+                document.getElementById('pNombre').value = "";
+                document.getElementById('pCant').value = "";
+                document.getElementById('pPrecio').value = "";
             }
         };
 
@@ -102,18 +119,24 @@
             let total = 0; div.innerHTML = "";
             carrito.forEach(p => {
                 total += p.subtotal;
-                div.innerHTML += `<div class="temp-item"><span>${p.cant}x ${p.nombre}</span><span>Bs. ${p.subtotal.toFixed(2)}</span></div>`;
+                div.innerHTML += `<div class="temp-item">
+                    <span><b>${p.cant}</b> x ${p.nombre}</span>
+                    <span>Bs. ${p.subtotal.toFixed(2)}</span>
+                </div>`;
             });
             document.getElementById('totalVenta').innerText = total.toFixed(2);
         }
 
-        // Guardar
+        // Guardar en Firebase
         document.getElementById('btnFinalizar').onclick = async () => {
-            if(carrito.length === 0) return alert("Agrega productos primero");
+            if(carrito.length === 0) return alert("Debes agregar al menos un producto.");
             
-            const data = {
-                nroGuia: document.getElementById('nroGuia').value,
-                nroFactura: document.getElementById('nroFactura').value,
+            const nroGuia = document.getElementById('nroGuia').value;
+            const nroFactura = document.getElementById('nroFactura').value;
+
+            const finalData = {
+                nroGuia,
+                nroFactura,
                 remitente: document.getElementById('remitente').value,
                 consignatario: document.getElementById('consignatario').value,
                 destino: document.getElementById('destino').value,
@@ -122,8 +145,8 @@
                 fecha: Date.now()
             };
 
-            await addDoc(collection(db, "servicios"), data);
-            alert("Registro #" + data.nroGuia + " guardado.");
+            await addDoc(collection(db, "servicios"), finalData);
+            alert(`Registro Guardado!\nGuía: ${nroGuia} | Factura: ${nroFactura}`);
             location.reload();
         };
     </script>
