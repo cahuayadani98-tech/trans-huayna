@@ -2,55 +2,77 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - TRANS CK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro Operativo - TRANS CK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --azul: #2a3b4e; --celeste: #8ac9d8; --verde: #2ecc71; }
-        body { font-family: 'Inter', sans-serif; background: #f4f7f6; padding: 15px; margin: 0; color: var(--azul); }
-        .card { background: white; padding: 20px; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 15px; }
-        h3 { margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 14px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-add { background: var(--celeste); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; width: 100%; margin-top: 10px; }
-        .btn-save { background: var(--azul); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 800; width: 100%; font-size: 16px; margin-top: 20px; }
+        :root { --primary: #1e293b; --accent: #38bdf8; --success: #22c55e; --bg: #f1f5f9; --white: #ffffff; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--primary); }
+        
+        .header-nav { display: flex; align-items: center; margin-bottom: 20px; }
+        .btn-back { background: var(--white); border: 1px solid #e2e8f0; padding: 10px 15px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+
+        .section-card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 15px; border: 1px solid #f1f5f9; }
+        .section-card h3 { margin: 0 0 15px 0; font-size: 13px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        
+        input { width: 100%; padding: 14px; margin: 6px 0; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: var(--accent); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Estilo para la lista de productos */
+        .item-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .total-banner { background: var(--primary); color: var(--white); padding: 20px; border-radius: 15px; text-align: right; margin-top: 10px; }
+        .total-banner span { display: block; font-size: 11px; opacity: 0.7; }
+        .total-banner b { font-size: 24px; color: var(--accent); }
+
+        .btn-add { background: #eff6ff; color: var(--accent); border: 2px dashed var(--accent); padding: 12px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 10px; cursor: pointer; }
+        .btn-submit { background: var(--primary); color: var(--white); border: none; padding: 20px; border-radius: 18px; font-weight: 800; width: 100%; font-size: 16px; margin-top: 20px; box-shadow: 0 10px 20px rgba(30,41,59,0.2); cursor: pointer; }
+        .btn-submit:disabled { opacity: 0.5; background: #94a3b8; }
     </style>
 </head>
 <body>
-    <button onclick="location.href='menu.html'" style="border:none; background:none; font-weight:800; color:var(--azul);">← VOLVER</button>
 
-    <div class="card">
-        <h3>🚚 Datos de la Guía</h3>
-        <div class="grid">
-            <input type="text" id="nroGuia" placeholder="N° Guía" readonly style="background:#eee;">
-            <input type="text" id="destino" placeholder="Destino">
-        </div>
-        <input type="text" id="remitente" placeholder="Remitente">
-        <input type="text" id="consignatario" placeholder="Consignatario">
+    <div class="header-nav">
+        <button class="btn-back" onclick="location.href='menu.html'">← PANEL</button>
     </div>
 
-    <div class="card" style="border-top: 4px solid var(--verde);">
-        <h3>📄 Facturación</h3>
-        <div class="grid">
+    <div class="section-card">
+        <h3>📦 Datos de Transporte</h3>
+        <div class="grid-2">
+            <input type="text" id="nroGuia" placeholder="N° Guía" readonly style="background:#f8fafc; font-weight:800; color:var(--accent);">
+            <input type="text" id="destino" placeholder="Destino (Ej. Riberalta)">
+        </div>
+        <input type="text" id="remitente" placeholder="Nombre del Remitente">
+        <input type="text" id="consignatario" placeholder="Nombre del Consignatario">
+    </div>
+
+    <div class="section-card">
+        <h3>📄 Documentación Legal</h3>
+        <div class="grid-2">
             <input type="text" id="nroFactura" placeholder="N° Factura">
-            <input type="text" id="nitCliente" placeholder="NIT / CI">
+            <input type="text" id="nit" placeholder="NIT / CI">
         </div>
-        <input type="text" id="razonSocial" placeholder="Razón Social">
+        <input type="text" id="razon" placeholder="Razón Social">
     </div>
 
-    <div class="card">
-        <h3>📦 Productos</h3>
-        <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:5px;">
-            <input type="text" id="pNombre" placeholder="Item">
-            <input type="number" id="pCant" placeholder="Cant.">
-            <input type="number" id="pPrecio" placeholder="Precio">
+    <div class="section-card">
+        <h3>🛒 Detalle de Mercadería</h3>
+        <input type="text" id="pNombre" placeholder="Descripción del producto">
+        <div class="grid-2">
+            <input type="number" id="pCant" placeholder="Cantidad">
+            <input type="number" id="pPrecio" placeholder="Precio Unit.">
         </div>
-        <button class="btn-add" id="btnAdd">+ Agregar</button>
-        <div id="lista" style="margin-top:10px; font-size:13px;"></div>
-        <div style="text-align:right; font-weight:800; margin-top:10px;">Total: Bs. <span id="totalVenta">0.00</span></div>
+        <button class="btn-add" id="addItem">+ AGREGAR ITEM</button>
+        
+        <div id="listaItems" style="margin-top:20px;"></div>
+        
+        <div class="total-banner">
+            <span>TOTAL A COBRAR</span>
+            <b id="txtTotal">Bs. 0.00</b>
+        </div>
     </div>
 
-    <button class="btn-save" id="btnFinalizar">GUARDAR REGISTRO</button>
+    <button class="btn-submit" id="btnFinalizar">FINALIZAR Y GUARDAR REGISTRO</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -62,42 +84,79 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        let carrito = [];
+
+        // MiddleWare de Seguridad
         onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
 
-        let carrito = [];
-        async function correlativo() {
+        // Auto-incremento de Guía Profesional
+        async function fetchNextGuia() {
             const q = query(collection(db, "servicios"), orderBy("fecha", "desc"), limit(1));
             const snap = await getDocs(q);
-            let num = 1; snap.forEach(d => num = parseInt(d.data().nroGuia) + 1);
-            document.getElementById('nroGuia').value = num.toString().padStart(4, '0');
+            let nextNum = 1;
+            snap.forEach(d => nextNum = parseInt(d.data().nroGuia) + 1);
+            document.getElementById('nroGuia').value = nextNum.toString().padStart(4, '0');
         }
-        correlativo();
+        fetchNextGuia();
 
-        document.getElementById('btnAdd').onclick = () => {
-            const n = document.getElementById('pNombre').value, c = parseFloat(document.getElementById('pCant').value), p = parseFloat(document.getElementById('pPrecio').value);
-            if(n && c > 0) {
-                carrito.push({ nombre: n, cant: c, precio: p, subtotal: c * p });
-                let t = 0; document.getElementById('lista').innerHTML = "";
-                carrito.forEach(i => { t += i.subtotal; document.getElementById('lista').innerHTML += `<div>${i.cant}x ${i.nombre} - Bs.${i.subtotal}</div>`; });
-                document.getElementById('totalVenta').innerText = t.toFixed(2);
+        // Lógica de Carrito
+        document.getElementById('addItem').onclick = () => {
+            const nom = document.getElementById('pNombre').value;
+            const can = parseFloat(document.getElementById('pCant').value);
+            const pre = parseFloat(document.getElementById('pPrecio').value);
+
+            if(nom && can > 0) {
+                carrito.push({ nombre: nom, cant: can, precio: pre, subtotal: can * pre });
+                renderCarrito();
+                // Limpiar campos de item
+                document.getElementById('pNombre').value = "";
+                document.getElementById('pCant').value = "";
+                document.getElementById('pPrecio').value = "";
             }
         };
 
-        document.getElementById('btnFinalizar').onclick = async () => {
-            if(carrito.length === 0) return alert("Agrega productos");
-            await addDoc(collection(db, "servicios"), {
-                nroGuia: document.getElementById('nroGuia').value,
-                remitente: document.getElementById('remitente').value,
-                consignatario: document.getElementById('consignatario').value,
-                destino: document.getElementById('destino').value,
-                nroFactura: document.getElementById('nroFactura').value || "S/F",
-                razonSocial: document.getElementById('razonSocial').value || "S/R",
-                nitCliente: document.getElementById('nitCliente').value || "S/N",
-                items: carrito,
-                total: carrito.reduce((a, b) => a + b.subtotal, 0),
-                fecha: Date.now()
+        function renderCarrito() {
+            const div = document.getElementById('listaItems');
+            let total = 0;
+            div.innerHTML = "";
+            carrito.forEach((item, index) => {
+                total += item.subtotal;
+                div.innerHTML += `<div class="item-row">
+                    <span>${item.cant}x ${item.nombre}</span>
+                    <b>Bs. ${item.subtotal.toFixed(2)}</b>
+                </div>`;
             });
-            alert("Guardado!"); location.reload();
+            document.getElementById('txtTotal').innerText = `Bs. ${total.toFixed(2)}`;
+        }
+
+        // Persistencia en Firebase
+        document.getElementById('btnFinalizar').onclick = async () => {
+            if(carrito.length === 0) return alert("Error: Debe agregar al menos un producto.");
+            
+            const btn = document.getElementById('btnFinalizar');
+            btn.disabled = true;
+            btn.innerText = "PROCESANDO...";
+
+            try {
+                await addDoc(collection(db, "servicios"), {
+                    nroGuia: document.getElementById('nroGuia').value,
+                    remitente: document.getElementById('remitente').value || "S/N",
+                    consignatario: document.getElementById('consignatario').value || "S/N",
+                    destino: document.getElementById('destino').value || "S/D",
+                    nroFactura: document.getElementById('nroFactura').value || "S/F",
+                    nit: document.getElementById('nit').value || "S/N",
+                    razon: document.getElementById('razon').value || "S/R",
+                    items: carrito,
+                    total: carrito.reduce((sum, i) => sum + i.subtotal, 0),
+                    fecha: Date.now()
+                });
+                alert("Registro exitoso en TRANS CK");
+                location.reload();
+            } catch (e) {
+                alert("Error de red: " + e.message);
+                btn.disabled = false;
+                btn.innerText = "GUARDAR REGISTRO";
+            }
         };
     </script>
 </body>
