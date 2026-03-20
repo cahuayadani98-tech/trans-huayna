@@ -3,81 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gestión de Camiones - TRANS CK</title>
+    <title>Flota - TRANS CK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --azul-gris: #537d8f; --celeste: #8ac9d8; --blanco: #ffffff;
-            --texto: #2a3b4e; --verde: #2ecc71; --naranja: #f39c12; --rojo: #e74c3c;
-        }
-
-        body { margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background-color: #f4f7f6; color: var(--texto); }
-        .header-nav { display: flex; align-items: center; margin-bottom: 25px; justify-content: space-between; }
-        .btn-back { text-decoration: none; font-size: 24px; color: var(--azul-gris); font-weight: bold; }
-        h1 { font-size: 22px; font-weight: 800; margin: 0; }
-
-        /* Lista de Camiones */
-        .truck-item {
-            background: var(--blanco); padding: 18px; border-radius: 18px;
-            margin-bottom: 12px; display: flex; justify-content: space-between;
-            align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #eee;
-        }
-
-        .status-pill { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: white; }
-        .LIBRE { background: var(--verde); }
-        .EN-RUTA { background: var(--celeste); color: var(--texto); }
-        .CARGANDO { background: var(--naranja); }
-
-        /* Modal / Formulario */
-        #modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100;
-        }
-        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 85%; max-width: 350px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        :root { --azul: #537d8f; --verde: #2ecc71; --naranja: #f39c12; --rojo: #e74c3c; --blanco: #ffffff; }
+        body { margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background: #f4f7f6; }
+        .header { display: flex; align-items: center; margin-bottom: 20px; justify-content: space-between; }
+        .btn-back { text-decoration: none; font-size: 24px; color: var(--azul); }
         
-        .btn-save { width: 100%; padding: 15px; background: var(--azul-gris); color: white; border: none; border-radius: 12px; font-weight: 600; }
-
-        .fab-add {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            background: var(--azul-gris); border-radius: 50%; display: flex;
-            justify-content: center; align-items: center; color: white; font-size: 30px;
-            box-shadow: 0 8px 20px rgba(83, 125, 143, 0.4); border: none;
+        .truck-card { 
+            background: var(--blanco); padding: 15px; border-radius: 20px; 
+            margin-bottom: 12px; display: flex; justify-content: space-between; 
+            align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
+        .info h3 { margin: 0; font-size: 18px; color: #2a3b4e; }
+        .info p { margin: 2px 0 0; color: #888; font-size: 14px; }
+        
+        .pill { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: white; border: none; }
+        .LIBRE { background: var(--verde); }
+        .EN-RUTA { background: #8ac9d8; color: #2a3b4e; }
+        .CARGANDO { background: var(--naranja); }
+        
+        .btn-del { background: none; border: none; font-size: 18px; color: #ddd; padding-left: 10px; }
+
+        /* Modal */
+        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:100; }
+        .modal-content { background: white; padding: 25px; border-radius: 25px; width: 85%; max-width: 320px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .btn-save { width: 100%; padding: 15px; background: var(--azul); color: white; border: none; border-radius: 12px; font-weight: 600; }
+        
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<div class="header-nav">
+<div class="header">
     <a href="menu.html" class="btn-back">←</a>
-    <h1>Flota TRANS CK</h1>
-    <div style="font-size: 20px;">🚛</div>
+    <h1 style="font-size: 22px; font-weight: 800; margin:0;">Flota TRANS CK</h1>
+    <span>🚛</span>
 </div>
 
-<div id="truckContainer">
-    <p style="text-align: center; color: #888;">Cargando flota...</p>
-</div>
+<div id="truckContainer"></div>
 
 <div id="modal">
     <div class="modal-content">
-        <h2 style="margin-top:0">Nuevo Camión</h2>
-        <input type="text" id="placa" placeholder="Placa (Ej: ABC-123)">
-        <input type="text" id="chofer" placeholder="Nombre del Chofer">
+        <h2 id="modalTitle" style="margin:0 0 15px 0;">Nuevo Camión</h2>
+        <input type="text" id="placa" placeholder="Placa">
+        <input type="text" id="chofer" placeholder="Chofer">
         <select id="estado">
             <option value="LIBRE">LIBRE</option>
             <option value="EN-RUTA">EN RUTA</option>
             <option value="CARGANDO">CARGANDO</option>
         </select>
-        <button class="btn-save" id="btnGuardar">GUARDAR EN NUBE</button>
-        <button onclick="cerrarModal()" style="width:100%; background:none; border:none; color:#888; margin-top:10px;">Cancelar</button>
+        <button class="btn-save" id="btnGuardar">GUARDAR</button>
+        <button onclick="cerrarModal()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Cerrar</button>
     </div>
 </div>
 
-<button class="fab-add" onclick="abrirModal()">+</button>
+<button class="fab" onclick="abrirModal()">+</button>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
@@ -91,47 +78,48 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // FUNCIONES DEL MODAL
     window.abrirModal = () => document.getElementById('modal').style.display = 'flex';
     window.cerrarModal = () => document.getElementById('modal').style.display = 'none';
 
-    // GUARDAR EN FIRESTORE
     document.getElementById('btnGuardar').addEventListener('click', async () => {
-        const placa = document.getElementById('placa').value;
-        const chofer = document.getElementById('chofer').value;
-        const estado = document.getElementById('estado').value;
-
-        if(!placa || !chofer) return alert("Completa los datos");
-
-        try {
-            await addDoc(collection(db, "camiones"), {
-                placa, chofer, estado, fecha: Date.now()
-            });
-            cerrarModal();
-            document.getElementById('placa').value = "";
-            document.getElementById('chofer').value = "";
-        } catch (e) { alert("Error al guardar"); }
+        const p = document.getElementById('placa').value;
+        const c = document.getElementById('chofer').value;
+        const e = document.getElementById('estado').value;
+        if(!p || !c) return alert("Completa los datos");
+        await addDoc(collection(db, "camiones"), { placa: p, chofer: c, estado: e, fecha: Date.now() });
+        cerrarModal();
+        document.getElementById('placa').value = ""; document.getElementById('chofer').value = "";
     });
 
-    // LEER DATOS EN TIEMPO REAL
+    window.eliminarCamion = async (id) => {
+        if(confirm("¿Eliminar este camión?")) await deleteDoc(doc(db, "camiones", id));
+    };
+
+    window.cambiarEstado = async (id, actual) => {
+        const nuevos = ["LIBRE", "CARGANDO", "EN-RUTA"];
+        let siguiente = nuevos[(nuevos.indexOf(actual) + 1) % nuevos.length];
+        await updateDoc(doc(db, "camiones", id), { estado: siguiente });
+    };
+
     const q = query(collection(db, "camiones"), orderBy("fecha", "desc"));
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(q, (snap) => {
         const container = document.getElementById('truckContainer');
         container.innerHTML = "";
-        snapshot.forEach((doc) => {
-            const t = doc.data();
+        snap.forEach((d) => {
+            const t = d.data();
             container.innerHTML += `
-                <div class="truck-item">
-                    <div class="truck-info">
+                <div class="truck-card">
+                    <div class="info">
                         <h3>${t.placa}</h3>
                         <p>${t.chofer}</p>
                     </div>
-                    <div class="status-pill ${t.estado}">${t.estado.replace('-', ' ')}</div>
-                </div>
-            `;
+                    <div style="display:flex; align-items:center;">
+                        <button class="pill ${t.estado}" onclick="cambiarEstado('${d.id}', '${t.estado}')">${t.estado.replace('-', ' ')}</button>
+                        <button class="btn-del" onclick="eliminarCamion('${d.id}')">🗑️</button>
+                    </div>
+                </div>`;
         });
     });
 </script>
-
 </body>
 </html>
