@@ -6,127 +6,28 @@
     <title>Panel Principal - TRANS CK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --azul-fuerte: #2a3b4e;
-            --azul-gris: #537d8f;
-            --celeste: #8ac9d8;
-            --blanco: #ffffff;
-            --fondo: #f4f7f6;
-        }
-
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--fondo);
-            color: var(--azul-fuerte);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .user-info {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .user-email {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--azul-gris);
-        }
-
-        .header {
-            text-align: left;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 800;
-            margin: 0;
-        }
-
-        p.subtitle {
-            margin: 5px 0 0;
-            color: #888;
-            font-size: 16px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .menu-item {
-            background: var(--blanco);
-            padding: 25px 15px;
-            border-radius: 24px;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            border: 1px solid #eee;
-        }
-
-        .menu-item:active {
-            transform: scale(0.95);
-            background-color: #f9f9f9;
-        }
-
-        .icon-circle {
-            width: 60px;
-            height: 60px;
-            background: #f0f4f8;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 28px;
-        }
-
-        .menu-item span {
-            font-weight: 700;
-            color: var(--azul-fuerte);
-            font-size: 15px;
-        }
-
-        .btn-logout {
-            margin-top: 40px;
-            width: 100%;
-            max-width: 400px;
-            padding: 18px;
-            background: none;
-            border: 2px solid #e74c3c;
-            color: #e74c3c;
-            border-radius: 15px;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
+        :root { --azul: #2a3b4e; --gris: #537d8f; --fondo: #f4f7f6; }
+        body { margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background: var(--fondo); display: flex; flex-direction: column; align-items: center; }
+        .user-info { width: 100%; display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 14px; font-weight: 600; color: var(--gris); }
+        .header { width: 100%; margin-bottom: 30px; }
+        h1 { font-size: 28px; font-weight: 800; margin: 0; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 400px; }
+        .menu-item { background: white; padding: 25px 15px; border-radius: 24px; text-decoration: none; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .icon-circle { width: 60px; height: 60px; background: #f0f4f8; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; font-size: 28px; }
+        .menu-item span { font-weight: 700; color: var(--azul); font-size: 15px; }
+        .btn-logout { margin-top: 40px; width: 100%; max-width: 400px; padding: 18px; background: none; border: 2px solid #e74c3c; color: #e74c3c; border-radius: 15px; font-weight: 700; }
     </style>
 </head>
 <body>
 
     <div class="user-info">
-        <span class="user-email" id="userEmail">Cargando...</span>
-        <span style="font-size: 24px;">🚛</span>
+        <span id="userEmail">Cargando...</span>
+        <span>🚛</span>
     </div>
 
     <div class="header">
         <h1>Panel Principal</h1>
-        <p class="subtitle">Gestión de Logística TRANS CK</p>
+        <p style="color:#888; margin:5px 0 0;">TRANS CK Logística</p>
     </div>
 
     <div class="menu-grid">
@@ -135,7 +36,7 @@
             <span>Camiones</span>
         </a>
 
-        <a href="guias.html" class="menu-item">
+        <a href="registro_carga.html" class="menu-item">
             <div class="icon-circle">📝</div>
             <span>Registro</span>
         </a>
@@ -144,7 +45,6 @@
             <div class="icon-circle">💰</div>
             <span>Facturas</span>
         </a>
-
         <a href="reportes.html" class="menu-item">
             <div class="icon-circle">📊</div>
             <span>Reportes</span>
@@ -167,20 +67,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Verificar sesión activa
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('userEmail').innerText = user.email;
-            } else {
-                window.location.href = "index.html"; // Redirigir si no hay sesión
-            }
+            if (user) document.getElementById('userEmail').innerText = user.email;
+            else window.location.href = "index.html";
         });
 
-        // Botón Cerrar Sesión
         document.getElementById('btnLogout').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            });
+            signOut(auth).then(() => { window.location.href = "index.html"; });
         });
     </script>
 </body>
