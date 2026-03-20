@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro de Carga - TRANS CK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --azul: #537d8f; --celeste: #8ac9d8; --rojo: #e74c3c; --texto: #2a3b4e; }
+        body { margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background: #f4f7f6; color: var(--texto); }
+        .header { display: flex; align-items: center; margin-bottom: 20px; justify-content: space-between; }
+        .btn-back { text-decoration: none; font-size: 24px; color: var(--azul); }
+        
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--azul); margin-top: 12px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: 'Inter'; font-size: 14px; }
+        
+        .btn-registrar { width: 100%; margin-top: 20px; padding: 15px; background: var(--azul); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; box-shadow: 0 4px 10px rgba(83, 125, 143, 0.3); }
+        
+        .recientes { margin-top: 30px; }
+        .guia-item { background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--azul); position: relative; }
+        .guia-item h4 { margin: 0 0 5px 0; font-size: 16px; color: var(--azul); }
+        .guia-item p { margin: 3px 0; font-size: 13px; color: #555; }
+        
+        .actions { display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+        .btn-action { flex: 1; padding: 8px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-print { background: #f0f4f8; color: var(--azul); }
+        .btn-delete { background: #fff5f5; color: var(--rojo); }
+
+        /* Estilos para impresión */
+        @media print {
+            body * { visibility: hidden; }
+            .print-area, .print-area * { visibility: visible; }
+            .print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header no-print">
+    <a href="menu.html" class="btn-back">←</a>
+    <h1 style="font-size: 20px; margin:0; font-weight: 800;">Registro de Carga</h1>
+    <span style="font-size: 24px;">📝</span>
+</div>
+
+<div class="card no-print">
+    <label>Cliente / Empresa</label>
+    <input type="text" id="cliente" placeholder="Nombre del cliente">
+
+    <label>Producto / Detalle</label>
+    <textarea id="producto" rows="2" placeholder="¿Qué se está registrando?"></textarea>
+
+    <label>Cantidad / Peso / Volumen</label>
+    <input type="text" id="cantidad" placeholder="Ej: 50 cajas / 10 TN">
+
+    <label>Destino Final</label>
+    <input type="text" id="destino" placeholder="Ciudad o almacén">
+
+    <label>Asignar a Camión</label>
+    <select id="camionSelect">
+        <option value="">Seleccione transporte...</option>
+    </select>
+
+    <button class="btn-registrar" id="btnGuardar">GUARDAR REGISTRO</button>
+</div>
+
+<div class="recientes no-print">
+    <h3 style="font-size: 13px; color: #888; letter-spacing: 1px;">HISTORIAL DE REGISTROS</h3>
+    <div id="listaGuias"></div>
+</div>
+
+<div id="printContainer" class="print-area"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
+        authDomain: "registro-8f26e.firebaseapp.com",
+        projectId: "registro-8f26e",
+        appId: "1:62551766112:web:e59e4b444591a0e7737f05"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Cargar camiones para asignar
+    onSnapshot(collection(db, "camiones"), (snap) => {
+        const select = document.getElementById('camionSelect');
+        select.innerHTML = '<option value="">Seleccione transporte...</option>';
+        snap.forEach(d => {
+            const t = d.data();
+            select.innerHTML += `<option value="${t.placa}">${t.placa} (${t.chofer})</option>`;
+        });
+    });
+
+    // Guardar registro
+    document.getElementById('btnGuardar').addEventListener('click', async () => {
+        const data = {
+            cliente: document.getElementById('cliente').value,
+            producto: document.getElementById('producto').value,
+            cantidad: document.getElementById('cantidad').value,
+            destino: document.getElementById('destino').value,
+            camion: document.getElementById('camionSelect').value,
+            fecha: new Date().toLocaleString(),
+            ts: Date.now()
+        };
+
+        if(!data.cliente || !data.producto) return alert("Completa Cliente y Producto");
+
+        await addDoc(collection(db, "guias"), data);
+        alert("Registro guardado");
+        document.querySelectorAll('input, textarea').forEach(i => i.value = "");
+    });
+
+    // Funciones globales para botones de la lista
+    window.eliminarRegistro = async (id) => {
+        if(confirm("¿Seguro que quieres borrar este registro?")) {
+            await deleteDoc(doc(db, "guias", id));
+        }
+    };
+
+    window.imprimirRegistro = (cliente, prod, cant, dest, cam, fecha) => {
+        const area = document.getElementById('printContainer');
+        area.innerHTML = `
+            <div style="border: 2px solid #333; padding: 30px; border-radius: 10px;">
+                <h1 style="text-align:center; color:#537d8f;">TRANS CK - REGISTRO DE CARGA</h1>
+                <hr>
+                <p><strong>Fecha:</strong> ${fecha}</p>
+                <p><strong>Cliente:</strong> ${cliente}</p>
+                <p><strong>Producto:</strong> ${prod}</p>
+                <p><strong>Cantidad/Peso:</strong> ${cant}</p>
+                <p><strong>Destino:</strong> ${dest}</p>
+                <p><strong>Transporte:</strong> ${cam}</p>
+                <br><br><br>
+                <div style="display:flex; justify-content: space-around;">
+                    <div style="border-top: 1px solid #000; width: 200px; text-align:center;">Firma Despacho</div>
+                    <div style="border-top: 1px solid #000; width: 200px; text-align:center;">Firma Transportista</div>
+                </div>
+            </div>
+        `;
+        window.print();
+    };
+
+    // Escuchar cambios en la base de datos
+    const q = query(collection(db, "guias"), orderBy("ts", "desc"));
+    onSnapshot(q, (snap) => {
+        const lista = document.getElementById('listaGuias');
+        lista.innerHTML = "";
+        snap.forEach(d => {
+            const g = d.data();
+            lista.innerHTML += `
+                <div class="guia-item">
+                    <h4>${g.cliente}</h4>
+                    <p>📦 ${g.producto} (${g.cantidad})</p>
+                    <p>📍 ${g.destino} | 🚛 ${g.camion}</p>
+                    <div class="actions">
+                        <button class="btn-action btn-print" onclick="imprimirRegistro('${g.cliente}','${g.producto}','${g.cantidad}','${g.destino}','${g.camion}','${g.fecha}')">
+                            🖨️ IMPRIMIR
+                        </button>
+                        <button class="btn-action btn-delete" onclick="eliminarRegistro('${d.id}')">
+                            🗑️ BORRAR
+                        </button>
+                    </div>
+                </div>`;
+        });
+    });
+</script>
+</body>
+</html>
