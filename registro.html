@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Login - TRANS CK</title>
+    <title>Registro - TRANS CK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,19 +21,18 @@
         }
 
         .card {
-            background: var(--blanco); padding: 40px 30px; border-radius: 25px;
+            background: var(--blanco); padding: 35px 25px; border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 320px;
             text-align: center;
         }
 
-        .truck-box {
+        .icon-box {
             width: 25%; aspect-ratio: 1; margin: 0 auto 20px;
             display: flex; justify-content: center; align-items: center;
-            background: #f1f6f8; border-radius: 50%; font-size: 35px;
+            background: #f1f6f8; border-radius: 50%; font-size: 30px;
         }
 
-        h1 { color: var(--texto); font-size: 24px; font-weight: 800; margin: 0; }
-        p.subtitle { color: #666; font-size: 14px; margin: 5px 0 30px; }
+        h1 { color: var(--texto); font-size: 22px; font-weight: 800; margin-bottom: 20px; }
         
         input {
             width: 100%; padding: 14px; margin-bottom: 12px;
@@ -41,70 +40,70 @@
             font-size: 16px; font-family: 'Inter', sans-serif;
         }
 
-        .btn-login {
+        .btn-reg {
             width: 100%; padding: 16px; background: var(--celeste);
             color: var(--texto); border: none; border-radius: 12px;
             font-weight: 600; font-size: 16px; cursor: pointer;
-            text-transform: uppercase; transition: 0.3s;
+            transition: 0.3s;
         }
 
-        .btn-login:active { transform: scale(0.98); opacity: 0.8; }
+        .btn-reg:active { transform: scale(0.98); opacity: 0.8; }
 
-        .link { margin-top: 25px; font-size: 13px; color: #666; }
+        .link { margin-top: 20px; font-size: 13px; color: #666; }
         .link a { color: var(--azul-gris); font-weight: 600; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="truck-box">🚛</div>
-    <h1>TRANS CK</h1>
-    <p class="subtitle">Logística y Transporte</p>
-
-    <form id="loginForm">
+    <div class="icon-box">🤝</div>
+    <h1>Nuevo Usuario</h1>
+    <form id="regForm">
         <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="pass" placeholder="Contraseña" required>
-        <button type="submit" class="btn-login" id="btnTxt">ENTRAR</button>
+        <input type="password" id="pass" placeholder="Contraseña (6+ caracteres)" required>
+        <button type="submit" class="btn-reg" id="btnTexto">CREAR CUENTA</button>
     </form>
-    
-    <p class="link">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    <p class="link">¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a></p>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+  // Configuración de TRANS CK (Tesla Edition)
   const firebaseConfig = {
     apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
     authDomain: "registro-8f26e.firebaseapp.com",
     projectId: "registro-8f26e",
     storageBucket: "registro-8f26e.firebasestorage.app",
     messagingSenderId: "62551766112",
-    appId: "1:62551766112:web:e59e4b444591a0e7737f05"
+    appId: "1:62551766112:web:e59e4b444591a0e7737f05",
+    measurementId: "G-571RBK52C4"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  const form = document.getElementById('loginForm');
-  const btn = document.getElementById('btnTxt');
+  const form = document.getElementById('regForm');
+  const btn = document.getElementById('btnTexto');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const pass = document.getElementById('pass').value;
 
-    btn.innerText = "VERIFICANDO...";
+    btn.innerText = "REGISTRANDO...";
     btn.disabled = true;
 
-    signInWithEmailAndPassword(auth, email, pass)
+    createUserWithEmailAndPassword(auth, email, pass)
       .then((userCredential) => {
-        window.location.href = "menu.html"; // Redirige al menú principal
+        alert("¡Cuenta de TRANS CK creada con éxito!");
+        window.location.href = "index.html";
       })
       .catch((error) => {
-        btn.innerText = "ENTRAR";
+        btn.innerText = "CREAR CUENTA";
         btn.disabled = false;
-        alert("Acceso denegado: Revisa tus datos");
+        alert("Error de Tesla: " + error.message);
       });
   });
 </script>

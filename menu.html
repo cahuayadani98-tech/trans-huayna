@@ -3,47 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menú - TRANS CK</title>
+    <title>Panel de Control - TRANS CK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135px, #0a0e2a 0%, #152042 100%); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #ffffff; min-height: 100vh; }
-        h1 { color: #4dabf7; margin-top: 20px; font-size: 32px; letter-spacing: 2px; }
-        p.subtitle { color: #a1b1d4; margin-bottom: 30px; font-size: 16px; }
-        .container { width: 100%; max-width: 500px; margin-top: 30px; flex-grow: 1; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-        .btn-menu { background: #1a2549; padding: 35px 15px; border-radius: 20px; text-decoration: none; color: #ffffff; font-weight: bold; display: flex; flex-direction: column; align-items: center; border: 2px solid #324a87; transition: 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .btn-menu span { margin-top: 10px; font-size: 16px; }
-        /* Efecto de iluminación al tocar */
-        .btn-menu:active { transform: scale(0.95); border-color: #4dabf7; box-shadow: 0 0 15px rgba(77, 171, 247, 0.7); }
-        .icon-img { width: 50px; height: 50px; margin-bottom: 5px; }
-        .btn-salir { margin-top: 50px; margin-bottom: 30px; padding: 15px 30px; background: #ff5252; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 16px; transition: 0.3s; box-shadow: 0 5px 10px rgba(255, 82, 82, 0.3); }
-        .btn-salir:active { transform: scale(0.95); background: #e04a4a; }
+        :root {
+            --azul-gris: #537d8f;
+            --celeste: #8ac9d8;
+            --blanco: #ffffff;
+            --texto: #2a3b4e;
+            --rojo: #e74c3c;
+        }
+
+        body {
+            margin: 0; padding: 20px; font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; color: var(--texto);
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding: 10px 0;
+        }
+
+        .user-info { font-weight: 600; font-size: 14px; color: var(--azul-gris); }
+
+        h1 { font-size: 26px; font-weight: 800; margin: 0; color: var(--texto); }
+        p.tagline { font-size: 14px; color: #888; margin: 5px 0 25px; }
+
+        /* Contenedor de Botones Pro */
+        .menu-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+
+        .menu-card {
+            background: var(--blanco); padding: 25px 15px; border-radius: 20px;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-decoration: none; color: var(--texto); transition: 0.3s;
+            border: 1px solid #eee; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .menu-card:active { transform: scale(0.95); background: #f9f9f9; }
+
+        .icon-circle {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: #f1f6f8; display: flex; justify-content: center;
+            align-items: center; font-size: 28px; margin-bottom: 12px;
+        }
+
+        .menu-card span { font-size: 14px; font-weight: 700; }
+
+        .btn-logout {
+            margin-top: 40px; width: 100%; padding: 15px;
+            background: transparent; color: var(--rojo);
+            border: 2px solid var(--rojo); border-radius: 12px;
+            font-weight: 600; cursor: pointer; font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <h1>TRANS CK</h1>
-    <p class="subtitle">Panel de Control</p>
-    
-    <div class="container">
-        <div class="menu-grid">
-            <a href="dashboard.html" class="btn-menu">
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Memo.png" alt="Memo" class="icon-img">
-                <span>Registro</span>
-            </a>
-            <a href="camiones.html" class="btn-menu">
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20%26%20Places/Articulated%20Lorry.png" alt="Articulated Lorry" class="icon-img">
-                <span>Camiones</span>
-            </a>
-            <a href="factura.html" class="btn-menu">
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20Facing%20Up.png" alt="Page Facing Up" class="icon-img">
-                <span>Facturas</span>
-            </a>
-            <a href="guia.html" class="btn-menu">
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Package.png" alt="Package" class="icon-img">
-                <span>Guías</span>
-            </a>
-        </div>
-    </div>
-    
-    <a href="index.html" class="btn-salir">Cerrar Sesión</a>
+
+<header>
+    <div class="user-info" id="userEmail">Cargando...</div>
+    <div style="font-size: 20px;">🚛</div>
+</header>
+
+<h1>Panel Principal</h1>
+<p class="tagline">Gestión de Logística TRANS CK</p>
+
+<div class="menu-grid">
+    <a href="camiones.html" class="menu-card">
+        <div class="icon-circle">🚚</div>
+        <span>Camiones</span>
+    </a>
+
+    <a href="guias.html" class="menu-card">
+        <div class="icon-circle">📋</div>
+        <span>Guías</span>
+    </a>
+
+    <a href="facturas.html" class="menu-card">
+        <div class="icon-circle">💰</div>
+        <span>Facturas</span>
+    </a>
+
+    <a href="reportes.html" class="menu-card">
+        <div class="icon-circle">📊</div>
+        <span>Reportes</span>
+    </a>
+</div>
+
+<button class="btn-logout" id="btnLogout">CERRAR SESIÓN</button>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
+        authDomain: "registro-8f26e.firebaseapp.com",
+        projectId: "registro-8f26e",
+        storageBucket: "registro-8f26e.firebasestorage.app",
+        messagingSenderId: "62551766112",
+        appId: "1:62551766112:web:e59e4b444591a0e7737f05"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Seguridad: Si no hay usuario logueado, lo saca al Login
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById('userEmail').innerText = user.email;
+        } else {
+            window.location.href = "index.html";
+        }
+    });
+
+    // Cerrar Sesión
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        signOut(auth).then(() => {
+            window.location.href = "index.html";
+        });
+    });
+</script>
+
 </body>
 </html>

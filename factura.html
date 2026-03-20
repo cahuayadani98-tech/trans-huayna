@@ -3,101 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura TRANS CK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>Facturas - TRANS CK</title>
     <style>
-        body { font-family: 'Poppins', sans-serif; background:#f4f7fe; margin:0; padding:15px; display:flex; flex-direction:column; align-items:center; }
-        .invoice-card { background: white; width: 100%; max-width: 500px; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); box-sizing: border-box; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #1a237e; padding-bottom: 10px; margin-bottom: 20px; }
-        .logo { color: #1a237e; font-size: 26px; font-weight: 800; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 12px; margin-bottom: 15px; }
-        .contact-box { background: #f8f9fa; padding: 10px; border-radius: 8px; border-left: 3px solid #1a237e; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #1a237e; color: white; padding: 10px; font-size: 11px; text-align: left; }
-        td { padding: 12px 10px; border-bottom: 1px solid #eee; font-size: 13px; }
-        .total-section { margin-top: 20px; text-align: right; }
-        .total-txt { font-size: 20px; font-weight: 800; color: #1a237e; }
-        .footer-sign { margin-top: 40px; border-top: 1px solid #333; width: 180px; text-align: center; font-size: 12px; margin: 40px auto 0 auto; padding-top: 5px; }
-        .no-print { margin-bottom: 15px; display: flex; gap: 10px; }
-        .btn { padding: 10px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-        @media print { .no-print { display: none; } body { background: white; padding: 0; } .invoice-card { box-shadow: none; border: 1px solid #eee; } }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0e2a; color: white; padding: 20px; }
+        .factura-box { background: white; color: #333; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; }
+        .header-fact { border-bottom: 2px solid #4dabf7; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .logo-ck { color: #152042; font-weight: bold; font-size: 24px; }
+        .total-box { background: #f8f9fa; padding: 15px; text-align: right; margin-top: 20px; border-radius: 8px; }
+        .btn-print { display: block; width: 100%; padding: 15px; background: #4dabf7; color: white; border: none; border-radius: 10px; margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="no-print">
-        <button class="btn" style="background:#1a237e; color:white;" onclick="window.print()">🖨️ Imprimir</button>
-        <button class="btn" style="background:#ccc;" onclick="window.history.back()">Volver</button>
-    </div>
+    <a href="menu.html" style="color: #4dabf7; text-decoration: none;">← Volver</a>
+    <h2 style="text-align: center; color: #4dabf7;">Visor de Facturas</h2>
 
-    <div class="invoice-card">
-        <div class="header">
-            <div class="logo">TRANS CK</div>
-            <div style="text-align: right;">
-                <div style="font-weight: 800; font-size: 16px;">FACTURA DE CARGA</div>
-                <div id="fFecha" style="font-size: 11px; color: gray;"></div>
-            </div>
+    <div class="factura-box">
+        <div class="header-fact">
+            <div class="logo-ck">TRANS CK</div>
+            <div><strong>N° 0001</strong></div>
         </div>
-
-        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 15px;">
-            <div><b>No. Factura:</b> #<span id="fGuia"></span></div>
-            <div><b>Camión:</b> <span id="fPlaca"></span></div>
-        </div>
-
-        <div class="info-grid">
-            <div class="contact-box">
-                <b style="color: #1a237e;">REMITENTE:</b><br>
-                <span id="fRemi"></span><br>
-                <b>Tel:</b> <span id="fRemiTel"></span>
-            </div>
-            <div class="contact-box">
-                <b style="color: #1a237e;">CONSIGNATARIO:</b><br>
-                <span id="fCons"></span><br>
-                <b>Tel:</b> <span id="fConsTel"></span>
-            </div>
-        </div>
-
-        <div style="font-size: 12px; margin-bottom: 15px; padding-left: 10px;">
-            <b>RUTA:</b> <span id="fRuta"></span>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>DESCRIPCIÓN</th>
-                    <th style="text-align: center;">CANT.</th>
-                    <th style="text-align: right;">BS./UNID.</th>
-                </tr>
-            </thead>
-            <tbody id="fCuerpo"></tbody>
+        <p><strong>Cliente:</strong> Distribuidora Norte</p>
+        <p><strong>Fecha:</strong> 19/03/2026</p>
+        <hr>
+        <table style="width: 100%; text-align: left;">
+            <tr><th>Carga</th><th>Cant.</th><th>Subtotal</th></tr>
+            <tr><td>Cemento Wari</td><td>100</td><td>5000 Bs.</td></tr>
         </table>
-
-        <div class="total-section">
-            <span class="total-txt">TOTAL: Bs. <span id="fMonto"></span></span>
+        <div class="total-box">
+            <span style="font-size: 20px;">Total: <strong>5000 Bs.</strong></span>
         </div>
-
-        <div class="footer-sign">Recibí Conforme</div>
     </div>
-
-    <script>
-        const d = JSON.parse(localStorage.getItem('facturaActual'));
-        if(d) {
-            document.getElementById('fGuia').innerText = d.guia;
-            document.getElementById('fPlaca').innerText = d.placa;
-            document.getElementById('fRemi').innerText = d.remi;
-            document.getElementById('fRemiTel').innerText = d.remiTel;
-            document.getElementById('fCons').innerText = d.cons;
-            document.getElementById('fConsTel').innerText = d.consTel;
-            document.getElementById('fRuta').innerText = d.ruta;
-            document.getElementById('fMonto').innerText = d.monto;
-            document.getElementById('fFecha').innerText = new Date().toLocaleDateString();
-            document.getElementById('fCuerpo').innerHTML = d.items.map(i => `
-                <tr>
-                    <td>${i.n}</td>
-                    <td style="text-align: center;">${parseFloat(i.c).toFixed(2)}</td>
-                    <td style="text-align: right;">${parseFloat(i.u).toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-    </script>
+    <button class="btn-print">COMPARTIR / IMPRIMIR</button>
 </body>
 </html>
