@@ -1,152 +1,102 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SCM Report - TRANS CK</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #1e293b; --accent: #38bdf8; --success: #22c55e; --surface: #ffffff; --bg: #f1f5f9; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--primary); -webkit-tap-highlight-color: transparent; }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE", 
+        authDomain: "registro-8f26e.firebaseapp.com", 
+        projectId: "registro-8f26e", 
+        appId: "1:62551766112:web:e59e4b444591a0e7737f05" 
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let masterData = []; // Fuente de verdad para el Excel
+
+    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
+
+    // Carga de datos optimizada
+    onSnapshot(query(collection(db, "servicios"), orderBy("fecha", "desc")), (snap) => {
+        masterData = [];
+        snap.forEach(d => {
+            const data = d.data();
+            masterData.push({ id: d.id, ...data });
+        });
+        renderTable();
+    });
+
+    window.renderTable = () => {
+        const queryBusq = document.getElementById('search').value.toLowerCase();
+        const body = document.getElementById('tableBody');
+        let sum = 0;
+        body.innerHTML = "";
+
+        // Filtramos datos para mostrar y para tener lista la exportación
+        masterData.forEach(d => {
+            const itemsDetalle = (d.items || []).map(i => i.nombre).join(" ").toLowerCase();
+            const cliente = (d.remitente || "").toLowerCase();
+            
+            if (cliente.includes(queryBusq) || itemsDetalle.includes(queryBusq)) {
+                sum += (d.total || 0);
+                const itemsStr = (d.items || []).map(i => `${i.cant}x ${i.nombre}`).join(", ");
+                
+                body.innerHTML += `
+                    <tr>
+                        <td style="color:#64748b;">${new Date(d.fecha).toLocaleDateString()}</td>
+                        <td><span class="tag-guia">${d.nroGuia}</span></td>
+                        <td class="client-cell"><b>${d.remitente}</b><small>${itemsStr}</small></td>
+                        <td style="font-weight:800;">Bs.${(d.total || 0).toFixed(2)}</td>
+                        <td><button class="btn-action-del" onclick="softDelete('${d.id}')">Eliminar</button></td>
+                    </tr>`;
+            }
+        });
+        document.getElementById('totalView').innerText = `Bs. ${sum.toFixed(2)}`;
+    };
+
+    // FUNCIÓN DE EXCEL CORREGIDA
+    document.getElementById('xlsxOut').onclick = () => {
+        const queryBusq = document.getElementById('search').value.toLowerCase();
+        const reportDate = new Date().toLocaleString();
         
-        /* Navbar de Navegación */
-        .nav-bar { display: flex; align-items: center; margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .btn-nav { background: var(--surface); border: 1px solid #e2e8f0; padding: 10px 18px; border-radius: 12px; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.2s; }
-        .btn-nav:active { transform: scale(0.95); background: #f8fafc; }
+        // 1. Definir encabezados profesionales
+        const excelRows = [
+            ["TRANS CK - SISTEMA DE CONTROL LOGÍSTICO"],
+            ["REPORTE DE AUDITORÍA DE CARGA"],
+            ["Generado el:", reportDate],
+            [""],
+            ["FECHA", "GUÍA", "FACTURA", "CLIENTE", "DESTINO", "TOTAL (BS)", "DETALLE DE PRODUCTOS"]
+        ];
 
-        /* Widget de Recaudación */
-        .kpi-card { background: var(--primary); color: white; padding: 25px; border-radius: 24px; text-align: center; margin: 0 auto 20px auto; max-width: 600px; box-shadow: 0 10px 25px rgba(30,41,59,0.15); }
-        .kpi-card span { font-size: 11px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 1.5px; }
-        .kpi-card h2 { margin: 8px 0 0 0; font-size: 36px; font-weight: 800; color: var(--accent); }
+        // 2. Filtrar los mismos datos que hay en pantalla para el Excel
+        masterData.forEach(d => {
+            const itemsDetalle = (d.items || []).map(i => i.nombre).join(" ").toLowerCase();
+            const cliente = (d.remitente || "").toLowerCase();
 
-        /* Controles de Filtro */
-        .controls { max-width: 600px; margin: 0 auto 25px auto; display: flex; flex-direction: column; gap: 12px; }
-        .search-box { width: 100%; padding: 16px; border-radius: 16px; border: 1px solid #e2e8f0; background: var(--surface); font-size: 16px; font-weight: 600; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
-        .search-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
-
-        .btn-export { background: var(--success); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(34,197,94,0.2); }
-
-        /* Datatable Estilizada */
-        .data-wrapper { background: var(--surface); border-radius: 24px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
-        table { width: 100%; border-collapse: collapse; min-width: 550px; }
-        th { background: #f8fafc; padding: 18px 15px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; }
-        td { padding: 18px 15px; border-bottom: 1px solid #f8fafc; font-size: 14px; vertical-align: middle; }
-        .tag-guia { background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: 800; color: var(--primary); font-size: 12px; }
-        .client-cell b { display: block; margin-bottom: 4px; }
-        .client-cell small { color: #94a3b8; line-height: 1.4; display: block; }
-        .btn-action-del { color: #f43f5e; background: #fff1f2; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 800; transition: background 0.2s; }
-    </style>
-</head>
-<body>
-
-    <div class="nav-bar">
-        <button class="btn-nav" onclick="location.href='menu.html'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            VOLVER
-        </button>
-    </div>
-
-    <div class="kpi-card">
-        <span>Flujo de Caja en Pantalla</span>
-        <h2 id="totalView">Bs. 0.00</h2>
-    </div>
-
-    <div class="controls">
-        <input type="text" id="search" class="search-box" placeholder="Buscar por cliente o mercadería..." oninput="renderTable()">
-        <button class="btn-export" id="xlsxOut">📊 EXPORTAR AUDITORÍA EXCEL</button>
-    </div>
-
-    <div class="data-wrapper" style="overflow-x: auto;">
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>ID Guía</th>
-                    <th>Cliente y Detalle</th>
-                    <th>Total (Bs)</th>
-                    <th>Ops</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE", authDomain: "registro-8f26e.firebaseapp.com", projectId: "registro-8f26e", appId: "1:62551766112:web:e59e4b444591a0e7737f05" };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let masterData = [];
-
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
-
-        onSnapshot(query(collection(db, "servicios"), orderBy("fecha", "desc")), (snap) => {
-            masterData = [];
-            snap.forEach(d => masterData.push({ id: d.id, ...d.data() }));
-            renderTable();
+            if (cliente.includes(queryBusq) || itemsDetalle.includes(queryBusq)) {
+                const productosTexto = (d.items || []).map(i => `${i.cant} ${i.nombre}`).join(" | ");
+                excelRows.push([
+                    new Date(d.fecha).toLocaleDateString(),
+                    d.nroGuia,
+                    d.nroFactura || "S/F",
+                    d.remitente,
+                    d.destino,
+                    d.total,
+                    productosTexto
+                ]);
+            }
         });
 
-        window.renderTable = () => {
-            const query = document.getElementById('search').value.toLowerCase();
-            const body = document.getElementById('tableBody');
-            let sum = 0;
-            body.innerHTML = "";
+        // 3. Generar archivo
+        const worksheet = XLSX.utils.aoa_to_sheet(excelRows);
+        const workbook = XLSX.utils.book_new();
+        
+        // Ajuste de anchos de columna
+        worksheet['!cols'] = [{wch:12}, {wch:10}, {wch:12}, {wch:25}, {wch:15}, {wch:12}, {wch:50}];
 
-            masterData.forEach(d => {
-                const searchContent = `${d.remitente} ${d.items.map(i=>i.nombre).join(" ")}`.toLowerCase();
-                if (searchContent.includes(query)) {
-                    sum += d.total;
-                    const items = d.items.map(i => `${i.cant}x ${i.nombre}`).join(", ");
-                    body.innerHTML += `
-                        <tr>
-                            <td style="color:#64748b; font-weight:600;">${new Date(d.fecha).toLocaleDateString()}</td>
-                            <td><span class="tag-guia">${d.nroGuia}</span></td>
-                            <td class="client-cell"><b>${d.remitente}</b><small>${items}</small></td>
-                            <td style="font-weight:800; color:var(--primary);">Bs.${d.total.toFixed(2)}</td>
-                            <td><button class="btn-action-del" onclick="softDelete('${d.id}')">Eliminar</button></td>
-                        </tr>`;
-                }
-            });
-            document.getElementById('totalView').innerText = `Bs. ${sum.toFixed(2)}`;
-        };
-
-        window.softDelete = async (id) => { if(confirm("¿Confirmar eliminación de registro?")) await deleteDoc(doc(db, "servicios", id)); };
-
-        document.getElementById('xlsxOut').onclick = () => {
-            const reportDate = new Date().toLocaleString();
-            const header = [
-                ["TRANS CK - SISTEMA DE CONTROL LOGÍSTICO"],
-                ["REPORTE DE AUDITORÍA DE CARGA"],
-                ["Generado el:", reportDate],
-                [""],
-                ["FECHA", "GUÍA", "FACTURA", "CLIENTE", "DESTINO", "TOTAL (BS)", "DETALLE DE PRODUCTOS"]
-            ];
-
-            const rows = masterData.map(d => [
-                new Date(d.fecha).toLocaleDateString(),
-                d.nroGuia,
-                d.nroFactura || "S/F",
-                d.remitente,
-                d.destino,
-                d.total,
-                d.items.map(i => `${i.cant} ${i.nombre}`).join(" | ")
-            ]);
-
-            const worksheet = XLSX.utils.aoa_to_sheet([...header, ...rows]);
-            const workbook = XLSX.utils.book_new();
-
-            // Configuración de anchos de columna para profesionalismo
-            worksheet['!cols'] = [{wch:12}, {wch:10}, {wch:12}, {wch:25}, {wch:15}, {wch:12}, {wch:50}];
-
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Master_Report");
-            XLSX.writeFile(workbook, `TRANS_CK_Audit_${new Date().getTime()}.xlsx`);
-        };
-    </script>
-</body>
-</html>
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Auditoria_Carga");
+        XLSX.writeFile(workbook, `TRANS_CK_Audit_${Date.now()}.xlsx`);
+    };
+</script>
