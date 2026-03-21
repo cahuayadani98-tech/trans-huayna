@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - TRANS HUAYNA KAPAC</title>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f3f4f6; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: #1f2937; font-size: 20px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        .btn-add { width: 100%; padding: 15px; background: #1f2937; color: #facc15; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .btn-excel { width: 100%; padding: 15px; background: #107c10; color: white; border: none; border-radius: 12px; font-weight: 800; margin-top: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>REGISTRO DE PRODUCTOS</h1>
+    <input type="text" id="prodNombre" placeholder="Nombre del producto">
+    <input type="number" id="prodCant" placeholder="Cantidad">
+    <input type="text" id="prodDestino" placeholder="Destino / Cliente">
+    
+    <button class="btn-add" onclick="agregarProducto()">GUARDAR PRODUCTO</button>
+    <hr>
+    <button class="btn-excel" onclick="descargarExcel()">📥 DESCARGAR INFORME EXCEL</button>
+</div>
+
+<script>
+    // Lista temporal (Luego la conectaremos a tu Firebase Database)
+    let listaProductos = [
+        ["FECHA", "PRODUCTO", "CANTIDAD", "DESTINO"] // Encabezados
+    ];
+
+    function agregarProducto() {
+        const nombre = document.getElementById('prodNombre').value;
+        const cant = document.getElementById('prodCant').value;
+        const destino = document.getElementById('prodDestino').value;
+        const fecha = new Date().toLocaleDateString();
+
+        if(nombre && cant) {
+            listaProductos.push([fecha, nombre, cant, destino]);
+            alert("Producto guardado en la lista");
+            // Limpiar campos
+            document.getElementById('prodNombre').value = '';
+            document.getElementById('prodCant').value = '';
+        } else {
+            alert("Por favor llena los datos");
+        }
+    }
+
+    function descargarExcel() {
+        if(listaProductos.length < 2) {
+            alert("No hay productos registrados para exportar");
+            return;
+        }
+
+        // 1. Crear el libro y la hoja
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(listaProductos);
+
+        // 2. DAR FORMATO: Filtros automáticos
+        const rango = XLSX.utils.decode_range(ws['!ref']);
+        ws['!autofilter'] = { ref: XLSX.utils.encode_range({s: {c:0, r:0}, e: {c:3, r:0}}) };
+
+        // 3. Descargar
+        XLSX.utils.book_append_sheet(wb, ws, "Informe de Cargas");
+        XLSX.writeFile(wb, "Informe_Productos_Huayna.xlsx");
+    }
+</script>
+
+</body>
+</html>
