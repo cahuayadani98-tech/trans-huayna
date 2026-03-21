@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Guía - TRANS HUAYNA KAPAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gris-oscuro: #1f2937; --amarillo: #facc15; }
+        body { margin: 0; padding: 40px; font-family: 'Plus Jakarta Sans', sans-serif; color: #333; background: #f3f4f6; }
+
+        /* HOJA DE IMPRESIÓN */
+        .hoja-impresion {
+            background: white; width: 100%; max-width: 800px; margin: 0 auto;
+            padding: 50px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 15px solid var(--gris-oscuro);
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .logo-area h1 { margin: 0; font-size: 26px; font-weight: 800; color: var(--gris-oscuro); }
+        /* NUEVO ESLOGAN */
+        .logo-area p { margin: 0; font-size: 11px; letter-spacing: 2px; color: #666; font-weight: 800; text-transform: uppercase; }
+
+        .nro-guia { text-align: right; }
+        .nro-guia h2 { margin: 0; font-size: 32px; color: var(--gris-oscuro); font-weight: 800; }
+        .nro-guia span { font-size: 12px; color: #9ca3af; font-weight: 700; }
+
+        /* DATOS DE LA GUÍA */
+        .seccion-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+        .dato-item { border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .label { display: block; font-size: 10px; font-weight: 800; color: #9ca3af; text-transform: uppercase; margin-bottom: 5px; }
+        .value { font-size: 16px; font-weight: 600; color: var(--gris-oscuro); }
+
+        /* TABLA DE PRODUCTO */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #f9fafb; padding: 15px; text-align: left; font-size: 11px; text-transform: uppercase; color: #9ca3af; border-bottom: 2px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 15px; color: var(--gris-oscuro); }
+
+        /* BOTONES DE CONTROL */
+        .no-print { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+        .btn { padding: 15px 30px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.2s; }
+        .btn-print { background: var(--amarillo); color: var(--gris-oscuro); }
+        .btn-back { background: var(--gris-oscuro); color: white; text-decoration: none; display: flex; align-items: center; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .hoja-impresion { box-shadow: none; padding: 20px; width: 100%; border: none; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <a href="guias.html" class="btn btn-back">← VOLVER</a>
+        <button class="btn btn-print" onclick="window.print()">🖨️ IMPRIMIR GUÍA</button>
+    </div>
+
+    <div class="hoja-impresion">
+        <div class="header">
+            <div class="logo-area">
+                <h1>TRANS HUAYNA KAPAC</h1>
+                <p>LOGÍSTICA Y TRANSPORTE</p>
+            </div>
+            <div class="nro-guia">
+                <span>DOCUMENTO DE DESPACHO</span>
+                <h2 id="view-num">00000</h2>
+            </div>
+        </div>
+
+        <div class="seccion-datos">
+            <div class="dato-item"><span class="label">Remitente</span><span class="value" id="view-rem">-</span></div>
+            <div class="dato-item"><span class="label">Consignatario</span><span class="value" id="view-cons">-</span></div>
+            <div class="dato-item"><span class="label">Fecha de Emisión</span><span class="value" id="view-fecha">-</span></div>
+            <div class="dato-item"><span class="label">Unidad Asignada</span><span class="value" id="view-unidad">-</span></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Descripción del Producto</th>
+                    <th>Cantidad / Peso</th>
+                    <th style="text-align: right;">Costo Total (Bs.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="view-prod">-</td>
+                    <td id="view-cant">-</td>
+                    <td style="text-align: right; font-weight: 800; font-size: 18px;" id="view-total">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 50px; font-size: 10px; color: #9ca3af; text-align: center;">
+            Este documento es un comprobante de logística interno de Trans Huayna Kapac.
+        </div>
+    </div>
+
+    <script>
+        // Captura de datos dinámicos
+        const params = new URLSearchParams(window.location.search);
+        
+        document.getElementById('view-num').innerText = params.get('num') || '00000';
+        document.getElementById('view-rem').innerText = params.get('rem') || 'No definido';
+        document.getElementById('view-cons').innerText = params.get('cons') || 'No definido';
+        document.getElementById('view-prod').innerText = params.get('prod') || 'Mercadería general';
+        document.getElementById('view-cant').innerText = params.get('cant') || '0';
+        document.getElementById('view-total').innerText = params.get('total') || '0.00';
+        document.getElementById('view-unidad').innerText = params.get('unidad') || 'Pendiente';
+
+        // Fecha automática
+        const hoy = new Date();
+        document.getElementById('view-fecha').innerText = hoy.toLocaleDateString();
+    </script>
+</body>
+</html>

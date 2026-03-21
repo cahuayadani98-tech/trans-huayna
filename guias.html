@@ -3,117 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - TRANS HUAYNA KAPAC</title>
+    <title>Historial - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gris-mate: #374151; --amarillo: #facc15; --blanco: #ffffff; }
-        body { margin: 0; padding: 20px; background: #1f2937; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 500px; }
+        :root { 
+            --gris-mate: #374151; 
+            --amarillo: #facc15; 
+            --blanco: #ffffff; 
+            --fondo-app: #1f2937; 
+        }
         
-        .card { background: var(--blanco); padding: 25px; border-radius: 24px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
-        .numero-guia { position: absolute; top: 20px; right: 25px; background: #f3f4f6; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 12px; color: var(--gris-mate); }
+        body { 
+            margin: 0; 
+            background: var(--fondo-app); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: white;
+        }
+
+        /* BOTÓN DE MENÚ */
+        .btn-menu-float {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            background: var(--blanco); border: none; width: 50px; height: 50px;
+            border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
+            cursor: pointer;
+        }
+
+        /* SIDEBAR PROFESIONAL */
+        .sidebar { 
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
+            background: var(--blanco); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1100; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.open { left: 0; }
+        .nav-link { 
+            display: flex; align-items: center; text-decoration: none; 
+            color: #4b5563; padding: 18px 25px; font-weight: 700; 
+            font-size: 13px; border-bottom: 1px solid #f9fafb; 
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .main-container { 
+            width: 100%; padding: 100px 20px 40px 20px; 
+            box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
+        }
         
-        h2 { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 20px 0; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        .head-icon { width: 18px; height: 18px; color: #9ca3af; stroke-width: 2.5; }
+        .header-section { width: 100%; max-width: 500px; margin-bottom: 25px; }
+        .header-section h2 { color: var(--blanco); font-size: 32px; font-weight: 800; margin: 0; }
+        .header-section p { color: var(--amarillo); font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 10px; font-weight: 800; color: #4b5563; margin-bottom: 5px; margin-left: 5px; }
+        /* TARJETA DE GUÍA CORREGIDA (UNA SOLA COLUMNA) */
+        .guide-card { 
+            background: rgba(255,255,255,0.08); width: 100%; max-width: 500px; 
+            border-radius: 25px; padding: 25px; margin-bottom: 20px; 
+            border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+        }
         
-        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e5e7eb; background: #f9fafb; box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; }
-        select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 15px; }
+        .guide-header { 
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); 
+            padding-bottom: 15px; 
+        }
+        .guide-no { color: var(--amarillo); font-weight: 800; font-size: 18px; }
+        .guide-date { color: #9ca3af; font-size: 12px; text-align: right; }
+        
+        /* Contenedor de datos apilados para que no se choquen */
+        .info-box { 
+            display: flex; flex-direction: column; 
+            margin-bottom: 12px; padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .label { color: #9ca3af; font-size: 10px; text-transform: uppercase; margin-bottom: 4px; font-weight: 800; }
+        .value { color: var(--blanco); font-size: 14px; font-weight: 600; }
 
-        .btn-elegant { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; background: var(--amarillo); color: #1f2937; cursor: pointer; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-elegant:active { transform: scale(0.96); }
+        .btn-print {
+            width: 100%; background: none; border: 1.5px solid var(--amarillo); 
+            padding: 15px; border-radius: 12px; color: var(--amarillo);
+            font-weight: 800; font-size: 13px; margin-top: 10px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-print:active { background: var(--amarillo); color: var(--gris-mate); }
 
-        .total-display { background: #1f2937; color: var(--amarillo); padding: 15px; border-radius: 12px; text-align: center; margin-top: 10px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
+        .sidebar.open + .overlay { display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="numero-guia">GUÍA N°: <span id="num-guia">00155</span></div>
-            <h2>
-                <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                DATOS DEL CLIENTE
-            </h2>
-            <div class="input-group"><label>REMITENTE</label><input type="text" id="rem"></div>
-            <div class="input-group"><label>CONSIGNATARIO</label><input type="text" id="cons"></div>
+
+    <button class="btn-menu-float" onclick="toggleMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <nav class="sidebar" id="sidebar">
+        <div style="padding: 30px 25px; font-weight: 800; border-bottom: 1px solid #f3f4f6; color: var(--gris-mate);">MENÚ SISTEMA</div>
+        <div style="flex: 1;">
+            <a href="index.html" class="nav-link">INICIO</a>
+            <a href="carga.html" class="nav-link">REGISTRO DE CARGA</a>
+            <a href="camiones.html" class="nav-link">CONTROL CAMIONES</a>
+            <a href="guias.html" class="nav-link" style="color: var(--amarillo);">HISTORIAL GUÍAS</a>
+            <a href="reportes.html" class="nav-link">REPORTE MENSUAL</a>
+        </div>
+        <a href="index.html" class="nav-link" style="color: #ef4444; border-top: 1px solid #f3f4f6;">SALIR</a>
+    </nav>
+    
+    <div class="overlay" onclick="toggleMenu()"></div>
+
+    <div class="main-container">
+        <div class="header-section">
+            <h2>Historial de Guías</h2>
+            <p>Registro completo de despachos realizados</p>
         </div>
 
-        <div class="card">
-            <h2>
-                <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 16v3H5v-3"/><path d="M17 12H7"/><path d="M21 8l-2-2H5L3 8v8h18V8z"/></svg>
-                ASIGNACIÓN DE TRANSPORTE
-            </h2>
-            <div class="input-group">
-                <label>SELECCIONAR CAMIÓN DISPONIBLE</label>
-                <select id="camion-select">
-                    </select>
+        <div class="guide-card">
+            <div class="guide-header">
+                <span class="guide-no">Guía N°: 00155</span>
+                <span class="guide-date">15/05/2024<br>10:30 AM</span>
             </div>
-        </div>
+            
+            <div class="info-box"><span class="label">Remitente</span><span class="value">Comercial Luna</span></div>
+            <div class="info-box"><span class="label">Consignatario</span><span class="value">Transportes Guty</span></div>
+            <div class="info-box"><span class="label">Unidad Asignada</span><span class="value">ABC-123 - Chofer: J. Pérez</span></div>
+            <div class="info-box"><span class="label">Producto</span><span class="value">Harina (50 Sacos)</span></div>
 
-        <div class="card">
-            <h2>
-                <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                DETALLE DE CARGA
-            </h2>
-            <div class="input-group"><label>PRODUCTO</label><input type="text" id="prod"></div>
-            <div style="display: flex; gap: 10px;">
-                <div class="input-group" style="flex: 1;"><label>CANTIDAD</label><input type="number" id="cant" oninput="calcular()"></div>
-                <div class="input-group" style="flex: 1;"><label>PRECIO UNIT.</label><input type="number" id="precio" oninput="calcular()"></div>
-            </div>
-            <div class="total-display">
-                <p style="margin:0; font-size: 10px; letter-spacing: 2px;">TOTAL NETO (BS)</p>
-                <h3 style="margin:0; font-size: 24px;">Bs. <span id="monto-total">0.00</span></h3>
-            </div>
+            <button class="btn-print" onclick="window.location.href='imprimir.html?num=00155&rem=Comercial%20Luna&cons=Transportes%20Guty&prod=Harina%20(50%20Sacos)&cant=50&total=1500'">VER DETALLE / IMPRIMIR</button>
         </div>
-
-        <button class="btn-elegant" onclick="imprimirYDespachar()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-            IMPRIMIR Y DESPACHAR
-        </button>
-        
-        <button class="btn-elegant" style="background: transparent; color: var(--amarillo); border: 2px solid var(--amarillo);" onclick="location.href='menu.html'">
-            ← VOLVER AL PANEL
-        </button>
     </div>
 
     <script>
-        function calcular() {
-            const c = document.getElementById('cant').value || 0;
-            const p = document.getElementById('precio').value || 0;
-            document.getElementById('monto-total').innerText = (c * p).toFixed(2);
-        }
-
-        function cargarCamiones() {
-            const flota = JSON.parse(localStorage.getItem('flota')) || [];
-            const select = document.getElementById('camion-select');
-            const disponibles = flota.filter(c => c.estado === 'disponible');
-            
-            if(disponibles.length === 0) {
-                select.innerHTML = '<option value="">No hay unidades libres</option>';
-            } else {
-                select.innerHTML = '<option value="">-- Seleccionar Placa --</option>' + 
-                    disponibles.map(c => `<option value="${c.placa}">${c.placa} - ${c.chofer}</option>`).join('');
-            }
-        }
-
-        function imprimirYDespachar() {
-            const placa = document.getElementById('camion-select').value;
-            if(!placa) return alert("Asigne un camión para continuar.");
-
-            let flota = JSON.parse(localStorage.getItem('flota')) || [];
-            const idx = flota.findIndex(c => c.placa === placa);
-            if(idx !== -1) {
-                flota[idx].estado = 'ruta'; // Cambia el estado internamente
-                localStorage.setItem('flota', JSON.stringify(flota));
-            }
-
-            alert("Unidad " + placa + " despachada correctamente.");
-            location.reload();
-        }
-
-        cargarCamiones();
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
     </script>
 </body>
 </html>
