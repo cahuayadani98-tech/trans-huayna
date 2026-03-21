@@ -1,112 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Registro - TRANS CK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - TRANS HUAYNA KAPAC</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --azul-gris: #537d8f;
-            --celeste: #8ac9d8;
-            --blanco: #ffffff;
-            --texto: #2a3b4e;
-        }
-
-        body {
-            margin: 0; padding: 20px; font-family: 'Inter', sans-serif;
-            background-color: var(--azul-gris); height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            box-sizing: border-box; overflow: hidden;
-        }
-
-        .card {
-            background: var(--blanco); padding: 35px 25px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 320px;
-            text-align: center;
-        }
-
-        .icon-box {
-            width: 25%; aspect-ratio: 1; margin: 0 auto 20px;
-            display: flex; justify-content: center; align-items: center;
-            background: #f1f6f8; border-radius: 50%; font-size: 30px;
-        }
-
-        h1 { color: var(--texto); font-size: 22px; font-weight: 800; margin-bottom: 20px; }
-        
-        input {
-            width: 100%; padding: 14px; margin-bottom: 12px;
-            border: 2px solid #eee; border-radius: 12px; box-sizing: border-box;
-            font-size: 16px; font-family: 'Inter', sans-serif;
-        }
-
-        .btn-reg {
-            width: 100%; padding: 16px; background: var(--celeste);
-            color: var(--texto); border: none; border-radius: 12px;
-            font-weight: 600; font-size: 16px; cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-reg:active { transform: scale(0.98); opacity: 0.8; }
-
-        .link { margin-top: 20px; font-size: 13px; color: #666; }
-        .link a { color: var(--azul-gris); font-weight: 600; text-decoration: none; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #374151; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: white; padding: 40px; border-radius: 24px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        h1 { color: #111827; font-size: 20px; margin-bottom: 20px; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e5e7eb; background: #f9fafb; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; border-radius: 10px; border: none; background: #facc15; color: #1f2937; font-weight: 800; cursor: pointer; }
+        a { display: block; margin-top: 15px; color: #374151; font-size: 13px; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <div class="icon-box">🤝</div>
-    <h1>Nuevo Usuario</h1>
-    <form id="regForm">
-        <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="pass" placeholder="Contraseña (6+ caracteres)" required>
-        <button type="submit" class="btn-reg" id="btnTexto">CREAR CUENTA</button>
-    </form>
-    <p class="link">¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a></p>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  // Configuración de TRANS CK (Tesla Edition)
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
-    authDomain: "registro-8f26e.firebaseapp.com",
-    projectId: "registro-8f26e",
-    storageBucket: "registro-8f26e.firebasestorage.app",
-    messagingSenderId: "62551766112",
-    appId: "1:62551766112:web:e59e4b444591a0e7737f05",
-    measurementId: "G-571RBK52C4"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const form = document.getElementById('regForm');
-  const btn = document.getElementById('btnTexto');
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const pass = document.getElementById('pass').value;
-
-    btn.innerText = "REGISTRANDO...";
-    btn.disabled = true;
-
-    createUserWithEmailAndPassword(auth, email, pass)
-      .then((userCredential) => {
-        alert("¡Cuenta de TRANS CK creada con éxito!");
-        window.location.href = "index.html";
-      })
-      .catch((error) => {
-        btn.innerText = "CREAR CUENTA";
-        btn.disabled = false;
-        alert("Error de Tesla: " + error.message);
-      });
-  });
-</script>
-
+    <div class="card">
+        <i data-lucide="user-plus" style="margin-bottom: 10px;"></i>
+        <h1>Crear Cuenta</h1>
+        <input type="text" placeholder="Nombre Completo">
+        <input type="password" placeholder="Contraseña">
+        <button onclick="location.href='index.html'">REGISTRARSE</button>
+        <a href="index.html">¿Ya tienes cuenta? Entrar</a>
+    </div>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

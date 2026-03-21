@@ -2,51 +2,134 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard - TRANS CK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2a3b4e; --accent: #8ac9d8; --success: #2ecc71; --danger: #e74c3c; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header-container { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
-        .header h1 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; letter-spacing: -1.5px; }
-        .header span { color: var(--accent); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-logout { background: #ffeaea; color: var(--danger); border: none; padding: 10px 15px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
-        .menu-grid { width: 100%; max-width: 400px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card-full { grid-column: span 2; }
-        .menu-card { background: white; padding: 25px 15px; border-radius: 24px; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(42, 59, 78, 0.06); border: 1px solid rgba(255,255,255,0.8); transition: all 0.3s ease; }
-        .menu-card:active { transform: scale(0.95); }
-        .icon-bg { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 12px; }
-        .card-title { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; text-align: center; }
-        .bg-green { background: #e8f9f1; color: var(--success); }
-        .bg-yellow { background: #fef9e7; color: #b7950b; }
-        .bg-accent { background: #f0f7f9; color: var(--accent); }
+        :root { --gris-mate: #374151; --amarillo: #facc15; --blanco: #ffffff; --fondo-app: #1f2937; }
+        body { margin: 0; padding: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; }
+        
+        /* SIDEBAR: Empieza cerrado (75px) */
+        .sidebar { 
+            background: var(--blanco); 
+            width: 75px; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 10px 0 30px rgba(0,0,0,0.3); 
+            border-radius: 0 20px 20px 0;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        /* CLASE PARA ABRIR: Cuando tenga esta clase, medirá 280px */
+        .sidebar.open { 
+            width: 280px; 
+        }
+        
+        /* Botón de las tres rayitas */
+        .menu-toggle { 
+            padding: 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: center; 
+            border-bottom: 1px solid #f3f4f6;
+            background: none;
+            border-top: none; border-left: none; border-right: none;
+            width: 100%;
+            color: var(--gris-mate);
+        }
+        .sidebar.open .menu-toggle { justify-content: flex-start; padding-left: 25px; }
+        
+        .nav-link { 
+            display: flex; 
+            align-items: center; 
+            text-decoration: none; 
+            color: #4b5563; 
+            font-size: 13px; 
+            font-weight: 600; 
+            height: 55px;
+            white-space: nowrap; 
+            transition: background 0.2s;
+        }
+        
+        .nav-link svg { 
+            width: 24px; 
+            height: 24px; 
+            margin: 0 25px; 
+            flex-shrink: 0; 
+            stroke-width: 2.5;
+        }
+
+        /* TEXTO: Oculto por defecto, aparece solo cuando el menú está abierto */
+        .nav-text {
+            opacity: 0;
+            display: none;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar.open .nav-text {
+            display: inline-block;
+            opacity: 1;
+        }
+        
+        .nav-link.active { 
+            background: #fefce8; 
+            color: var(--gris-mate); 
+            border-left: 6px solid var(--amarillo); 
+        }
+
+        .brand-area { flex: 1; background: var(--fondo-app); padding: 50px; display: flex; flex-direction: column; justify-content: center; color: var(--amarillo); }
+        .brand-area h1 { margin: 0; font-size: 40px; font-weight: 800; }
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <div class="header"><span>Panel de Control</span><h1>TRANS CK</h1></div>
-        <button class="btn-logout" id="btnLogout">🚪 SALIR</button>
+    <div class="sidebar" id="mySidebar">
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        
+        <div style="flex:1; margin-top: 20px;">
+            <a href="menu.html" class="nav-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <span class="nav-text">INICIO</span>
+            </a>
+            <a href="guias.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+                <span class="nav-text">REGISTRO DE CARGA</span>
+            </a>
+            <a href="#" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect></svg>
+                <span class="nav-text">FACTURAS</span>
+            </a>
+            <a href="#" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
+                <span class="nav-text">REPORTES EXCEL</span>
+            </a>
+            <a href="camiones.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="3" width="15" height="13"></rect><circle cx="5.5" cy="18.5" r="2.5"></circle></svg>
+                <span class="nav-text">CONTROL CAMIONES</span>
+            </a>
+        </div>
+        
+        <div style="padding: 20px 0; border-top: 1px solid #f3f4f6;">
+            <a href="index.html" class="nav-link" style="color: #ef4444;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2-2h4"></path></svg>
+                <span class="nav-text">SALIR SISTEMA</span>
+            </a>
+        </div>
     </div>
-    <div class="menu-grid">
-        <a href="guias.html" class="menu-card card-full" style="background: linear-gradient(135deg, var(--primary), #455a71);">
-            <div class="icon-bg" style="background: rgba(255,255,255,0.1); color: white;">➕</div>
-            <div class="card-title" style="color: white; font-size: 16px;">Nuevo Registro de Carga</div>
-        </a>
-        <a href="ver_guia.html" class="menu-card"><div class="icon-bg bg-accent">🚚</div><div class="card-title">Imprimir Guía</div></a>
-        <a href="factura.html" class="menu-card"><div class="icon-bg bg-green">📄</div><div class="card-title">Imprimir Factura</div></a>
-        <a href="reportes.html" class="menu-card card-full"><div class="icon-bg bg-yellow">📊</div><div class="card-title">Reportes y Excel Detallado</div></a>
+    
+    <div class="brand-area">
+        <h1>TRANS<br>HUAYNA<br>KAPAC</h1>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE", authDomain: "registro-8f26e.firebaseapp.com", projectId: "registro-8f26e", appId: "1:62551766112:web:e59e4b444591a0e7737f05" };
-        const auth = getAuth(initializeApp(firebaseConfig));
-        
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
-        document.getElementById('btnLogout').onclick = () => { if(confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href="index.html"); };
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('mySidebar');
+            sidebar.classList.toggle('open');
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía Oficial - TRANS HUAYNA KAPAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gris: #374151; --amarillo: #facc15; --borde: #e5e7eb; }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; }
+        
+        .guia-elegant { width: 100%; max-width: 800px; margin: 0 auto; padding: 60px; box-sizing: border-box; }
+        
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--gris); padding-bottom: 20px; margin-bottom: 40px; }
+        .brand-area h1 { margin: 0; font-size: 32px; font-weight: 800; color: var(--gris); letter-spacing: -1px; }
+        .brand-area p { margin: 5px 0 0; font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .guia-meta { text-align: right; }
+        .guia-meta p { margin: 0; font-size: 11px; font-weight: 800; color: #9ca3af; text-transform: uppercase; }
+        .guia-meta h2 { margin: 0; font-size: 28px; font-weight: 800; color: #ef4444; }
+
+        .datos-cli { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
+        .cli-row { display: flex; border-bottom: 1px solid var(--borde); padding: 10px 0; }
+        .cli-label { width: 180px; font-size: 11px; font-weight: 800; color: #9ca3af; text-transform: uppercase; }
+        .cli-text { font-size: 16px; font-weight: 600; color: var(--gris); }
+
+        .tabla-elegant { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .tabla-elegant th { background: #f9fafb; color: var(--gris); font-size: 11px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid var(--gris); }
+        .tabla-elegant td { padding: 20px 15px; border-bottom: 1px solid var(--borde); font-size: 15px; }
+        .monto-total { font-size: 22px; font-weight: 800; color: var(--gris); text-align: right; }
+
+        .no-print { background: var(--gris); padding: 15px; text-align: center; }
+        .btn-print { padding: 12px 30px; font-weight: 800; background: var(--amarillo); border: none; border-radius: 8px; cursor: pointer; }
+
+        @media print { .no-print { display: none; } .guia-elegant { padding: 40px; } }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <button class="btn-print" onclick="window.print()">IMPRIMIR AHORA</button>
+    </div>
+
+    <div class="guia-elegant">
+        <div class="header">
+            <div class="brand-area">
+                <h1>TRANS HUAYNA KAPAC</h1>
+                <p>Logística y Transporte Nacional</p>
+            </div>
+            <div class="guia-meta">
+                <p>NÚMERO DE GUÍA</p>
+                <h2 id="print-num">00000</h2>
+            </div>
+        </div>
+
+        <div class="datos-cli">
+            <div class="cli-row">
+                <div class="cli-label">Remitente:</div>
+                <div class="cli-text" id="print-rem"></div>
+            </div>
+            <div class="cli-row">
+                <div class="cli-label">Consignatario:</div>
+                <div class="cli-text" id="print-cons"></div>
+            </div>
+        </div>
+
+        <table class="tabla-elegant">
+            <thead>
+                <tr>
+                    <th>Cantidad / Peso</th>
+                    <th>Descripción de Mercadería</th>
+                    <th style="text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="print-cant"></td>
+                    <td id="print-prod"></td>
+                    <td class="monto-total" id="print-total"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('print-num').innerText = params.get('num');
+        document.getElementById('print-rem').innerText = params.get('rem') || "-";
+        document.getElementById('print-cons').innerText = params.get('cons') || "-";
+        document.getElementById('print-prod').innerText = params.get('prod') || "-";
+        document.getElementById('print-cant').innerText = params.get('cant') || "-";
+        document.getElementById('print-total').innerText = "Bs. " + (params.get('total') || "0.00");
+    </script>
+</body>
+</html>

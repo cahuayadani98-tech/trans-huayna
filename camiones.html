@@ -2,124 +2,122 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Flota - TRANS CK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camiones - TRANS HUAYNA KAPAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --azul: #537d8f; --verde: #2ecc71; --naranja: #f39c12; --rojo: #e74c3c; --blanco: #ffffff; }
-        body { margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background: #f4f7f6; }
-        .header { display: flex; align-items: center; margin-bottom: 20px; justify-content: space-between; }
-        .btn-back { text-decoration: none; font-size: 24px; color: var(--azul); }
+        :root { --gris-mate: #374151; --amarillo: #facc15; --blanco: #ffffff; --rojo: #ef4444; --verde: #22c55e; }
+        body { margin: 0; padding: 20px; background: #1f2937; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; }
         
-        .truck-card { 
-            background: var(--blanco); padding: 15px; border-radius: 20px; 
-            margin-bottom: 12px; display: flex; justify-content: space-between; 
-            align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .info h3 { margin: 0; font-size: 18px; color: #2a3b4e; }
-        .info p { margin: 2px 0 0; color: #888; font-size: 14px; }
+        .card { background: var(--blanco); padding: 25px; border-radius: 20px; margin-bottom: 20px; color: black; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h2 { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 20px 0; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         
-        .pill { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: white; border: none; }
-        .LIBRE { background: var(--verde); }
-        .EN-RUTA { background: #8ac9d8; color: #2a3b4e; }
-        .CARGANDO { background: var(--naranja); }
-        
-        .btn-del { background: none; border: none; font-size: 18px; color: #ddd; padding-left: 10px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 10px; font-weight: 800; color: #4b5563; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e5e7eb; background: #f9fafb; box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; }
 
-        /* Modal */
-        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:100; }
-        .modal-content { background: white; padding: 25px; border-radius: 25px; width: 85%; max-width: 320px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .btn-save { width: 100%; padding: 15px; background: var(--azul); color: white; border: none; border-radius: 12px; font-weight: 600; }
+        .btn-elegant { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; background: var(--amarillo); color: #1f2937; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
         
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--azul); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        /* LISTA DE UNIDADES */
+        .camion-item { display: flex; align-items: center; gap: 12px; padding: 15px; background: rgba(255,255,255,0.08); border-radius: 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .camion-icon-box { background: var(--amarillo); padding: 10px; border-radius: 12px; min-width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; }
+        .camion-info { flex: 1; }
+        .placa { font-weight: 800; font-size: 15px; color: var(--amarillo); display: block; }
+        .chofer { font-size: 11px; color: #9ca3af; }
+
+        /* ICONOS DE ESTADO PROFESIONALES */
+        .status-svg { width: 18px; height: 18px; stroke-width: 2.5; }
+        .color-disponible { color: var(--verde); }
+        .color-ruta { color: var(--amarillo); }
+        .color-taller { color: var(--rojo); }
+
+        .btn-delete { background: rgba(255, 255, 255, 0.1); color: #9ca3af; border: none; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div style="margin-bottom: 25px;">
+            <h1 style="margin:0; font-size: 24px; font-weight: 800;">Flota de Camiones</h1>
+            <p style="margin:0; font-size: 10px; color: var(--amarillo); letter-spacing: 1px;">GESTIÓN PROFESIONAL</p>
+        </div>
 
-<div class="header">
-    <a href="menu.html" class="btn-back">←</a>
-    <h1 style="font-size: 22px; font-weight: 800; margin:0;">Flota TRANS CK</h1>
-    <span>🚛</span>
-</div>
+        <div class="card">
+            <h2>REGISTRAR UNIDAD</h2>
+            <div class="input-group"><label>PLACA</label><input type="text" id="placa" placeholder="0000-XXX"></div>
+            <div class="input-group"><label>CHOFER</label><input type="text" id="chofer" placeholder="Nombre completo"></div>
+            <div class="input-group">
+                <label>ESTADO INICIAL</label>
+                <select id="estado">
+                    <option value="disponible">Disponible</option>
+                    <option value="ruta">En Ruta</option>
+                    <option value="mantenimiento">Taller</option>
+                </select>
+            </div>
+            <button class="btn-elegant" onclick="guardarCamion()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                AGREGAR UNIDAD
+            </button>
+        </div>
 
-<div id="truckContainer"></div>
+        <h2 style="color: #9ca3af; margin-top: 30px;">📦 UNIDADES EN FLOTA</h2>
+        <div id="lista-camiones"></div>
 
-<div id="modal">
-    <div class="modal-content">
-        <h2 id="modalTitle" style="margin:0 0 15px 0;">Nuevo Camión</h2>
-        <input type="text" id="placa" placeholder="Placa">
-        <input type="text" id="chofer" placeholder="Chofer">
-        <select id="estado">
-            <option value="LIBRE">LIBRE</option>
-            <option value="EN-RUTA">EN RUTA</option>
-            <option value="CARGANDO">CARGANDO</option>
-        </select>
-        <button class="btn-save" id="btnGuardar">GUARDAR</button>
-        <button onclick="cerrarModal()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Cerrar</button>
+        <button class="btn-elegant" style="background: transparent; color: var(--amarillo); border: 2px solid var(--amarillo); margin-top: 20px;" onclick="location.href='menu.html'">
+            ← VOLVER AL INICIO
+        </button>
     </div>
-</div>
 
-<button class="fab" onclick="abrirModal()">+</button>
+    <script>
+        // Definición de iconos profesionales (SVG)
+        const ICON_CHECK = `<svg class="status-svg color-disponible" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        const ICON_CLOCK = `<svg class="status-svg color-ruta" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        const ICON_TOOL = `<svg class="status-svg color-taller" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a2 2 0 0 1-2.79-2.79l-3.77 3.77Z"></path><path d="M20 13c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c1.88 0 3.63.58 5.08 1.58"></path><path d="m7 15 5-5"></path><path d="m15 15-5-5"></path><path d="m7 10 5 5"></path></svg>`;
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        function guardarCamion() {
+            const placa = document.getElementById('placa').value;
+            const chofer = document.getElementById('chofer').value;
+            const estado = document.getElementById('estado').value;
+            if(!placa || !chofer) return alert("Por favor, complete los campos.");
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
-        authDomain: "registro-8f26e.firebaseapp.com",
-        projectId: "registro-8f26e",
-        storageBucket: "registro-8f26e.firebasestorage.app",
-        messagingSenderId: "62551766112",
-        appId: "1:62551766112:web:e59e4b444591a0e7737f05"
-    };
+            let flota = JSON.parse(localStorage.getItem('flota')) || [];
+            flota.push({ placa, chofer, estado });
+            localStorage.setItem('flota', JSON.stringify(flota));
+            
+            document.getElementById('placa').value = "";
+            document.getElementById('chofer').value = "";
+            mostrarFlota();
+        }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    window.abrirModal = () => document.getElementById('modal').style.display = 'flex';
-    window.cerrarModal = () => document.getElementById('modal').style.display = 'none';
-
-    document.getElementById('btnGuardar').addEventListener('click', async () => {
-        const p = document.getElementById('placa').value;
-        const c = document.getElementById('chofer').value;
-        const e = document.getElementById('estado').value;
-        if(!p || !c) return alert("Completa los datos");
-        await addDoc(collection(db, "camiones"), { placa: p, chofer: c, estado: e, fecha: Date.now() });
-        cerrarModal();
-        document.getElementById('placa').value = ""; document.getElementById('chofer').value = "";
-    });
-
-    window.eliminarCamion = async (id) => {
-        if(confirm("¿Eliminar este camión?")) await deleteDoc(doc(db, "camiones", id));
-    };
-
-    window.cambiarEstado = async (id, actual) => {
-        const nuevos = ["LIBRE", "CARGANDO", "EN-RUTA"];
-        let siguiente = nuevos[(nuevos.indexOf(actual) + 1) % nuevos.length];
-        await updateDoc(doc(db, "camiones", id), { estado: siguiente });
-    };
-
-    const q = query(collection(db, "camiones"), orderBy("fecha", "desc"));
-    onSnapshot(q, (snap) => {
-        const container = document.getElementById('truckContainer');
-        container.innerHTML = "";
-        snap.forEach((d) => {
-            const t = d.data();
-            container.innerHTML += `
-                <div class="truck-card">
-                    <div class="info">
-                        <h3>${t.placa}</h3>
-                        <p>${t.chofer}</p>
+        function mostrarFlota() {
+            let flota = JSON.parse(localStorage.getItem('flota')) || [];
+            const lista = document.getElementById('lista-camiones');
+            lista.innerHTML = flota.map((c, i) => {
+                let sIcon = c.estado === 'disponible' ? ICON_CHECK : (c.estado === 'ruta' ? ICON_CLOCK : ICON_TOOL);
+                return `
+                <div class="camion-item">
+                    <div class="camion-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 16v3H5v-3"></path><path d="M17 12H7"></path><path d="M21 8l-2-2H5L3 8v8h18V8z"></path></svg>
                     </div>
-                    <div style="display:flex; align-items:center;">
-                        <button class="pill ${t.estado}" onclick="cambiarEstado('${d.id}', '${t.estado}')">${t.estado.replace('-', ' ')}</button>
-                        <button class="btn-del" onclick="eliminarCamion('${d.id}')">🗑️</button>
+                    <div class="camion-info">
+                        <span class="placa">${c.placa}</span>
+                        <span class="chofer">${c.chofer}</span>
                     </div>
-                </div>`;
-        });
-    });
-</script>
+                    ${sIcon}
+                    <button class="btn-delete" onclick="eliminar(${i})">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            `;}).join('');
+        }
+
+        function eliminar(i) {
+            let flota = JSON.parse(localStorage.getItem('flota')) || [];
+            flota.splice(i, 1);
+            localStorage.setItem('flota', JSON.stringify(flota));
+            mostrarFlota();
+        }
+        mostrarFlota();
+    </script>
 </body>
 </html>

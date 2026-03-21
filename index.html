@@ -1,113 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Login - TRANS CK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TRANS HUAYNA KAPAC</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --azul-gris: #537d8f;
-            --celeste: #8ac9d8;
-            --blanco: #ffffff;
-            --texto: #2a3b4e;
-        }
-
-        body {
-            margin: 0; padding: 20px; font-family: 'Inter', sans-serif;
-            background-color: var(--azul-gris); height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            box-sizing: border-box; overflow: hidden;
-        }
-
-        .card {
-            background: var(--blanco); padding: 40px 30px; border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 320px;
-            text-align: center;
-        }
-
-        .truck-box {
-            width: 25%; aspect-ratio: 1; margin: 0 auto 20px;
-            display: flex; justify-content: center; align-items: center;
-            background: #f1f6f8; border-radius: 50%; font-size: 35px;
-        }
-
-        h1 { color: var(--texto); font-size: 24px; font-weight: 800; margin: 0; }
-        p.subtitle { color: #666; font-size: 14px; margin: 5px 0 30px; }
-        
-        input {
-            width: 100%; padding: 14px; margin-bottom: 12px;
-            border: 2px solid #eee; border-radius: 12px; box-sizing: border-box;
-            font-size: 16px; font-family: 'Inter', sans-serif;
-        }
-
-        .btn-login {
-            width: 100%; padding: 16px; background: var(--celeste);
-            color: var(--texto); border: none; border-radius: 12px;
-            font-weight: 600; font-size: 16px; cursor: pointer;
-            text-transform: uppercase; transition: 0.3s;
-        }
-
-        .btn-login:active { transform: scale(0.98); opacity: 0.8; }
-
-        .link { margin-top: 25px; font-size: 13px; color: #666; }
-        .link a { color: var(--azul-gris); font-weight: 600; text-decoration: none; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #374151; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: white; padding: 50px; border-radius: 24px; width: 100%; max-width: 300px; text-align: center; }
+        .logo-box { background: #facc15; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        h1 { font-size: 16px; font-weight: 800; color: #1f2937; margin-bottom: 25px; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e5e7eb; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; border: none; border-radius: 10px; background: #1f2937; color: #facc15; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <div class="truck-box">🚛</div>
-    <h1>TRANS CK</h1>
-    <p class="subtitle">Logística y Transporte</p>
-
-    <form id="loginForm">
-        <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="pass" placeholder="Contraseña" required>
-        <button type="submit" class="btn-login" id="btnTxt">ENTRAR</button>
-    </form>
-    
-    <p class="link">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE",
-    authDomain: "registro-8f26e.firebaseapp.com",
-    projectId: "registro-8f26e",
-    storageBucket: "registro-8f26e.firebasestorage.app",
-    messagingSenderId: "62551766112",
-    appId: "1:62551766112:web:e59e4b444591a0e7737f05"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const form = document.getElementById('loginForm');
-  const btn = document.getElementById('btnTxt');
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const pass = document.getElementById('pass').value;
-
-    btn.innerText = "VERIFICANDO...";
-    btn.disabled = true;
-
-    signInWithEmailAndPassword(auth, email, pass)
-      .then((userCredential) => {
-        window.location.href = "menu.html"; // Redirige al menú principal
-      })
-      .catch((error) => {
-        btn.innerText = "ENTRAR";
-        btn.disabled = false;
-        alert("Acceso denegado: Revisa tus datos");
-      });
-  });
-</script>
-
+    <div class="card">
+        <div class="logo-box"><i data-lucide="truck"></i></div>
+        <h1>TRANS HUAYNA KAPAC</h1>
+        <input type="text" placeholder="Usuario">
+        <input type="password" placeholder="Contraseña">
+        <button onclick="location.href='menu.html'">ENTRAR AL SISTEMA</button>
+    </div>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

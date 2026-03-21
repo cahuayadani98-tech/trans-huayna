@@ -2,144 +2,119 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reporte Pro - TRANS CK</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1e293b; --accent: #38bdf8; --success: #22c55e; --bg: #f1f5f9; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--primary); }
+        :root { --gris-mate: #374151; --amarillo: #facc15; --blanco: #ffffff; --verde-excel: #166534; }
+        body { margin: 0; padding: 20px; background: var(--gris-mate); font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         
-        .nav-bar { max-width: 600px; margin: 0 auto 15px auto; }
-        .btn-nav { background: white; border: 1px solid #e2e8f0; padding: 10px 15px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; }
+        
+        /* CABECERA */
+        .header-reporte { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .titulo h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .titulo p { margin: 0; font-size: 10px; color: var(--amarillo); letter-spacing: 2px; text-transform: uppercase; }
 
-        .kpi-card { background: var(--primary); color: white; padding: 20px; border-radius: 20px; text-align: center; margin: 0 auto 20px auto; max-width: 600px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .kpi-card h2 { margin: 5px 0 0 0; font-size: 32px; color: var(--accent); }
+        /* TARJETAS DE RESUMEN */
+        .resumen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .resumen-card { background: rgba(255,255,255,0.08); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .resumen-label { font-size: 9px; font-weight: 800; color: #9ca3af; text-transform: uppercase; }
+        .resumen-val { font-size: 18px; font-weight: 800; display: block; margin-top: 4px; }
 
-        .controls { max-width: 600px; margin: 0 auto 20px auto; display: flex; flex-direction: column; gap: 10px; }
-        .search-box { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid #e2e8f0; font-size: 16px; box-sizing: border-box; }
-        .btn-export { background: var(--success); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 800; cursor: pointer; }
+        /* CONTENEDOR DE TABLA CON SCROLL */
+        .aviso-scroll { text-align: center; font-size: 10px; color: var(--amarillo); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .tabla-scroll-container { 
+            background: var(--blanco); 
+            border-radius: 20px; 
+            overflow-x: auto; /* Permite el movimiento lateral */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            -webkit-overflow-scrolling: touch;
+        }
 
-        .data-table-container { background: white; border-radius: 20px; overflow-x: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { background: #f8fafc; padding: 12px; text-align: left; font-size: 11px; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; }
-        td { padding: 12px; border-bottom: 1px solid #f8fafc; font-size: 13px; }
-        .client-name { font-weight: 700; display: block; }
-        .item-detail { font-size: 11px; color: #94a3b8; }
-        .btn-del { color: #f43f5e; background: #fff1f2; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; color: black; }
+        th { background: #f9fafb; padding: 15px; text-align: left; font-weight: 800; color: #9ca3af; text-transform: uppercase; font-size: 10px; border-bottom: 2px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #f3f4f6; font-size: 13px; white-space: nowrap; }
+        
+        .monto-negrita { font-weight: 800; color: var(--gris-mate); }
+        .status-tag { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; background: #dcfce7; color: #166534; }
+
+        /* BOTONES */
+        .btn-accion { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; transition: 0.2s; }
+        .btn-excel { background: var(--verde-excel); color: white; }
+        .btn-volver { background: transparent; border: 1.5px solid var(--amarillo); color: var(--amarillo); }
+        .btn-accion:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header-reporte">
+            <div class="titulo">
+                <h1>Reporte General</h1>
+                <p>TRANS HUAYNA KAPAC</p>
+            </div>
+        </div>
 
-    <div class="nav-bar">
-        <button class="btn-nav" onclick="location.href='menu.html'">← VOLVER</button>
+        <div class="resumen-grid">
+            <div class="resumen-card">
+                <span class="resumen-label">GUÍAS DEL MES</span>
+                <span class="resumen-val">154 Registros</span>
+            </div>
+            <div class="resumen-card">
+                <span class="resumen-label">INGRESOS TOTALES</span>
+                <span class="resumen-val" style="color: var(--amarillo);">Bs. 12,450.00</span>
+            </div>
+        </div>
+
+        <p class="aviso-scroll">↔ Desliza lateralmente para ver todo el registro</p>
+
+        <div class="tabla-scroll-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Guía</th>
+                        <th>Fecha</th>
+                        <th>Remitente</th>
+                        <th>Consignatario</th>
+                        <th>Producto / Carga</th>
+                        <th>Cant / Peso</th>
+                        <th>Total Cobrado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>00154</td>
+                        <td>20/03/2026</td>
+                        <td>Daniel</td>
+                        <td>Achazo</td>
+                        <td>Sacos de Papa</td>
+                        <td>10</td>
+                        <td class="monto-negrita">Bs. 1000.00</td>
+                        <td><span class="status-tag">COMPLETADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>00153</td>
+                        <td>19/03/2026</td>
+                        <td>Ferretería Central</td>
+                        <td>Juan Perez</td>
+                        <td>Bolsas de Cemento</td>
+                        <td>50</td>
+                        <td class="monto-negrita">Bs. 2500.00</td>
+                        <td><span class="status-tag">COMPLETADO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn-accion btn-excel" onclick="alert('Generando archivo Excel...')">
+            📄 EXPORTAR A EXCEL (.XLSX)
+        </button>
+
+        <button class="btn-accion btn-volver" onclick="location.href='menu.html'">
+            ← VOLVER AL PANEL DE CONTROL
+        </button>
     </div>
-
-    <div class="kpi-card">
-        <small>RECAUDACIÓN FILTRADA</small>
-        <h2 id="totalDisplay">Bs. 0.00</h2>
-    </div>
-
-    <div class="controls">
-        <input type="text" id="searchInput" class="search-box" placeholder="Buscar por cliente..." oninput="actualizarVista()">
-        <button class="btn-export" id="btnDownloadExcel">📥 DESCARGAR EXCEL PROFESIONAL</button>
-    </div>
-
-    <div class="data-table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Guía</th>
-                    <th>Cliente y Detalle</th>
-                    <th>Total</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="tableContent"></tbody>
-        </table>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        const firebaseConfig = { 
-            apiKey: "AIzaSyBtiw8MM-kchif6lCBJkjh9fVfWAAPxqaE", 
-            authDomain: "registro-8f26e.firebaseapp.com", 
-            projectId: "registro-8f26e", 
-            appId: "1:62551766112:web:e59e4b444591a0e7737f05" 
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let dataCache = [];
-
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
-
-        onSnapshot(query(collection(db, "servicios"), orderBy("fecha", "desc")), (snapshot) => {
-            dataCache = [];
-            snapshot.forEach(d => dataCache.push({ id: d.id, ...d.data() }));
-            actualizarVista();
-        });
-
-        window.actualizarVista = () => {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const table = document.getElementById('tableContent');
-            let total = 0;
-            table.innerHTML = "";
-
-            dataCache.forEach(item => {
-                const remitente = (item.remitente || "").toLowerCase();
-                if (remitente.includes(term)) {
-                    total += (item.total || 0);
-                    const detalle = (item.items || []).map(i => `${i.cant}x ${i.nombre}`).join(", ");
-                    table.innerHTML += `
-                        <tr>
-                            <td>${new Date(item.fecha).toLocaleDateString()}</td>
-                            <td><b>${item.nroGuia}</b></td>
-                            <td><span class="client-name">${item.remitente}</span><span class="item-detail">${detalle}</span></td>
-                            <td style="font-weight:800;">Bs.${(item.total || 0).toFixed(2)}</td>
-                            <td><button class="btn-del" onclick="borrarRegistro('${item.id}')">X</button></td>
-                        </tr>`;
-                }
-            });
-            document.getElementById('totalDisplay').innerText = `Bs. ${total.toFixed(2)}`;
-        };
-
-        window.borrarRegistro = async (id) => { if(confirm("¿Eliminar?")) await deleteDoc(doc(db, "servicios", id)); };
-
-        document.getElementById('btnDownloadExcel').onclick = () => {
-            const rows = [
-                ["TRANS CK - REPORTE LOGÍSTICO"],
-                ["Fecha:", new Date().toLocaleDateString()],
-                [""],
-                ["FECHA", "GUÍA", "FACTURA", "CLIENTE", "DESTINO", "TOTAL (BS)", "PRODUCTOS"]
-            ];
-
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            dataCache.forEach(item => {
-                if ((item.remitente || "").toLowerCase().includes(term)) {
-                    rows.push([
-                        new Date(item.fecha).toLocaleDateString(),
-                        item.nroGuia,
-                        item.nroFactura || "S/F",
-                        item.remitente,
-                        item.destino,
-                        item.total,
-                        (item.items || []).map(i => `${i.cant} ${i.nombre}`).join(" | ")
-                    ]);
-                }
-            });
-
-            const ws = XLSX.utils.aoa_to_sheet(rows);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Reporte");
-            XLSX.writeFile(wb, `Reporte_TRANS_CK.xlsx`);
-        };
-    </script>
 </body>
 </html>
