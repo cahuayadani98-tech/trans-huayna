@@ -219,8 +219,35 @@
     <script>
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         function descargarExcel() { 
-            XLSX.writeFile(XLSX.utils.book_append_sheet(XLSX.utils.book_new(), XLSX.utils.table_to_sheet(document.getElementById("tablaExcel")), "Reporte Mensual"), "Reporte_TRANS_HUAYNA.xlsx"); 
-        }
+    try {
+        // 1. Creamos el libro de trabajo de Excel
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.table_to_sheet(document.getElementById("tablaExcel"));
+        XLSX.utils.book_append_sheet(wb, ws, "Reporte Mensual");
+
+        // 2. Generamos el archivo en memoria
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // 3. Truco para Móvil: Crear un link temporal y hacerle clic
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = "Reporte_TRANS_HUAYNA.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpieza
+        setTimeout(() => {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }, 100);
+
+    } catch (error) {
+        alert("Error al descargar: " + error.message);
+    }
+}
+
     </script>
 </body>
 </html>
