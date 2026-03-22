@@ -16,7 +16,6 @@
         label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; color: #6b7280; }
         input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f3f4f6; box-sizing: border-box; font-family: inherit; font-weight: 600; outline: none; }
         
-        /* Estilo para el campo automático (deshabilitado) */
         input:disabled { background: #f9fafb; color: #1f2937; border-color: #e5e7eb; cursor: not-allowed; }
         input:focus { border-color: var(--amarillo); }
 
@@ -33,7 +32,7 @@
         
         <div class="form-group">
             <label>N° de Guía (Automático)</label>
-            <input type="text" id="n_guia" disabled placeholder="Cargando...">
+            <input type="text" id="n_guia" disabled placeholder="Generando número...">
         </div>
 
         <div class="form-group">
@@ -77,7 +76,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4",
@@ -92,30 +91,34 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- LÓGICA DEL NÚMERO DE GUÍA AUTOMÁTICO ---
+        // --- LÓGICA DEL NÚMERO DE GUÍA CON CORRECCIÓN ---
         const guiaInput = document.getElementById('n_guia');
         const registrosRef = ref(db, 'registros_carga');
 
-        // Escuchar el último registro para generar el siguiente número
         onValue(registrosRef, (snapshot) => {
-            const data = snapshot.val();
             let siguienteNumero = 1;
 
-            if (data) {
-                // Obtenemos todos los números de guía actuales
-                const numeros = Object.values(data).map(item => parseInt(item.n_guia) || 0);
-                // Buscamos el más alto y sumamos 1
-                siguienteNumero = Math.max(...numeros) + 1;
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const numeros = Object.values(data)
+                    .map(item => parseInt(item.n_guia))
+                    .filter(n => !isNaN(n));
+                
+                if (numeros.length > 0) {
+                    siguienteNumero = Math.max(...numeros) + 1;
+                }
             }
-            
-            // Le damos formato de 5 dígitos (ej: 00001)
+            // Esto soluciona el problema de "Cargando..."
             guiaInput.value = siguienteNumero.toString().padStart(5, '0');
+        }, (error) => {
+            console.error("Error al leer base de datos:", error);
+            guiaInput.value = "00001";
         });
 
         // --- GUARDAR REGISTRO ---
         document.getElementById('btnGuardar').onclick = function() {
             const data = {
-                n_guia: guiaInput.value, // Toma el automático
+                n_guia: guiaInput.value,
                 remitente: document.getElementById('remitente').value,
                 consignatario: document.getElementById('consignatario').value,
                 producto: document.getElementById('producto').value,
@@ -132,7 +135,7 @@
                         alert("✅ Guía " + data.n_guia + " registrada con éxito");
                         window.location.href = 'reportes.html';
                     })
-                    .catch((e) => alert("Error: " + e.message));
+                    .catch((e) => alert("Error al guardar: " + e.message));
             } else {
                 alert("⚠️ Por favor completa el Producto y el Total");
             }
