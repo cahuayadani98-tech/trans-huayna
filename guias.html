@@ -11,81 +11,77 @@
             --amarillo: #facc15; 
             --blanco: #ffffff; 
             --fondo-app: #1f2937; 
+            --rojo: #ef4444;
         }
         
-        body { 
-            margin: 0; 
-            background: var(--fondo-app); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            color: white;
-        }
+        body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; padding: 20px; color: black; }
 
-        /* BOTÓN DE MENÚ */
+        /* --- BOTÓN MENÚ FLOTANTE MEJORADO --- */
         .btn-menu-float {
-            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: var(--blanco); border: none; width: 50px; height: 50px;
             border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
             cursor: pointer;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.1s ease;
         }
+        .btn-menu-float:active { transform: scale(0.9); background: #f3f4f6; }
 
-        /* SIDEBAR PROFESIONAL */
+        /* --- SIDEBAR PROFESIONAL --- */
         .sidebar { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
-            background: var(--blanco); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            z-index: 1100; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column;
+            background: #ffffff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1100; display: flex; flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
-        .sidebar.open { left: 0; }
+        .sidebar.active { left: 0; }
+
         .nav-link { 
             display: flex; align-items: center; text-decoration: none; 
-            color: #4b5563; padding: 18px 25px; font-weight: 700; 
-            font-size: 13px; border-bottom: 1px solid #f9fafb; 
+            color: #4b5563; padding: 20px 25px; font-weight: 700; 
+            font-size: 14px; letter-spacing: 0.5px; transition: 0.3s;
         }
-
-        /* CONTENEDOR PRINCIPAL */
-        .main-container { 
-            width: 100%; padding: 100px 20px 40px 20px; 
-            box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
-        }
-        
-        .header-section { width: 100%; max-width: 500px; margin-bottom: 25px; }
-        .header-section h2 { color: var(--blanco); font-size: 32px; font-weight: 800; margin: 0; }
-        .header-section p { color: var(--amarillo); font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
-
-        /* TARJETA DE GUÍA CORREGIDA (UNA SOLA COLUMNA) */
-        .guide-card { 
-            background: rgba(255,255,255,0.08); width: 100%; max-width: 500px; 
-            border-radius: 25px; padding: 25px; margin-bottom: 20px; 
-            border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
-        }
-        
-        .guide-header { 
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); 
-            padding-bottom: 15px; 
-        }
-        .guide-no { color: var(--amarillo); font-weight: 800; font-size: 18px; }
-        .guide-date { color: #9ca3af; font-size: 12px; text-align: right; }
-        
-        /* Contenedor de datos apilados para que no se choquen */
-        .info-box { 
-            display: flex; flex-direction: column; 
-            margin-bottom: 12px; padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .label { color: #9ca3af; font-size: 10px; text-transform: uppercase; margin-bottom: 4px; font-weight: 800; }
-        .value { color: var(--blanco); font-size: 14px; font-weight: 600; }
-
-        .btn-print {
-            width: 100%; background: none; border: 1.5px solid var(--amarillo); 
-            padding: 15px; border-radius: 12px; color: var(--amarillo);
-            font-weight: 800; font-size: 13px; margin-top: 10px; cursor: pointer; transition: 0.2s;
-        }
-        .btn-print:active { background: var(--amarillo); color: var(--gris-mate); }
+        .nav-link svg { margin-right: 15px; color: #4b5563; }
+        .nav-link:active, .nav-link.active { background: #f9fafb; color: #1f2937; }
+        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; color: #ef4444 !important; padding: 25px !important; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
-        .sidebar.open + .overlay { display: block; }
+        .sidebar.active + .overlay { display: block; }
+
+        /* --- ZONA SEGURA BLANCA --- */
+        .safe-area {
+            background: var(--blanco);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 600px;
+            margin: 90px auto 20px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .safe-area-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px;
+        }
+        
+        .titulo h1 { margin: 0; font-size: 22px; font-weight: 800; color: var(--gris-mate); }
+        .titulo p { margin: 0; font-size: 10px; color: var(--amarillo); letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
+        
+        /* BUSCADOR */
+        .buscador-container { position: relative; width: 100%; margin-bottom: 25px; }
+        .search-icon { position: absolute; left: 15px; top: 16px; color: #9ca3af; }
+        .search-box { width: 100%; padding: 15px 15px 15px 45px; border-radius: 15px; border: 2px solid #f3f4f6; font-family: inherit; font-weight: 600; font-size: 14px; box-sizing: border-box; outline: none; }
+        .search-box:focus { border-color: var(--amarillo); }
+
+        /* TABLA COMPACTA */
+        .tabla-historial-scroll { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 550px; }
+        th { text-align: left; padding: 15px; color: #9ca3af; font-size: 10px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #f3f4f6; }
+        td { padding: 14px 15px; border-bottom: 1px solid #f9fafb; font-size: 13px; color: var(--gris-mate); font-weight: 600; }
+        
+        .ci-tag { font-size: 9px; color: #9ca3af; display: block; font-weight: 400; }
     </style>
 </head>
 <body>
@@ -95,42 +91,107 @@
     </button>
 
     <nav class="sidebar" id="sidebar">
-        <div style="padding: 30px 25px; font-weight: 800; border-bottom: 1px solid #f3f4f6; color: var(--gris-mate);">MENÚ SISTEMA</div>
+        <div style="padding: 40px 25px 20px;"></div>
         <div style="flex: 1;">
-            <a href="dashboard.html" class="nav-link">INICIO</a>
-            <a href="carga.html" class="nav-link">REGISTRO DE CARGA</a>
-            <a href="camiones.html" class="nav-link">CONTROL CAMIONES</a>
-            <a href="guias.html" class="nav-link" style="color: var(--amarillo);">HISTORIAL GUÍAS</a>
-            <a href="reportes.html" class="nav-link">REPORTE MENSUAL</a>
+            <a href="dashboard.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                INICIO
+            </a>
+            <a href="carga.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
+                REGISTRO DE CARGA
+            </a>
+            <a href="camiones.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                CONTROL CAMIONES
+            </a>
+            <a href="guias.html" class="nav-link active">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+                HISTORIAL GUÍAS
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                REPORTE MENSUAL
+            </a>
         </div>
-        <a href="index.html" class="nav-link" style="color: #ef4444; border-top: 1px solid #f3f4f6;">SALIR</a>
+        <a href="index.html" class="nav-link btn-logout">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            CERRAR SESIÓN
+        </a>
     </nav>
-    
     <div class="overlay" onclick="toggleMenu()"></div>
 
-    <div class="main-container">
-        <div class="header-section">
-            <h2>Historial de Guías</h2>
-            <p>Registro completo de despachos realizados</p>
+    <div class="safe-area">
+        <div class="safe-area-header">
+            <div class="titulo">
+                <p>LOGÍSTICA Y TRANSPORTE</p>
+                <h1>Historial de Guías</h1>
+            </div>
+            <span id="contador" style="font-weight:800; color:var(--amarillo); font-size: 18px;">0</span>
         </div>
 
-        <div class="guide-card">
-            <div class="guide-header">
-                <span class="guide-no">Guía N°: 00155</span>
-                <span class="guide-date">15/05/2024<br>10:30 AM</span>
-            </div>
-            
-            <div class="info-box"><span class="label">Remitente</span><span class="value">Comercial Luna</span></div>
-            <div class="info-box"><span class="label">Consignatario</span><span class="value">Transportes Guty</span></div>
-            <div class="info-box"><span class="label">Unidad Asignada</span><span class="value">ABC-123 - Chofer: J. Pérez</span></div>
-            <div class="info-box"><span class="label">Producto</span><span class="value">Harina (50 Sacos)</span></div>
+        <div class="buscador-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="buscador" class="search-box" placeholder="Buscar guía o nombre...">
+        </div>
 
-            <button class="btn-print" onclick="window.location.href='imprimir.html?num=00155&rem=Comercial%20Luna&cons=Transportes%20Guty&prod=Harina%20(50%20Sacos)&cant=50&total=1500'">VER DETALLE / IMPRIMIR</button>
+        <div class="tabla-historial-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Guía</th>
+                        <th>Fecha</th>
+                        <th>Remitente</th>
+                        <th>Consignatario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="listaGuias"></tbody>
+            </table>
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4", authDomain: "trans-huayna-kapac.firebaseapp.com", projectId: "trans-huayna-kapac", databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/", storageBucket: "trans-huayna-kapac.firebasestorage.app", messagingSenderId: "683920138332", appId: "1:683920138332:web:b028d2dae6d92aca5dc699" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        onValue(ref(db, 'registros_carga'), (snapshot) => {
+            const data = snapshot.val();
+            const contenedor = document.getElementById("listaGuias");
+            const contador = document.getElementById("contador");
+            contenedor.innerHTML = "";
+            if (data) {
+                const guias = Object.values(data).reverse();
+                contador.innerText = guias.length;
+                guias.forEach(r => {
+                    contenedor.innerHTML += `
+                        <tr>
+                            <td style="font-weight:800; color:var(--fondo-app);">#${r.n_guia}</td>
+                            <td>${r.fecha}</td>
+                            <td>${r.remitente}<span class="ci-tag">CI: ${r.ci_remitente || '---'}</span></td>
+                            <td>${r.consignatario}<span class="ci-tag">CI: ${r.ci_consignatario || '---'}</span></td>
+                            <td style="font-weight:800; text-align:right;">Bs. ${parseFloat(r.total).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            }
+        });
+    </script>
     <script>
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        
+        // Buscador básico en tiempo real
+        document.getElementById('buscador').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#listaGuias tr');
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+            });
+        });
     </script>
 </body>
 </html>

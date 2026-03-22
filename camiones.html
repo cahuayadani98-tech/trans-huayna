@@ -3,41 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camiones - TRANS HUAYNA KAPAC</title>
+    <title>Control Camiones - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gris-mate: #374151; --amarillo: #facc15; --blanco: #ffffff; --fondo-app: #1f2937; --rojo: #ef4444; --verde: #22c55e; }
+        :root { 
+            --gris-mate: #374151; 
+            --amarillo: #facc15; 
+            --blanco: #ffffff; 
+            --fondo-app: #1f2937; 
+            --rojo: #ef4444; 
+            --verde: #22c55e; 
+        }
         
         body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
 
-        /* BOTÓN MENÚ FLOTANTE */
+        /* --- BOTÓN MENÚ CON EFECTO DE PULSACIÓN --- */
         .btn-menu-float {
-            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: var(--blanco); border: none; width: 50px; height: 50px;
             border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
             cursor: pointer;
+            /* Mejoras para móvil */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.1s ease;
         }
+        .btn-menu-float:active { transform: scale(0.9); background: #f3f4f6; }
 
-        /* SIDEBAR CON TEXTO INICIO */
+        /* --- SIDEBAR PROFESIONAL --- */
         .sidebar { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
-            background: var(--blanco); transition: 0.4s; z-index: 1100;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+            background: #ffffff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1100; display: flex; flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
-        .sidebar.open { left: 0; }
-        .nav-link { display: flex; align-items: center; text-decoration: none; color: #4b5563; padding: 18px 25px; font-weight: 700; font-size: 13px; border-bottom: 1px solid #f9fafb; }
+        .sidebar.active { left: 0; }
 
+        .nav-link { 
+            display: flex; align-items: center; text-decoration: none; 
+            color: #4b5563; padding: 20px 25px; font-weight: 700; 
+            font-size: 14px; letter-spacing: 0.5px; transition: 0.3s;
+        }
+        .nav-link svg { margin-right: 15px; color: #4b5563; }
+        .nav-link:active, .nav-link.active { background: #f9fafb; color: #1f2937; }
+        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; color: #ef4444 !important; padding: 25px !important; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
+        .sidebar.active + .overlay { display: block; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
         .main-container { 
             width: 100%; padding: 100px 20px 40px 20px; box-sizing: border-box;
             display: flex; flex-direction: column; align-items: center;
         }
         
-        .header-section { width: 100%; max-width: 500px; margin-bottom: 25px; }
+        .header-section { width: 100%; max-width: 500px; margin-bottom: 25px; text-align: left; }
         .header-section h1 { margin:0; font-size: 24px; font-weight: 800; }
-        .header-section p { margin:0; font-size: 10px; color: var(--amarillo); letter-spacing: 1px; text-transform: uppercase; }
+        .header-section p { margin:0; font-size: 10px; color: var(--amarillo); letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
 
-        /* TARJETAS */
+        /* --- TARJETA DE REGISTRO --- */
         .card { 
             background: var(--blanco); width: 100%; max-width: 500px; 
             border-radius: 30px; padding: 30px; color: black; 
@@ -48,26 +73,35 @@
         
         .input-group { margin-bottom: 15px; }
         label { display: block; font-size: 10px; font-weight: 800; color: #4b5563; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e5e7eb; background: #f9fafb; box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e5e7eb; background: #f9fafb; box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; color: var(--gris-mate); font-weight: 600; }
 
-        .btn-elegant { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; background: var(--amarillo); color: #1f2937; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        /* BOTÓN ELEGANTE CON EFECTO */
+        .btn-elegant { 
+            width: 100%; padding: 16px; border-radius: 12px; border: none; 
+            font-weight: 800; background: var(--amarillo); color: #1f2937; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            gap: 10px; transition: 0.1s; outline: none; -webkit-tap-highlight-color: transparent;
+        }
+        .btn-elegant:active { transform: scale(0.96); opacity: 0.9; }
         
-        /* LISTA DE UNIDADES */
+        /* --- LISTA DE UNIDADES --- */
         .camion-item { display: flex; align-items: center; gap: 12px; padding: 15px; background: rgba(255,255,255,0.08); border-radius: 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; box-sizing: border-box; }
         .camion-icon-box { background: var(--amarillo); padding: 10px; border-radius: 12px; min-width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: var(--gris-mate); }
         .camion-info { flex: 1; }
         .placa { font-weight: 800; font-size: 15px; color: var(--amarillo); display: block; }
-        .chofer { font-size: 11px; color: #9ca3af; }
+        .chofer { font-size: 11px; color: #9ca3af; font-weight: 600; }
 
         .status-svg { width: 18px; height: 18px; stroke-width: 2.5; }
         .color-disponible { color: var(--verde); }
         .color-ruta { color: var(--amarillo); }
         .color-taller { color: var(--rojo); }
 
-        .btn-delete { background: rgba(255, 255, 255, 0.1); color: #9ca3af; border: none; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
-        .sidebar.open + .overlay { display: block; }
+        .btn-delete { 
+            background: rgba(255, 255, 255, 0.1); color: #9ca3af; border: none; 
+            padding: 10px; border-radius: 10px; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; transition: 0.1s;
+        }
+        .btn-delete:active { transform: scale(0.85); background: rgba(239, 68, 68, 0.2); }
     </style>
 </head>
 <body>
@@ -77,22 +111,40 @@
     </button>
 
     <nav class="sidebar" id="sidebar">
-        <div style="padding: 30px 25px; font-weight: 800; border-bottom: 1px solid #f3f4f6; color: var(--gris-mate);">MENÚ SISTEMA</div>
+        <div style="padding: 40px 25px 20px;"></div>
         <div style="flex: 1;">
-            <a href="dashboard.html" class="nav-link">INICIO</a>
-            <a href="carga.html" class="nav-link">REGISTRO DE CARGA</a>
-            <a href="camiones.html" class="nav-link" style="color: var(--amarillo);">CONTROL CAMIONES</a>
-            <a href="guias.html" class="nav-link">HISTORIAL GUÍAS</a>
-            <a href="reportes.html" class="nav-link">REPORTE MENSUAL</a>
+            <a href="dashboard.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                INICIO
+            </a>
+            <a href="carga.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
+                REGISTRO DE CARGA
+            </a>
+            <a href="camiones.html" class="nav-link active">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                CONTROL CAMIONES
+            </a>
+            <a href="guias.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+                HISTORIAL GUÍAS
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                REPORTE MENSUAL
+            </a>
         </div>
-        <a href="index.html" class="nav-link" style="color: #ef4444; border-top: 1px solid #f3f4f6;">SALIR</a>
+        <a href="index.html" class="nav-link btn-logout">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            CERRAR SESIÓN
+        </a>
     </nav>
     <div class="overlay" onclick="toggleMenu()"></div>
 
     <div class="main-container">
         <div class="header-section">
+            <p>LOGÍSTICA Y TRANSPORTE</p>
             <h1>Flota de Camiones</h1>
-            <p>GESTIÓN PROFESIONAL</p>
         </div>
 
         <div class="card">
@@ -108,7 +160,7 @@
                 </select>
             </div>
             <button class="btn-elegant" onclick="guardarCamion()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 AGREGAR UNIDAD
             </button>
         </div>
@@ -118,11 +170,11 @@
     </div>
 
     <script>
-        const ICON_CHECK = `<svg class="status-svg color-disponible" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-        const ICON_CLOCK = `<svg class="status-svg color-ruta" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
-        const ICON_TOOL = `<svg class="status-svg color-taller" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a2 2 0 0 1-2.79-2.79l-3.77 3.77Z"></path><path d="M20 13c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c1.88 0 3.63.58 5.08 1.58"></path><path d="m7 15 5-5"></path><path d="m15 15-5-5"></path><path d="m7 10 5 5"></path></svg>`;
+        const ICON_CHECK = `<svg class="status-svg color-disponible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        const ICON_CLOCK = `<svg class="status-svg color-ruta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        const ICON_TOOL = `<svg class="status-svg color-taller" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a2 2 0 0 1-2.79-2.79l-3.77 3.77Z"></path><path d="M20 13c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c1.88 0 3.63.58 5.08 1.58"></path><path d="m7 15 5-5"></path><path d="m15 15-5-5"></path><path d="m7 10 5 5"></path></svg>`;
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
         function guardarCamion() {
             const placa = document.getElementById('placa').value;
@@ -147,7 +199,7 @@
                 return `
                 <div class="camion-item">
                     <div class="camion-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 16v3H5v-3"></path><path d="M17 12H7"></path><path d="M21 8l-2-2H5L3 8v8h18V8z"></path></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
                     </div>
                     <div class="camion-info">
                         <span class="placa">${c.placa}</span>
@@ -155,17 +207,19 @@
                     </div>
                     ${sIcon}
                     <button class="btn-delete" onclick="eliminar(${i})">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </button>
                 </div>
             `;}).join('');
         }
 
         function eliminar(i) {
-            let flota = JSON.parse(localStorage.getItem('flota')) || [];
-            flota.splice(i, 1);
-            localStorage.setItem('flota', JSON.stringify(flota));
-            mostrarFlota();
+            if(confirm("¿Seguro que deseas eliminar esta unidad?")) {
+                let flota = JSON.parse(localStorage.getItem('flota')) || [];
+                flota.splice(i, 1);
+                localStorage.setItem('flota', JSON.stringify(flota));
+                mostrarFlota();
+            }
         }
         mostrarFlota();
     </script>
