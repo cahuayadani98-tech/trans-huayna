@@ -3,75 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Carga - TRANS HUAYNA KAPAC</title>
+    <title>Registro - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gris-mate: #374151; --amarillo: #facc15; --fondo: #1f2937; }
-        body { margin: 0; background: var(--fondo); font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 20px; }
+        :root { 
+            --gris-mate: #374151; 
+            --amarillo: #facc15; 
+            --blanco: #ffffff; 
+            --fondo-app: #1f2937; 
+        }
         
-        .container { max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 30px; color: var(--gris-mate); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        h1 { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 25px; color: var(--fondo); }
-        
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; color: #6b7280; }
-        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f3f4f6; box-sizing: border-box; font-family: inherit; font-weight: 600; outline: none; }
-        
-        input:disabled { background: #f9fafb; color: #1f2937; border-color: #e5e7eb; cursor: not-allowed; }
-        input:focus { border-color: var(--amarillo); }
+        body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 15px; }
 
-        .btn-registrar { width: 100%; padding: 18px; background: var(--fondo); color: var(--amarillo); border: none; border-radius: 15px; font-weight: 800; cursor: pointer; margin-top: 10px; font-size: 14px; }
-        .btn-registrar:active { transform: scale(0.98); }
+        /* --- RECUPERANDO DISEÑO DE MENÚ ORIGINAL --- */
+        .btn-menu-float {
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
+            background: var(--blanco); border: none; width: 50px; height: 50px;
+            border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
+            cursor: pointer;
+        }
+
+        .sidebar { 
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
+            background: var(--blanco); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1100; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { left: 0; }
         
-        .btn-back { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: #6b7280; font-size: 13px; font-weight: 600; }
+        .sidebar-header { padding: 30px 25px; font-weight: 800; border-bottom: 1px solid #f3f4f6; color: var(--gris-mate); font-size: 14px; }
+        
+        .nav-link { 
+            display: flex; align-items: center; text-decoration: none; 
+            color: #4b5563; padding: 18px 25px; font-weight: 700; 
+            font-size: 13px; border-bottom: 1px solid #f9fafb; 
+        }
+        .nav-link:hover { background: #f9fafb; color: var(--gris-mate); }
+        .nav-link.active { color: var(--amarillo); background: #fdfcea; border-left: 4px solid var(--amarillo); padding-left: 21px; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
+        .sidebar.active + .overlay { display: block; }
+        /* ------------------------------------------- */
+
+        .container { max-width: 500px; margin: 90px auto 20px; background: white; padding: 25px; border-radius: 25px; color: var(--gris-mate); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h1 { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 20px; color: var(--fondo-app); }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; color: #6b7280; }
+        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #f3f4f6; box-sizing: border-box; font-family: inherit; font-weight: 600; font-size: 14px; outline: none; color: var(--gris-mate); }
+        input:focus { border-color: var(--amarillo); }
+        input:disabled { background: #f9fafb; color: var(--fondo-app); border-color: #e5e7eb; }
+        
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .btn-registrar { width: 100%; padding: 16px; background: var(--fondo-app); color: var(--amarillo); border: none; border-radius: 15px; font-weight: 800; cursor: pointer; margin-top: 15px; font-size: 14px; transition: 0.2s; }
+        .btn-registrar:active { transform: scale(0.98); opacity: 0.9; }
     </style>
 </head>
 <body>
 
+    <button class="btn-menu-float" onclick="toggleMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">MENÚ SISTEMA</div>
+        <div style="flex: 1;">
+            <a href="dashboard.html" class="nav-link">INICIO</a>
+            <a href="carga.html" class="nav-link active">REGISTRO DE CARGA</a>
+            <a href="camiones.html" class="nav-link">CONTROL CAMIONES</a>
+            <a href="guias.html" class="nav-link">HISTORIAL GUÍAS</a>
+            <a href="reportes.html" class="nav-link">REPORTE MENSUAL</a>
+        </div>
+        <a href="index.html" class="nav-link" style="color: #ef4444; border-top: 1px solid #f3f4f6;">SALIR</a>
+    </nav>
+    <div class="overlay" onclick="toggleMenu()"></div>
+
     <div class="container">
         <h1>Nueva Carga</h1>
+        <div class="form-group"><label>N° de Guía Automático</label><input type="text" id="n_guia" disabled placeholder="Generando..."></div>
         
-        <div class="form-group">
-            <label>N° de Guía (Automático)</label>
-            <input type="text" id="n_guia" disabled placeholder="Generando número...">
+        <div class="row">
+            <div class="form-group"><label>Remitente</label><input type="text" id="remitente" placeholder="Nombre"></div>
+            <div class="form-group"><label>C.I. Remitente</label><input type="text" id="ci_remitente" placeholder="C.I."></div>
+        </div>
+
+        <div class="row">
+            <div class="form-group"><label>Consignatario</label><input type="text" id="consignatario" placeholder="Nombre"></div>
+            <div class="form-group"><label>C.I. Consignatario</label><input type="text" id="ci_consignatario" placeholder="C.I."></div>
+        </div>
+
+        <div class="form-group"><label>Producto / Descripción</label><input type="text" id="producto" placeholder="Ej: Harina"></div>
+
+        <div class="row">
+            <div class="form-group"><label>Peso</label><input type="text" id="peso" placeholder="50kg"></div>
+            <div class="form-group"><label>Total (Bs.)</label><input type="number" id="total" placeholder="0.00"></div>
         </div>
 
         <div class="form-group">
-            <label>Remitente</label>
-            <input type="text" id="remitente" placeholder="Nombre de quien envía">
-        </div>
-
-        <div class="form-group">
-            <label>Consignatario</label>
-            <input type="text" id="consignatario" placeholder="Nombre de quien recibe">
-        </div>
-
-        <div class="form-group">
-            <label>Producto / Descripción</label>
-            <input type="text" id="producto" placeholder="Ej: Sacos de Harina">
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="form-group">
-                <label>Peso / Cantidad</label>
-                <input type="text" id="peso" placeholder="Ej: 50 kg">
-            </div>
-            <div class="form-group">
-                <label>Total (Bs.)</label>
-                <input type="number" id="total" placeholder="0.00">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Estado de Carga</label>
+            <label>Estado</label>
             <select id="estado">
-                <option value="COMPLETADO">COMPLETADO</option>
-                <option value="EN CAMINO">EN CAMINO</option>
                 <option value="PENDIENTE">PENDIENTE</option>
+                <option value="EN CAMINO">EN CAMINO</option>
+                <option value="COMPLETADO">COMPLETADO</option>
             </select>
         </div>
 
-        <button class="btn-registrar" id="btnGuardar">REGISTRAR EN EL SISTEMA</button>
-        <a href="dashboard.html" class="btn-back">VOLVER AL INICIO</a>
+        <button class="btn-registrar" id="btnGuardar">REGISTRAR CARGA</button>
     </div>
 
     <script type="module">
@@ -82,45 +120,32 @@
             apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4",
             authDomain: "trans-huayna-kapac.firebaseapp.com",
             projectId: "trans-huayna-kapac",
+            databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/",
             storageBucket: "trans-huayna-kapac.firebasestorage.app",
             messagingSenderId: "683920138332",
-            appId: "1:683920138332:web:b028d2dae6d92aca5dc699",
-            databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/"
+            appId: "1:683920138332:web:b028d2dae6d92aca5dc699"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
-        // --- LÓGICA DEL NÚMERO DE GUÍA CON CORRECCIÓN ---
         const guiaInput = document.getElementById('n_guia');
-        const registrosRef = ref(db, 'registros_carga');
 
-        onValue(registrosRef, (snapshot) => {
-            let siguienteNumero = 1;
-
+        onValue(ref(db, 'registros_carga'), (snapshot) => {
+            let num = 1;
             if (snapshot.exists()) {
-                const data = snapshot.val();
-                const numeros = Object.values(data)
-                    .map(item => parseInt(item.n_guia))
-                    .filter(n => !isNaN(n));
-                
-                if (numeros.length > 0) {
-                    siguienteNumero = Math.max(...numeros) + 1;
-                }
+                const ns = Object.values(snapshot.val()).map(i => parseInt(i.n_guia)).filter(n => !isNaN(n));
+                if (ns.length > 0) num = Math.max(...ns) + 1;
             }
-            // Esto soluciona el problema de "Cargando..."
-            guiaInput.value = siguienteNumero.toString().padStart(5, '0');
-        }, (error) => {
-            console.error("Error al leer base de datos:", error);
-            guiaInput.value = "00001";
+            guiaInput.value = num.toString().padStart(5, '0');
         });
 
-        // --- GUARDAR REGISTRO ---
         document.getElementById('btnGuardar').onclick = function() {
             const data = {
                 n_guia: guiaInput.value,
                 remitente: document.getElementById('remitente').value,
+                ci_remitente: document.getElementById('ci_remitente').value,
                 consignatario: document.getElementById('consignatario').value,
+                ci_consignatario: document.getElementById('ci_consignatario').value,
                 producto: document.getElementById('producto').value,
                 peso: document.getElementById('peso').value,
                 total: document.getElementById('total').value,
@@ -129,17 +154,17 @@
             };
 
             if(data.producto && data.total) {
-                const nuevoRegistroRef = push(ref(db, 'registros_carga'));
-                set(nuevoRegistroRef, data)
-                    .then(() => {
-                        alert("✅ Guía " + data.n_guia + " registrada con éxito");
-                        window.location.href = 'reportes.html';
-                    })
-                    .catch((e) => alert("Error al guardar: " + e.message));
-            } else {
-                alert("⚠️ Por favor completa el Producto y el Total");
-            }
+                set(push(ref(db, 'registros_carga')), data).then(() => {
+                    alert("✅ Registrado con éxito");
+                    window.location.href = 'reportes.html';
+                });
+            } else { alert("⚠️ Completa Producto y Total"); }
         };
+    </script>
+    <script>
+        function toggleMenu() { 
+            document.getElementById('sidebar').classList.toggle('active'); 
+        }
     </script>
 </body>
 </html>
