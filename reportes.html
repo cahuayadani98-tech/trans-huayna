@@ -13,24 +13,21 @@
             --blanco: #ffffff; 
             --verde-excel: #166534; 
             --fondo-app: #1f2937; 
+            --rojo-error: #ef4444;
         }
         
         body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 15px; }
 
-        /* --- BOTÓN MENÚ CON EFECTO DE PULSACIÓN --- */
+        /* --- BOTÓN MENÚ --- */
         .btn-menu-float {
             position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: var(--blanco); border: none; width: 50px; height: 50px;
             border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
-            cursor: pointer;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform 0.1s ease;
+            cursor: pointer; outline: none; transition: 0.1s ease;
         }
-        .btn-menu-float:active { transform: scale(0.9); background: #f3f4f6; }
 
-        /* --- SIDEBAR PROFESIONAL --- */
+        /* --- SIDEBAR CON ICONOS PROFESIONALES --- */
         .sidebar { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
             background: #ffffff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -41,56 +38,56 @@
 
         .nav-link { 
             display: flex; align-items: center; text-decoration: none; 
-            color: #4b5563; padding: 20px 25px; font-weight: 700; 
+            color: #4b5563; padding: 18px 25px; font-weight: 700; 
             font-size: 14px; letter-spacing: 0.5px; transition: 0.3s;
         }
         .nav-link svg { margin-right: 15px; color: #4b5563; }
         .nav-link:active, .nav-link.active { background: #f9fafb; color: #1f2937; }
-        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; color: #ef4444 !important; padding: 25px !important; }
+        .nav-link.active svg { color: #1f2937; }
+
+        /* --- BOTÓN CERRAR SESIÓN ROJO --- */
+        .btn-logout { 
+            margin-top: auto; 
+            border-top: 1px solid #f3f4f6; 
+            color: var(--rojo-error) !important; 
+            padding: 25px !important; 
+        }
+        .btn-logout svg { color: var(--rojo-error) !important; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
         .sidebar.active + .overlay { display: block; }
 
-        /* --- DISEÑO DE REPORTES --- */
-        .header-reporte { max-width: 1000px; margin: 90px auto 20px; width: 100%; text-align: left; }
+        /* --- BUSCADOR --- */
+        .search-container { max-width: 1000px; margin: 20px auto; width: 100%; position: relative; display: flex; align-items: center; }
+        .search-container svg { position: absolute; left: 18px; color: #9ca3af; pointer-events: none; }
+        #searchInput {
+            width: 100%; padding: 16px 16px 16px 50px; border-radius: 18px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); 
+            color: white; font-weight: 600; font-size: 15px; box-sizing: border-box; outline: none;
+        }
+
+        /* --- TABLA Y RESUMEN --- */
+        .header-reporte { max-width: 1000px; margin: 90px auto 10px; width: 100%; text-align: left; }
         .titulo h1 { margin: 0; font-size: 26px; font-weight: 800; }
         .titulo p { margin: 0; font-size: 11px; color: var(--amarillo); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
 
         .resumen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; width: 100%; max-width: 1000px; margin-left: auto; margin-right: auto; }
-        .resumen-card { 
-            background: rgba(255,255,255,0.08); padding: 20px; border-radius: 20px; 
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .resumen-card { background: rgba(255,255,255,0.08); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
         .resumen-label { font-size: 10px; font-weight: 800; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
         .resumen-val { font-size: 20px; font-weight: 800; display: block; margin-top: 6px; }
 
-        .aviso-scroll { text-align: center; font-size: 10px; color: var(--amarillo); margin-bottom: 12px; text-transform: uppercase; font-weight: 800; }
-        
-        .tabla-scroll-container { 
-            background: var(--blanco); border-radius: 25px; overflow-x: auto; width: 100%; max-width: 1000px; margin-left: auto; margin-right: auto;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); -webkit-overflow-scrolling: touch;
-        }
+        .tabla-scroll-container { background: var(--blanco); border-radius: 25px; overflow-x: auto; width: 100%; max-width: 1000px; margin-left: auto; margin-right: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         table { width: 100%; border-collapse: collapse; min-width: 1200px; color: black; }
-        th { 
-            background: #f9fafb; padding: 18px 15px; text-align: left; font-weight: 800; 
-            color: #6b7280; text-transform: uppercase; font-size: 10px; border-bottom: 2px solid #eee; 
-        }
+        th { background: #1f2937; padding: 20px 15px; text-align: left; font-weight: 800; color: var(--amarillo); text-transform: uppercase; font-size: 10px; }
         td { padding: 16px 15px; border-bottom: 1px solid #f3f4f6; font-size: 13px; white-space: nowrap; color: var(--gris-mate); font-weight: 600; }
         
         .status { padding: 5px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; }
         .COMPLETADO { background: #dcfce7; color: #166534; }
         .EN\ CAMINO { background: #dbeafe; color: #1e40af; }
-        .PENDIENTE { background: #fee2e2; color: #991b1b; }
 
-        /* BOTÓN EXCEL CON EFECTO */
-        .btn-accion { 
-            width: 100%; max-width: 500px; padding: 18px; border-radius: 15px; border: none; 
-            font-weight: 800; cursor: pointer; display: flex; align-items: center; 
-            justify-content: center; gap: 10px; margin: 30px auto; transition: 0.1s;
-            outline: none; -webkit-tap-highlight-color: transparent;
-        }
+        .btn-accion { width: 100%; max-width: 500px; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin: 30px auto; transition: 0.1s ease; }
         .btn-excel { background: var(--verde-excel); color: white; }
-        .btn-excel:active { transform: scale(0.96); opacity: 0.9; }
+        .btn-excel:active { transform: scale(0.95); opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -103,7 +100,7 @@
         <div style="padding: 40px 25px 20px;"></div>
         <div style="flex: 1;">
             <a href="dashboard.html" class="nav-link">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 INICIO
             </a>
             <a href="carga.html" class="nav-link">
@@ -124,7 +121,7 @@
             </a>
         </div>
         <a href="index.html" class="nav-link btn-logout">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
             CERRAR SESIÓN
         </a>
     </nav>
@@ -137,34 +134,21 @@
         </div>
     </div>
 
-    <div class="resumen-grid">
-        <div class="resumen-card">
-            <span class="resumen-label">GUÍAS REGISTRADAS</span>
-            <span class="resumen-val" id="totalGuias">0</span>
-        </div>
-        <div class="resumen-card">
-            <span class="resumen-label">INGRESOS TOTALES</span>
-            <span class="resumen-val" id="totalIngresos" style="color: var(--amarillo);">Bs. 0.00</span>
-        </div>
+    <div class="search-container">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="Buscar por Guía, Cliente o Camión..." onkeyup="filtrarTabla()">
     </div>
 
-    <p class="aviso-scroll">↔ Desliza lateralmente para ver la tabla completa</p>
+    <div class="resumen-grid">
+        <div class="resumen-card"><span class="resumen-label">GUÍAS EN PANTALLA</span><span class="resumen-val" id="totalGuias">0</span></div>
+        <div class="resumen-card"><span class="resumen-label">SUBTOTAL FILTRADO</span><span class="resumen-val" id="totalIngresos" style="color: var(--amarillo);">Bs. 0.00</span></div>
+    </div>
 
     <div class="tabla-scroll-container">
         <table id="tablaExcel">
             <thead>
                 <tr>
-                    <th>Guía</th>
-                    <th>Fecha</th>
-                    <th>Camión / Unidad</th>
-                    <th>Remitente</th>
-                    <th>C.I. Rem.</th>
-                    <th>Consignatario</th>
-                    <th>C.I. Cons.</th>
-                    <th>Producto</th>
-                    <th>Peso</th>
-                    <th>Total</th>
-                    <th>Estado</th>
+                    <th>Guía</th><th>Fecha</th><th>Camión</th><th>Remitente</th><th>C.I. Rem.</th><th>Consignatario</th><th>C.I. Cons.</th><th>Producto</th><th>Peso</th><th>Total</th><th>Estado</th>
                 </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -172,14 +156,13 @@
     </div>
 
     <button class="btn-accion btn-excel" onclick="descargarExcel()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
         EXPORTAR A EXCEL (.XLSX)
     </button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
         const firebaseConfig = { apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4", authDomain: "trans-huayna-kapac.firebaseapp.com", projectId: "trans-huayna-kapac", databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/", storageBucket: "trans-huayna-kapac.firebasestorage.app", messagingSenderId: "683920138332", appId: "1:683920138332:web:b028d2dae6d92aca5dc699" };
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -188,66 +171,116 @@
             const data = snapshot.val();
             const tbody = document.getElementById("tbody");
             tbody.innerHTML = "";
-            let sumaIngresos = 0;
-            let contadorGuias = 0;
-
             if (data) {
                 Object.values(data).reverse().forEach(r => {
-                    contadorGuias++;
-                    sumaIngresos += parseFloat(r.total || 0);
-                    tbody.innerHTML += `
-                        <tr>
-                            <td style="font-weight: 800; color:var(--fondo-app)">#${r.n_guia}</td>
-                            <td>${r.fecha}</td>
-                            <td style="color:#1e40af; font-weight:800;">${r.camion || 'No Asignado'}</td>
-                            <td>${r.remitente}</td>
-                            <td style="color:#9ca3af">${r.ci_remitente || '---'}</td>
-                            <td>${r.consignatario}</td>
-                            <td style="color:#9ca3af">${r.ci_consignatario || '---'}</td>
-                            <td>${r.producto}</td>
-                            <td>${r.peso}</td>
-                            <td style="font-weight: 800;">Bs. ${parseFloat(r.total).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                            <td><span class="status ${r.estado}">${r.estado}</span></td>
-                        </tr>
-                    `;
+                    tbody.innerHTML += `<tr><td style="font-weight: 800;">#${r.n_guia}</td><td>${r.fecha}</td><td style="color:#1e40af; font-weight:800;">${r.camion || '---'}</td><td>${r.remitente}</td><td style="color:#9ca3af">${r.ci_remitente || '---'}</td><td>${r.consignatario}</td><td style="color:#9ca3af">${r.ci_consignatario || '---'}</td><td>${r.producto}</td><td>${r.peso}</td><td style="font-weight: 800;">Bs. ${parseFloat(r.total).toFixed(2)}</td><td><span class="status ${r.estado}">${r.estado}</span></td></tr>`;
                 });
+                filtrarTabla(); 
             }
-            document.getElementById("totalGuias").innerText = contadorGuias;
-            document.getElementById("totalIngresos").innerText = "Bs. " + sumaIngresos.toLocaleString('en-US', {minimumFractionDigits: 2});
         });
     </script>
     <script>
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        function descargarExcel() { 
-    try {
-        // 1. Creamos el libro de trabajo de Excel
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.table_to_sheet(document.getElementById("tablaExcel"));
-        XLSX.utils.book_append_sheet(wb, ws, "Reporte Mensual");
-
-        // 2. Generamos el archivo en memoria
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-        // 3. Truco para Móvil: Crear un link temporal y hacerle clic
-        const url = window.URL.createObjectURL(data);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = "Reporte_TRANS_HUAYNA.xlsx";
-        document.body.appendChild(link);
-        link.click();
+        function filtrarTabla() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let filas = document.getElementById("tbody").getElementsByTagName("tr");
+            let totalG = 0; let totalI = 0;
+            for (let i = 0; i < filas.length; i++) {
+                if (filas[i].textContent.toLowerCase().includes(input)) {
+                    filas[i].style.display = ""; totalG++;
+                    totalI += parseFloat(filas[i].cells[9].innerText.replace("Bs. ", "").replace(",", "")) || 0;
+                } else { filas[i].style.display = "none"; }
+            }
+            document.getElementById("totalGuias").innerText = totalG;
+            document.getElementById("totalIngresos").innerText = "Bs. " + totalI.toLocaleString('en-US', {minimumFractionDigits: 2});
+        }
         
-        // Limpieza
-        setTimeout(() => {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        }, 100);
+        // --- FUNCIÓN DE DESCARGA PROFESIONAL CON FORMATO ACTIVADO ---
+        function descargarExcel() {
+            try {
+                // 1. Obtener solo los datos visibles (filtrados)
+                const rows = [];
+                const header = ["Guía", "Fecha", "Camión / Unidad", "Remitente", "CI Rem.", "Consignatario", "CI Cons.", "Producto", "Peso", "Total Bs.", "Estado"];
+                rows.push(header);
 
-    } catch (error) {
-        alert("Error al descargar: " + error.message);
-    }
-}
+                const tableRows = document.getElementById("tbody").getElementsByTagName("tr");
+                let granTotal = 0;
 
+                for (let i = 0; i < tableRows.length; i++) {
+                    if (tableRows[i].style.display !== "none") {
+                        const cells = tableRows[i].cells;
+                        const rowData = [
+                            cells[0].innerText, // Guía
+                            cells[1].innerText, // Fecha
+                            cells[2].innerText, // Camión
+                            cells[3].innerText, // Remitente
+                            cells[4].innerText, // CI Rem
+                            cells[5].innerText, // Consignatario
+                            cells[6].innerText, // CI Cons
+                            cells[7].innerText, // Producto
+                            cells[8].innerText, // Peso
+                            parseFloat(cells[9].innerText.replace("Bs. ", "")), // Total (como número)
+                            cells[10].innerText // Estado
+                        ];
+                        rows.push(rowData);
+                        granTotal += rowData[9];
+                    }
+                }
+
+                // Añadir fila de Gran Total
+                rows.push(["", "", "", "", "", "", "", "", "GRAN TOTAL", granTotal, ""]);
+
+                // 2. Crear el libro y la hoja
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(rows);
+
+                // 3. --- APLICAR ESTILOS PROFESIONALES (SheetJS Pro/móvil compatible) ---
+                
+                // Definir anchos de columna
+                ws['!cols'] = [
+                    {wch: 10}, // A: Guía
+                    {wch: 12}, // B: Fecha
+                    {wch: 25}, // C: Camión
+                    {wch: 20}, // D: Remitente
+                    {wch: 12}, // E: CI Rem
+                    {wch: 20}, // F: Consignatario
+                    {wch: 12}, // G: CI Cons
+                    {wch: 20}, // H: Producto
+                    {wch: 10}, // I: Peso
+                    {wch: 15}, // J: Total (moneda)
+                    {wch: 15}  // K: Estado
+                ];
+
+                // Dar formato de moneda a la columna J (Total)
+                for (let i = 1; i < rows.length; i++) {
+                    const cellRef = XLSX.utils.encode_cell({c: 9, r: i}); // Columna J
+                    if (ws[cellRef]) {
+                        ws[cellRef].t = 'n'; // Tipo número
+                        ws[cellRef].z = '"Bs. "#,##0.00'; // Formato bolivianos
+                    }
+                }
+
+                // 4. Generar archivo binario y forzar descarga
+                XLSX.utils.book_append_sheet(wb, ws, "Reporte Logística THK");
+                const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                const url = window.URL.createObjectURL(data);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = "REPORTE_GERENCIAL_THK_" + new Date().toLocaleDateString().replace(/\//g, '-') + ".xlsx";
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+
+            } catch (e) {
+                alert("Error al generar reporte profesional: " + e.message);
+            }
+        }
     </script>
 </body>
 </html>
