@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes - TRANS HUAYNA KAPAC</title>
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <title>Reporte Inteligente - TRANS HUAYNA KAPAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gris-mate: #374151; 
             --amarillo: #facc15; 
-            --blanco: #ffffff; 
             --fondo-app: #111827; 
-            --rojo-thk: #ef4444;
-            --borde-tabla: #e2e8f0;
-            --azul-corporativo: #1e40af;
+            --verde-exito: #10b981;
+            --azul: #3b82f6;
+            --gris-mate: #374151; 
+            --blanco: #ffffff; 
         }
         
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 15px; }
 
-        /* --- BOTÓN MENÚ --- */
+        /* --- MENU & HEADER --- */
         .btn-menu-float {
             position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: var(--blanco); border: none; width: 50px; height: 50px;
             border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
             cursor: pointer;
+            transition: transform 0.1s ease;
         }
+        .btn-menu-float:active { transform: scale(0.9); background: #f3f4f6; }
 
-        /* --- SIDEBAR --- */
         .sidebar { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
             background: #ffffff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -37,20 +36,22 @@
             box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
         .sidebar.active { left: 0; }
-        .nav-link { display: flex; align-items: center; text-decoration: none; color: #4b5563; padding: 18px 25px; font-weight: 700; font-size: 14px; transition: 0.3s; }
-        .nav-link svg { margin-right: 15px; color: #4b5563; } 
-        .nav-link.active { background: #f9fafb; color: #1f2937; }
-        
-        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; padding: 25px !important; color: var(--rojo-thk) !important; }
-        .btn-logout svg { color: var(--rojo-thk) !important; } 
+
+        .nav-link { 
+            display: flex; align-items: center; text-decoration: none; 
+            color: #4b5563; padding: 20px 25px; font-weight: 700; 
+            font-size: 14px; letter-spacing: 0.5px; transition: 0.3s;
+        }
+        .nav-link svg { margin-right: 15px; color: #4b5563; }
+        .nav-link:active, .nav-link.active { background: #f9fafb; color: #1f2937; }
+        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; color: #ef4444 !important; padding: 25px !important; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
         .sidebar.active + .overlay { display: block; }
 
-        /* --- TÍTULO --- */
         .header-container {
             margin: 80px auto 30px;
-            max-width: 1550px;
+            max-width: 1200px;
             text-align: left;
             padding: 0 10px;
             border-left: 5px solid var(--amarillo);
@@ -73,28 +74,92 @@
             letter-spacing: 4px;
         }
 
+        /* --- NUEVA BARRA DE FILTROS & ACCIONES --- */
+        .filter-section {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #1f2937;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            transition: 0.2s;
+        }
+        .search-input:focus { border-color: var(--amarillo); background: #26323f; }
+
+        .btn-print-report {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--amarillo);
+            color: #1f2937;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.1s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-print-report:active { transform: scale(0.96); opacity: 0.9; }
+
+        /* --- TARJETAS RESUMEN (KPIs) --- */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; max-width: 1200px; margin: 0 auto 25px;
+        }
+        .stat-card {
+            background: #1f2937; border-radius: 20px; padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1); text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .stat-card h3 { margin: 0; font-size: 10px; text-transform: uppercase; color: #9ca3af; letter-spacing: 1px; }
+        .stat-card p { margin: 10px 0 0; font-size: 22px; font-weight: 800; color: var(--amarillo); }
+        .stat-card.money p { color: var(--verde-exito); }
+
         /* --- TABLA --- */
-        .tabla-scroll-container { background: white; border-radius: 12px; overflow-x: auto; width: 100%; max-width: 1550px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        table { width: 100%; border-collapse: collapse; min-width: 1600px; color: #1f2937; }
-        thead th { background: #334155; color: white; padding: 14px; font-size: 10px; text-transform: uppercase; text-align: left; border: 1px solid #1e293b; }
-        tbody td { padding: 12px; border: 1px solid var(--borde-tabla); font-size: 12px; font-weight: 600; }
-        tbody tr:nth-child(even) { background-color: #f8fafc; }
-        .col-costo { background-color: #f0fdf4; }
-        .fila-total { background: #064e3b !important; color: white; font-weight: 800; }
-
-        /* BOTÓN ELIMINAR */
-        .btn-delete-report {
-            background: transparent; border: none; color: var(--rojo-thk); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        .tabla-container { 
+            background: white; border-radius: 20px; overflow-x: auto; 
+            max-width: 1200px; margin: 0 auto; box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
         }
-        .btn-delete-report:active { transform: scale(0.85); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; color: #1f2937; }
+        thead th { background: #374151; color: white; padding: 15px; font-size: 11px; text-transform: uppercase; text-align: left; }
+        tbody td { padding: 15px; border-bottom: 1px solid #f3f4f6; font-size: 13px; font-weight: 600; }
+        
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+        .badge-camion { background: #eff6ff; color: #1e40af; }
+        .badge-cliente { background: #fdf2f8; color: #9d174d; }
 
-        .btn-excel { 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: #16a34a; color: white; padding: 16px; border-radius: 14px;
-            border: none; font-weight: 800; cursor: pointer; margin: 30px auto; width: 100%; max-width: 400px;
-            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
-        }
+        @media print { .btn-menu-float, .filter-section, .sidebar, .overlay { display: none !important; } body { background: white; color: black; } .tabla-container { box-shadow: none; } }
     </style>
 </head>
 <body>
@@ -113,114 +178,116 @@
             <a href="reportes.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>REPORTE MENSUAL</a>
         </div>
         <a href="index.html" class="nav-link btn-logout">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            <span>CERRAR SESIÓN</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            CERRAR SESIÓN
         </a>
     </nav>
     <div class="overlay" onclick="toggleMenu()"></div>
 
     <header class="header-container">
-        <h1>Gestión de Inventario y Carga</h1>
+        <h1>Reporte de Logística</h1>
         <p>Trans Huayna Kapac SRL</p>
     </header>
 
-    <div class="tabla-scroll-container">
-        <table id="tablaReporte">
+    <section class="filter-section">
+        <div class="search-container">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Filtrar por Camión, Cliente o Destino...">
+        </div>
+        <button class="btn-print-report" onclick="window.print()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            IMPRIMIR REPORTE
+        </button>
+    </section>
+
+    <div class="stats-grid">
+        <div class="stat-card money"><h3>Ingresos Filtrados</h3><p id="totalIngresos">0.00</p></div>
+        <div class="stat-card"><h3>Viajes</h3><p id="totalCargas">0</p></div>
+        <div class="stat-card"><h3>Cant. Total</h3><p id="totalVolumen">0</p></div>
+    </div>
+
+    <div class="tabla-container">
+        <table>
             <thead>
                 <tr>
-                    <th>N° Guía</th>
-                    <th>Producto / Ítem</th>
-                    <th>Cantidad</th>
-                    <th>Destino Final</th>
-                    <th>Chofer Asignado</th>
-                    <th>Unidad (Placa)</th>
-                    <th>Costo Unit.</th>
-                    <th>Costo Total</th>
-                    <th>Remitente</th>
-                    <th>Fecha Registro</th>
-                    <th style="background:var(--rojo-thk); width: 50px;">Acción</th>
+                    <th>Fecha</th>
+                    <th>Guía</th>
+                    <th>Unidad</th>
+                    <th>Consignatario (Cliente)</th>
+                    <th>Destino</th>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Monto (Bs)</th>
                 </tr>
             </thead>
-            <tbody id="tbody"></tbody>
-            <tfoot>
-                <tr class="fila-total">
-                    <td colspan="7" style="text-align: right; padding-right: 20px; font-size: 14px;">VALOR TOTAL ACUMULADO:</td>
-                    <td id="granTotalCell" colspan="4" style="font-size: 16px;">Bs. 0.00</td>
-                </tr>
-            </tfoot>
+            <tbody id="tbodyReporte"></tbody>
         </table>
     </div>
 
-    <button class="btn-excel" onclick="descargarExcel()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        EXPORTAR A EXCEL PROFESIONAL
-    </button>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        
-        const firebaseConfig = { apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4", authDomain: "trans-huayna-kapac.firebaseapp.com", projectId: "trans-huayna-kapac", databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/", storageBucket: "trans-huayna-kapac.firebasestorage.app", messagingSenderId: "683920138332", appId: "1:683920138332:web:b028d2dae6d92aca5dc699" };
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4", 
+            authDomain: "trans-huayna-kapac.firebaseapp.com", 
+            projectId: "trans-huayna-kapac", 
+            databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/"
+        };
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        let todosLosRegistros = [];
 
         onValue(ref(db, 'registros_carga'), (snapshot) => {
-            const data = snapshot.val();
-            const tbody = document.getElementById("tbody");
-            tbody.innerHTML = "";
-            let suma = 0;
-            if (data) {
-                const entries = Object.entries(data).reverse();
-                entries.forEach(([id, r]) => {
-                    let totalVal = parseFloat(r.total) || 0;
-                    let cant = parseInt(r.cantidad) || 1;
-                    suma += totalVal;
-
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td style="font-weight:800; color:var(--azul-corporativo);">#${r.n_guia}</td>
-                        <td>${r.producto}</td>
-                        <td>${cant}</td>
-                        <td style="color:var(--azul-corporativo); font-weight:700;">${r.destino || '---'}</td>
-                        <td style="text-transform:uppercase">${r.chofer || '-'}</td>
-                        <td>${r.camion || '-'}</td>
-                        <td class="col-costo">Bs. ${(totalVal/cant).toFixed(2)}</td>
-                        <td class="col-costo" style="font-weight:800;">Bs. ${totalVal.toFixed(2)}</td>
-                        <td>${r.remitente}</td>
-                        <td style="font-size:11px; color:#64748b;">${r.fecha}</td>
-                        <td style="text-align:center;">
-                            <button class="btn-delete-report" data-id="${id}" data-guia="${r.n_guia}">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
-                        </td>`;
-                    tbody.appendChild(row);
-                });
-                
-                document.getElementById("granTotalCell").innerText = "Bs. " + suma.toFixed(2);
-
-                // Lógica para eliminar
-                document.querySelectorAll('.btn-delete-report').forEach(btn => {
-                    btn.onclick = () => {
-                        const id = btn.getAttribute('data-id');
-                        const guia = btn.getAttribute('data-guia');
-                        if(confirm(`¿Deseas eliminar el registro de la Guía #${guia} del reporte mensual?`)) {
-                            remove(ref(db, `registros_carga/${id}`))
-                            .then(() => alert("Registro eliminado."))
-                            .catch(e => alert("Error: " + e.message));
-                        }
-                    };
-                });
-            } else {
-                document.getElementById("granTotalCell").innerText = "Bs. 0.00";
+            if (snapshot.exists()) {
+                todosLosRegistros = Object.values(snapshot.val()).reverse();
+                renderizarTabla(todosLosRegistros);
             }
         });
-    </script>
-    <script>
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        function descargarExcel() {
-            const wb = XLSX.utils.table_to_book(document.getElementById('tablaReporte'));
-            XLSX.writeFile(wb, "Reporte_General_THK.xlsx");
+
+        function renderizarTabla(data) {
+            const tbody = document.getElementById("tbodyReporte");
+            let sumBs = 0, sumViajes = 0, sumCant = 0;
+            tbody.innerHTML = "";
+
+            data.forEach(g => {
+                sumBs += parseFloat(g.total || 0);
+                sumViajes++;
+                sumCant += parseFloat(g.cantidad || 0);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${g.fecha}</td>
+                    <td style="color:var(--azul);">#${g.n_guia}</td>
+                    <td><span class="badge badge-camion">${g.camion || 'ALMACÉN'}</span></td>
+                    <td><span class="badge badge-cliente">${g.consignatario || '---'}</span></td>
+                    <td>${g.destino || 'CENTRO'}</td>
+                    <td>${g.producto}</td>
+                    <td>${g.cantidad}</td>
+                    <td style="font-weight:800;">Bs. ${parseFloat(g.total).toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById("totalIngresos").textContent = sumBs.toLocaleString('es-BO', {minimumFractionDigits: 2});
+            document.getElementById("totalCargas").textContent = sumViajes;
+            document.getElementById("totalVolumen").textContent = sumCant;
         }
+
+        // LÓGICA DE FILTRO EN TIEMPO REAL
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtrados = todosLosRegistros.filter(g => 
+                (g.camion && g.camion.toLowerCase().includes(term)) ||
+                (g.consignatario && g.consignatario.toLowerCase().includes(term)) ||
+                (g.destino && g.destino.toLowerCase().includes(term)) ||
+                (g.producto && g.producto.toLowerCase().includes(term))
+            );
+            renderizarTabla(filtrados);
+        });
+
+        window.toggleMenu = function() { document.getElementById('sidebar').classList.toggle('active'); };
     </script>
 </body>
 </html>

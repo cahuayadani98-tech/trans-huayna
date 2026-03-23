@@ -11,24 +11,21 @@
             --amarillo: #facc15; 
             --blanco: #ffffff; 
             --fondo-app: #1f2937; 
+            --rojo-error: #ef4444;
         }
         
         body { margin: 0; background: var(--fondo-app); font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 15px; }
 
-        /* --- BOTÓN MENÚ CON EFECTO DE PULSACIÓN --- */
+        /* --- BOTÓN MENÚ --- */
         .btn-menu-float {
             position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: var(--blanco); border: none; width: 50px; height: 50px;
             border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center; color: var(--gris-mate);
-            cursor: pointer;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform 0.1s ease;
+            cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent;
         }
-        .btn-menu-float:active { transform: scale(0.9); background: #f3f4f6; }
 
-        /* --- SIDEBAR PROFESIONAL --- */
+        /* --- SIDEBAR --- */
         .sidebar { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
             background: #ffffff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -36,50 +33,60 @@
             box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
         .sidebar.active { left: 0; }
-
+        
         .nav-link { 
             display: flex; align-items: center; text-decoration: none; 
             color: #4b5563; padding: 20px 25px; font-weight: 700; 
-            font-size: 14px; letter-spacing: 0.5px; transition: 0.3s;
+            font-size: 14px; transition: 0.3s; 
         }
-        .nav-link svg { margin-right: 15px; color: #4b5563; }
-        .nav-link:active, .nav-link.active { background: #f9fafb; color: #1f2937; }
-        .btn-logout { margin-top: auto; border-top: 1px solid #f3f4f6; color: #ef4444 !important; padding: 25px !important; }
+        .nav-link svg { margin-right: 15px; }
+        .nav-link.active { background: #f9fafb; color: #1f2937; }
+        
+        /* BOTÓN CERRAR SESIÓN ROJO */
+        .btn-logout { 
+            margin-top: auto; 
+            border-top: 1px solid #f3f4f6; 
+            color: var(--rojo-error) !important; 
+            padding: 25px !important; 
+        }
+        .btn-logout svg { color: var(--rojo-error); }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1050; }
         .sidebar.active + .overlay { display: block; }
 
-        /* --- CONTENEDOR DE FORMULARIO --- */
+        /* --- HEADER --- */
+        .header-container {
+            margin: 80px auto 20px;
+            max-width: 500px; text-align: left; padding: 0 10px; border-left: 5px solid var(--amarillo);
+        }
+        .header-container h1 { margin: 0; font-size: 28px; font-weight: 800; background: linear-gradient(to right, #ffffff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-container p { margin: 5px 0 0; color: var(--amarillo); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 4px; }
+
+        /* --- FORMULARIO --- */
         .container { 
-            max-width: 500px; margin: 90px auto 20px; background: white; 
+            max-width: 500px; margin: 0 auto 40px; background: white; 
             padding: 25px; border-radius: 30px; color: var(--gris-mate); 
             box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
         }
-        h1 { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 20px; color: var(--fondo-app); }
         
         .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; color: #6b7280; letter-spacing: 0.5px; }
-        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f3f4f6; box-sizing: border-box; font-family: inherit; font-weight: 600; font-size: 14px; outline: none; color: var(--gris-mate); transition: 0.2s; }
-        input:focus { border-color: var(--amarillo); background: #fff; }
-        input:disabled { background: #f9fafb; color: #9ca3af; border-color: #eee; }
+        label { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; color: #6b7280; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f3f4f6; box-sizing: border-box; font-family: inherit; font-weight: 600; font-size: 14px; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--amarillo); }
         
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        /* BOTÓN REGISTRAR CON EFECTO */
         .btn-registrar { 
             width: 100%; padding: 18px; background: var(--fondo-app); color: var(--amarillo); 
             border: none; border-radius: 15px; font-weight: 800; cursor: pointer; 
-            margin-top: 15px; font-size: 14px; transition: 0.1s;
-            outline: none; -webkit-tap-highlight-color: transparent;
+            margin-top: 15px; font-size: 14px;
         }
-        .btn-registrar:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* --- ESTILOS NUEVOS PARA PRODUCTOS --- */
-        .fila-producto { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .fila-producto { display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 8px; margin-bottom: 10px; }
         .btn-add-prod { 
-            background: #f3f4f6; border: 2px dashed #d1d5db; padding: 10px; 
+            background: #f3f4f6; border: 2px dashed #d1d5db; padding: 12px; 
             border-radius: 12px; cursor: pointer; display: flex; align-items: center; 
-            justify-content: center; gap: 8px; font-weight: 800; font-size: 12px;
+            justify-content: center; gap: 8px; font-weight: 800; font-size: 11px;
             color: #4b5563; margin-bottom: 15px; width: 100%;
         }
     </style>
@@ -93,40 +100,28 @@
     <nav class="sidebar" id="sidebar">
         <div style="padding: 40px 25px 20px;"></div>
         <div style="flex: 1;">
-            <a href="dashboard.html" class="nav-link">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                INICIO
-            </a>
-            <a href="carga.html" class="nav-link active">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
-                REGISTRO DE CARGA
-            </a>
-            <a href="camiones.html" class="nav-link">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                CONTROL CAMIONES
-            </a>
-            <a href="guias.html" class="nav-link">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
-                HISTORIAL GUÍAS
-            </a>
-            <a href="reportes.html" class="nav-link">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                REPORTE MENSUAL
-            </a>
+            <a href="dashboard.html" class="nav-link"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path></svg>INICIO</a>
+            <a href="carga.html" class="nav-link active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>REGISTRO DE CARGA</a>
+            <a href="camiones.html" class="nav-link"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>CONTROL CAMIONES</a>
+            <a href="guias.html" class="nav-link"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>HISTORIAL GUÍAS</a>
+            <a href="reportes.html" class="nav-link"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>REPORTE MENSUAL</a>
         </div>
         <a href="index.html" class="nav-link btn-logout">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
             CERRAR SESIÓN
         </a>
     </nav>
     <div class="overlay" onclick="toggleMenu()"></div>
 
-    <div class="container">
+    <header class="header-container">
         <h1>Registro de Carga</h1>
-        
+        <p>Trans Huayna Kapac SRL</p>
+    </header>
+
+    <div class="container">
         <div class="form-group">
             <label>N° de Guía</label>
-            <input type="text" id="n_guia" disabled placeholder="Generando...">
+            <input type="text" id="n_guia" disabled>
         </div>
         
         <div class="row">
@@ -139,31 +134,38 @@
             <div class="form-group"><label>C.I. Consignatario</label><input type="text" id="ci_consignatario" placeholder="C.I."></div>
         </div>
 
-        <label>Productos / Mercadería</label>
+        <div class="form-group">
+            <label>Ciudad / Lugar de Destino</label>
+            <input type="text" id="destino" placeholder="Ej. Oruro, La Paz, Santa Cruz...">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <label>Mercadería</label>
+            <span style="font-size: 9px; color: #9ca3af; font-weight: 800;">CANT. X PRECIO</span>
+        </div>
+        
         <div id="contenedor-productos">
             <div class="fila-producto">
                 <input type="text" placeholder="Producto" class="prod-nombre">
-                <input type="number" placeholder="Cant/Peso" class="prod-cant" oninput="calcularTotal()">
-                <input type="number" placeholder="Precio Bs" class="prod-precio" oninput="calcularTotal()">
+                <input type="number" placeholder="Cant." class="prod-cant" oninput="calcularTotal()">
+                <input type="number" placeholder="Bs Unit." class="prod-precio" oninput="calcularTotal()">
             </div>
         </div>
 
         <button type="button" class="btn-add-prod" onclick="agregarFila()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             AÑADIR OTRO PRODUCTO
         </button>
 
         <div class="form-group">
-            <label>Total General (Bs.)</label>
-            <input type="number" id="total" readonly value="0.00" style="background:#f9fafb; color:var(--fondo-app); font-size: 20px; font-weight: 800;">
+            <label>Total General a Cobrar (Bs.)</label>
+            <input type="number" id="total" readonly value="0.00" style="background:#f9fafb; color:#1f2937; font-size: 22px; font-weight: 800; border: 2px solid #e5e7eb;">
         </div>
 
         <div class="form-group">
-            <label>Estado del Envío</label>
-            <select id="estado">
-                <option value="PENDIENTE">PENDIENTE</option>
-                <option value="EN CAMINO">EN CAMINO</option>
-                <option value="COMPLETADO">COMPLETADO</option>
+            <label>Asignar Camión / Unidad</label>
+            <select id="camion">
+                <option value="ALMACÉN">ALMACÉN (SIN CAMIÓN)</option>
             </select>
         </div>
 
@@ -178,15 +180,25 @@
             apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4",
             authDomain: "trans-huayna-kapac.firebaseapp.com",
             projectId: "trans-huayna-kapac",
-            databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/",
-            storageBucket: "trans-huayna-kapac.firebasestorage.app",
-            messagingSenderId: "683920138332",
-            appId: "1:683920138332:web:b028d2dae6d92aca5dc699"
+            databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const guiaInput = document.getElementById('n_guia');
+        const camionSelect = document.getElementById('camion');
+
+        onValue(ref(db, 'registros_camiones'), (snapshot) => {
+            camionSelect.innerHTML = '<option value="ALMACÉN">ALMACÉN (SIN CAMIÓN)</option>';
+            if (snapshot.exists()) {
+                Object.values(snapshot.val()).forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = `${c.placa} - ${c.chofer}`;
+                    opt.textContent = `${c.placa} | ${c.chofer}`;
+                    camionSelect.appendChild(opt);
+                });
+            }
+        });
 
         onValue(ref(db, 'registros_carga'), (snapshot) => {
             let num = 1;
@@ -198,82 +210,55 @@
         });
 
         document.getElementById('btnGuardar').onclick = function() {
-            // Recolectar todos los productos en un solo texto
             let productosArray = [];
+            let totalCantidad = 0;
+            
             document.querySelectorAll('.fila-producto').forEach(fila => {
                 const nombre = fila.querySelector('.prod-nombre').value;
-                const cant = fila.querySelector('.prod-cant').value;
-                if(nombre) productosArray.push(`${nombre} (${cant})`);
+                const cant = parseFloat(fila.querySelector('.prod-cant').value) || 0;
+                if(nombre && cant > 0) {
+                    productosArray.push(`${nombre} (${cant})`);
+                    totalCantidad += cant;
+                }
             });
 
+            const totalFinal = parseFloat(document.getElementById('total').value);
+            
             const data = {
                 n_guia: guiaInput.value,
                 remitente: document.getElementById('remitente').value,
                 ci_remitente: document.getElementById('ci_remitente').value,
                 consignatario: document.getElementById('consignatario').value,
                 ci_consignatario: document.getElementById('ci_consignatario').value,
+                destino: document.getElementById('destino').value.toUpperCase(),
                 producto: productosArray.join(", "),
-                total: document.getElementById('total').value,
-                estado: document.getElementById('estado').value,
+                cantidad: totalCantidad,
+                total: totalFinal,
+                camion: camionSelect.value,
                 fecha: new Date().toLocaleDateString()
             };
 
-            if(productosArray.length > 0 && data.total > 0) {
+            if(productosArray.length > 0 && totalFinal > 0) {
                 set(push(ref(db, 'registros_carga')), data).then(() => {
-                    if(confirm("✅ Registrado en Firebase. ¿Deseas imprimir la guía ahora?")) {
-                        generarTicket(data);
-                    } else {
-                        window.location.href = 'guias.html';
-                    }
+                    alert("✅ Guía Registrada con éxito.");
+                    window.location.href = 'guias.html';
                 });
-            } else { alert("⚠️ Por favor añade al menos un producto con precio."); }
+            } else { alert("⚠️ Completa los productos y precios."); }
         };
-
-        function generarTicket(d) {
-            const win = window.open('', '', 'width=600,height=800');
-            win.document.write(`
-                <html><body style="font-family:sans-serif; padding:40px;">
-                    <h2 style="text-align:center;">TRANS HUAYNA KAPAC</h2>
-                    <p style="text-align:center; border-bottom:1px solid #000; padding-bottom:10px;">GUÍA DE CARGA N° ${d.n_guia}</p>
-                    <p><strong>Fecha:</strong> ${d.fecha}</p>
-                    <p><strong>Remitente:</strong> ${d.remitente} (CI: ${d.ci_remitente})</p>
-                    <p><strong>Consignatario:</strong> ${d.consignatario} (CI: ${d.ci_consignatario})</p>
-                    <hr>
-                    <p><strong>Productos:</strong> ${d.producto}</p>
-                    <h3>Total: Bs. ${d.total}</h3>
-                    <br><br><br>
-                    <div style="display:flex; justify-content:space-between;">
-                        <div style="border-top:1px solid #000; width:200px; text-align:center;">Firma Despacho</div>
-                        <div style="border-top:1px solid #000; width:200px; text-align:center;">Firma Recepción</div>
-                    </div>
-                </body></html>
-            `);
-            win.document.close();
-            win.print();
-            win.close();
-            window.location.href = 'guias.html';
-        }
     </script>
+    
     <script>
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-
         function agregarFila() {
             const div = document.createElement('div');
             div.className = 'fila-producto';
-            div.innerHTML = `
-                <input type="text" placeholder="Producto" class="prod-nombre">
-                <input type="number" placeholder="Cant/Peso" class="prod-cant" oninput="calcularTotal()">
-                <input type="number" placeholder="Precio Bs" class="prod-precio" oninput="calcularTotal()">
-            `;
+            div.innerHTML = `<input type="text" placeholder="Producto" class="prod-nombre"><input type="number" placeholder="Cant." class="prod-cant" oninput="calcularTotal()"><input type="number" placeholder="Bs Unit." class="prod-precio" oninput="calcularTotal()">`;
             document.getElementById('contenedor-productos').appendChild(div);
         }
-
         function calcularTotal() {
             let suma = 0;
-            document.querySelectorAll('.fila-producto').forEach(fila => {
-                const cant = parseFloat(fila.querySelector('.prod-cant').value) || 0;
-                const precio = parseFloat(fila.querySelector('.prod-precio').value) || 0;
-                suma += (cant * precio);
+            document.querySelectorAll('.fila-producto').forEach(f => {
+                suma += (parseFloat(f.querySelector('.prod-cant').value) || 0) * (parseFloat(f.querySelector('.prod-precio').value) || 0);
             });
             document.getElementById('total').value = suma.toFixed(2);
         }
