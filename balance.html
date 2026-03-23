@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance - TRANS HUAYNA KAPAC</title>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --fondo: #0f172a; --tarjeta: #1e293b; --amarillo: #facc15; 
+            --verde: #22c55e; --rojo: #ef4444; --blanco: #ffffff; 
+        }
+        
+        body { margin: 0; background: var(--fondo); font-family: 'Plus Jakarta Sans', sans-serif; color: var(--blanco); padding: 15px; }
+
+        /* --- PANEL DE GASTOS (AFUERA DEL CUADRO) --- */
+        .panel-gastos {
+            background: var(--tarjeta);
+            padding: 25px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 2px solid rgba(250, 204, 21, 0.2);
+        }
+        .panel-gastos h2 { margin: 0 0 15px; font-size: 18px; color: var(--amarillo); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .full-width { grid-column: span 2; }
+
+        input, select {
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            background: rgba(255,255,255,0.05); color: white; font-family: inherit; font-weight: 600;
+            box-sizing: border-box; outline: none; border: 1px solid rgba(255,255,255,0.1);
+        }
+        input:focus { border-color: var(--amarillo); }
+
+        .btn-registrar {
+            grid-column: span 2; background: var(--amarillo); color: #000;
+            padding: 16px; border-radius: 12px; border: none; font-weight: 800;
+            margin-top: 10px; cursor: pointer; text-transform: uppercase;
+        }
+
+        /* --- TABLA CON SCROLL LATERAL --- */
+        .tabla-wrapper { 
+            width: 100%; overflow-x: auto; background: var(--tarjeta); 
+            border-radius: 20px; -webkit-overflow-scrolling: touch;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 850px; } /* Aumentado min-width para la nueva columna */
+        th { padding: 15px; text-align: left; font-size: 10px; color: var(--amarillo); background: rgba(0,0,0,0.2); text-transform: uppercase; }
+        td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+
+        .utilidad-positiva { color: var(--verde); font-weight: 800; }
+        .utilidad-negativa { color: var(--rojo); font-weight: 800; }
+
+        /* BOTÓN ELIMINAR */
+        .btn-delete-balance {
+            background: transparent; border: none; color: var(--rojo); cursor: pointer; padding: 5px;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .btn-delete-balance:active { transform: scale(0.8); }
+
+        .btn-excel { 
+            background: #16a34a; color: white; padding: 16px; border-radius: 15px; 
+            border: none; font-weight: 800; cursor: pointer; margin-top: 20px; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <h1 style="margin:0; font-size: 24px;">CONTROL DE BALANCES</h1>
+        <p style="color:var(--amarillo); font-weight:800; font-size:10px; letter-spacing:3px;">THK LOGÍSTICA</p>
+    </div>
+
+    <div class="panel-gastos">
+        <h2>Anotar Gastos de Viaje</h2>
+        <div class="grid-inputs">
+            <select id="selectGuia" class="full-width">
+                <option value="">Seleccionar N° de Guía...</option>
+            </select>
+            <input type="number" id="g_viaticos" placeholder="Viáticos (Bs)">
+            <input type="number" id="g_peaje" placeholder="Peaje (Bs)">
+            <input type="number" id="g_diesel" placeholder="Diésel (Bs)" class="full-width">
+            <button class="btn-registrar" id="btnGuardar">Guardar y Calcular Balance</button>
+        </div>
+    </div>
+
+    <div class="tabla-wrapper">
+        <table id="tablaBalance">
+            <thead>
+                <tr>
+                    <th>N° Guía</th>
+                    <th>Ingreso Bruto</th>
+                    <th>Viáticos</th>
+                    <th>Peaje</th>
+                    <th>Diésel</th>
+                    <th>Total Gastos</th>
+                    <th>Utilidad Neta</th>
+                    <th style="width: 50px; text-align: center;">Acción</th> </tr>
+            </thead>
+            <tbody id="tbodyBalance"></tbody>
+        </table>
+    </div>
+
+    <button class="btn-excel" onclick="exportarExcel()">
+        Exportar Reporte a Excel
+    </button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyCjXNx1UB2I7mt_JUpBr4E05hJuFJWL6k4", authDomain: "trans-huayna-kapac.firebaseapp.com", projectId: "trans-huayna-kapac", databaseURL: "https://trans-huayna-kapac-default-rtdb.firebaseio.com/", storageBucket: "trans-huayna-kapac.firebasestorage.app", messagingSenderId: "683920138332", appId: "1:683920138332:web:b028d2dae6d92aca5dc699" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const select = document.getElementById('selectGuia');
+        const tbody = document.getElementById("tbodyBalance");
+
+        onValue(ref(db, 'registros_carga'), (snapshot) => {
+            const data = snapshot.val();
+            tbody.innerHTML = "";
+            select.innerHTML = '<option value="">Seleccionar N° de Guía...</option>';
+
+            if (data) {
+                Object.entries(data).reverse().forEach(([id, r]) => {
+                    // Llenar el selector de arriba
+                    const opt = document.createElement('option');
+                    opt.value = id;
+                    opt.textContent = `Guía #${r.n_guia} - ${r.producto}`;
+                    select.appendChild(opt);
+
+                    // Cálculos
+                    const ingreso = parseFloat(r.total) || 0;
+                    const v = parseFloat(r.viaticos) || 0;
+                    const p = parseFloat(r.peaje) || 0;
+                    const d = parseFloat(r.diesel) || 0;
+                    const totalG = v + p + d;
+                    const utilidad = ingreso - totalG;
+
+                    // Llenar tabla
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td style="font-weight:800;">#${r.n_guia}</td>
+                        <td style="color:var(--verde)">Bs. ${ingreso.toFixed(2)}</td>
+                        <td>${v.toFixed(2)}</td>
+                        <td>${p.toFixed(2)}</td>
+                        <td>${d.toFixed(2)}</td>
+                        <td style="color:var(--rojo)">${totalG.toFixed(2)}</td>
+                        <td class="${utilidad >= 0 ? 'utilidad-positiva' : 'utilidad-negativa'}">
+                            Bs. ${utilidad.toFixed(2)}
+                        </td>
+                        <td style="text-align:center;">
+                            <button class="btn-delete-balance" data-id="${id}" data-guia="${r.n_guia}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Lógica para eliminar
+                document.querySelectorAll('.btn-delete-balance').forEach(btn => {
+                    btn.onclick = () => {
+                        const id = btn.getAttribute('data-id');
+                        const guia = btn.getAttribute('data-guia');
+                        if(confirm(`¿Estás seguro de eliminar el registro de la Guía #${guia}? Esta acción no se puede deshacer y afectará reportes e historial.`)) {
+                            remove(ref(db, `registros_carga/${id}`))
+                            .then(() => alert("Registro eliminado correctamente."))
+                            .catch(e => alert("Error al eliminar: " + e.message));
+                        }
+                    };
+                });
+            }
+        });
+
+        // Guardar gastos desde el panel de arriba
+        document.getElementById('btnGuardar').onclick = () => {
+            const id = select.value;
+            if(!id) return alert("Selecciona una guía primero");
+
+            const updates = {};
+            updates[`registros_carga/${id}/viaticos`] = parseFloat(document.getElementById('g_viaticos').value) || 0;
+            updates[`registros_carga/${id}/peaje`] = parseFloat(document.getElementById('g_peaje').value) || 0;
+            updates[`registros_carga/${id}/diesel`] = parseFloat(document.getElementById('g_diesel').value) || 0;
+
+            update(ref(db), updates).then(() => {
+                alert("Gastos registrados y balance actualizado");
+                document.getElementById('g_viaticos').value = "";
+                document.getElementById('g_peaje').value = "";
+                document.getElementById('g_diesel').value = "";
+            });
+        };
+    </script>
+
+    <script>
+        function exportarExcel() {
+            const wb = XLSX.utils.table_to_book(document.getElementById('tablaBalance'));
+            XLSX.writeFile(wb, "Balance_Financiero_THK.xlsx");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - THK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fondo: #0f172a; /* Deep Navy from image_30.png */
+            --amarillo: #facc15; /* Glowing Yellow from image_30.png */
+            --amarillo-brillo: rgba(250, 204, 21, 0.4);
+            --blanco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--fondo);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* --- CLAVE PARA EL SALTO SUAVE (Fade Out) --- */
+            transition: opacity 1s ease-in-out;
+            opacity: 1; /* Comienza visible */
+        }
+
+        /* Clase para oscurecer la pantalla justo antes del cambio al dashboard */
+        .fade-out {
+            opacity: 0 !important;
+        }
+
+        .welcome-container {
+            text-align: center;
+            padding: 20px;
+            animation: fadeInBody 1s ease-out; /* Animación de entrada de todo el bloque */
+        }
+
+        /* --- ICONO DEL CAMINO/CARRETERA NEÓN --- */
+        .icon-circle-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fadeInBody 1.2s ease-out;
+        }
+
+        /* Efecto de resplandor neón pulsante detrás del icono */
+        .icon-circle-container::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--amarillo-brillo) 0%, rgba(250,204,21,0) 70%);
+            filter: blur(15px);
+            z-index: -1; /* Detrás de la imagen */
+            animation: pulse resplandor 2s infinite;
+        }
+
+        .road-svg {
+            width: 70px;
+            height: 70px;
+            color: var(--amarillo);
+            /* Efecto neón amarillo difuminado directamente en el vector */
+            filter: drop-shadow(0 0 10px var(--amarillo-brillo));
+        }
+
+        /* --- SIGLAS THK GIGANTES Y DIFUMINADAS --- */
+        .thk-logo {
+            font-size: 90px;
+            font-weight: 800;
+            color: var(--amarillo);
+            margin: 0;
+            letter-spacing: -6px;
+            line-height: 1;
+            /* Efecto neón amarillo difuminado */
+            text-shadow: 0 0 15px var(--amarillo-brillo), 
+                         0 0 30px var(--amarillo-brillo);
+        }
+
+        /* --- TEXTOS SECUNDARIOS Y CORPORATIVOS --- */
+        .subtitle-top {
+            color: var(--blanco);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .subtitle-bottom {
+            color: var(--blanco);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .highlight {
+            color: var(--amarillo);
+        }
+
+        .srl-tag {
+            display: block;
+            color: var(--amarillo);
+            font-weight: 800;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        /* --- BARRA DE CARGA DISCRETA --- */
+        .loader-bar {
+            width: 180px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            margin: 50px auto 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .loader-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--amarillo);
+            /* Duración de la intro (3.5 segundos) */
+            animation: loadBar 3.5s linear forwards; 
+        }
+
+        /* --- ANIMACIONES CSS --- */
+        @keyframes fadeInBody {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes resplandor {
+            0%, 100% { transform: scale(1); opacity: 1; filter: blur(15px); }
+            50% { transform: scale(1.1); opacity: 0.7; filter: blur(25px); }
+        }
+
+        @keyframes loadBar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-container">
+        <div class="icon-circle-container">
+            <svg class="road-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 2L4 22"/>
+                <path d="M14 2L20 22"/>
+                <path d="M12 4v2"/>
+                <path d="M12 10v3"/>
+                <path d="M12 17v4"/>
+            </svg>
+        </div>
+        
+        <div class="subtitle-top">Bienvenido a</div>
+        
+        <h1 class="thk-logo">THK</h1>
+        
+        <div class="subtitle-bottom">TRANS <span class="highlight">HUAYNA KAPAC</span></div>
+        <span class="srl-tag">S.R.L. · El Alto · Bolivia</span>
+
+        <div class="loader-bar">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGICA DE REDIRECCIÓN Y DESVANECIMIENTO (Fade Out) ---
+        
+        // Tiempo total de espera (3.5 segundos)
+        const displayTime = 3500; 
+
+        setTimeout(() => {
+            
+            // 1. Iniciamos el desvanecimiento suave de toda la pantalla (Fade Out)
+            // Esto activa la 'transition' del CSS
+            document.body.classList.add('fade-out');
+            
+            // 2. Esperamos 1 segundo más a que termine el efecto antes de cambiar
+            setTimeout(() => {
+                
+                // 3. Saltamos al Dashboard
+                // Al estar la pantalla oscura, el cambio es mucho más suave
+                window.location.href = "dashboard.html";
+                
+            }, 1000); // Tiempo del efecto CSS transition
+            
+        }, displayTime);
+    </script>
+</body>
+</html>

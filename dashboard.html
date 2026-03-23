@@ -3,108 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - TRANS HUAYNA KAPAC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <title>Dashboard - THK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --fondo: #1f2937; --amarillo: #facc15; --blanco: #ffffff; }
-        
-        body { 
-            margin: 0; background: var(--fondo); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            display: flex; height: 100vh; overflow: hidden;
+        :root {
+            --fondo: #0f172a;
+            --tarjeta: #1e293b;
+            --amarillo: #facc15;
+            --amarillo-brillo: rgba(250, 204, 21, 0.4);
+            --verde-neon: #4ade80;
+            --azul-claro: #38bdf8;
+            --blanco: #ffffff;
         }
 
-        /* BARRA LATERAL FLOTANTE */
-        .sidebar {
-            position: absolute; left: 0; top: 0;
-            width: 70px; background: var(--blanco); height: 100%;
-            display: flex; flex-direction: column; 
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden; z-index: 1000;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+        body {
+            background-color: var(--fondo);
+            color: var(--blanco);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
         }
 
-        .sidebar:hover, .sidebar:active { width: 280px; }
-
-        /* ICONOS CON LA MISMA ANIMACIÓN QUE LAS LETRAS */
-        .menu-item {
-            display: flex; align-items: center;
-            text-decoration: none; color: #4b5563;
-            padding: 20px 22px; min-width: 280px;
-            transition: all 0.2s;
-            
-            /* Aplicamos la misma animación de las letras */
-            animation: aparecerTodo 1.2s ease-out forwards;
-            opacity: 0;
+        /* --- CABECERA INSTITUCIONAL --- */
+        .header-brand {
+            text-align: center;
+            padding: 30px 0 10px;
+            margin-bottom: 30px;
         }
 
-        /* EFECTO DE CLIC */
-        .menu-item:active { transform: scale(0.96); background: #f3f4f6; }
-
-        .icon { min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
-        .icon svg { width: 26px; height: 26px; stroke-width: 2; }
-
-        .label {
-            margin-left: 20px; font-weight: 700; font-size: 14px;
-            white-space: nowrap; opacity: 0; transition: 0.2s;
+        .brand-name {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--amarillo);
+            letter-spacing: 3px;
             text-transform: uppercase;
-        }
-        .sidebar:hover .label, .sidebar:active .label { opacity: 1; }
-
-        /* CONTENIDO CENTRAL */
-        .main-content {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            text-align: center; width: 100%; padding-left: 70px;
-            box-sizing: border-box;
+            margin: 0;
+            text-shadow: 0 0 15px var(--amarillo-brillo);
         }
 
-        .main-content h1 {
-            color: var(--amarillo); font-size: 12vw; font-weight: 800;
-            line-height: 0.9; margin: 0; text-transform: uppercase;
-            letter-spacing: -2px;
-            /* Misma animación que los iconos */
-            animation: aparecerTodo 1.2s ease-out forwards;
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--blanco);
+            opacity: 0.7;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-weight: 600;
         }
 
-        /* ANIMACIÓN UNIFICADA (Iconos y Letras) */
-        @keyframes aparecerTodo {
-            0% { 
-                opacity: 0; 
-                transform: translateY(40px); 
-                filter: blur(8px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0); 
-                filter: blur(0); 
-            }
+        .panel-label {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            opacity: 0.5;
         }
 
-        /* Pequeño retraso para que los iconos no salgan todos al mismo tiempo */
-        .menu-item:nth-child(2) { animation-delay: 0.1s; }
-        .menu-item:nth-child(3) { animation-delay: 0.2s; }
-        .menu-item:nth-child(4) { animation-delay: 0.3s; }
-        .menu-item:nth-child(5) { animation-delay: 0.4s; }
-        .menu-item:last-child { animation-delay: 0.6s; }
+        /* --- CUADRÍCULA DE BOTONES --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
 
+        .menu-item {
+            background: var(--tarjeta);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 22px 10px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--blanco);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        /* Efecto visual al presionar */
+        .menu-item:active { 
+            transform: scale(0.96); 
+            background: #26334d; 
+        }
+
+        .icon-svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 14px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        /* --- ESTILOS DE COLORES POR BOTÓN --- */
+        .btn-carga .icon-svg { color: var(--azul-claro); }
+        .btn-camiones .icon-svg { color: var(--amarillo); }
+        .btn-guias .icon-svg { color: #a855f7; }
+        .btn-reportes .icon-svg { color: #f87171; }
+
+        /* BOTÓN BALANCE (RESALTADO) */
+        .btn-balance { 
+            grid-column: span 2; 
+            border: 1.5px solid var(--verde-neon);
+            background: linear-gradient(145deg, #1e293b, #131c2e);
+            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.1);
+        }
+        .btn-balance .icon-svg { color: var(--verde-neon); width: 36px; height: 36px; }
+
+        .menu-item span { 
+            font-weight: 700; 
+            font-size: 13px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            font-size: 10px;
+            opacity: 0.3;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div style="height: 40px;"></div>
-        <a href="dashboard.html" class="menu-item"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg></div><span class="label">Inicio</span></a>
-        <a href="carga.html" class="menu-item"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg></div><span class="label">Registro de Carga</span></a>
-        <a href="camiones.html" class="menu-item"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg></div><span class="label">Control Camiones</span></a>
-        <a href="guias.html" class="menu-item"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></div><span class="label">Historial Guías</span></a>
-        <a href="reportes.html" class="menu-item"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><span class="label">Reporte Mensual</span></a>
-        <div style="flex: 1;"></div>
-        <a href="index.html" class="menu-item" style="color: #ef4444; border-top: 1px solid #f3f4f6;"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></div><span class="label">Cerrar Sesión</span></a>
-    </nav>
+    <div class="header-brand">
+        <h1 class="brand-name">Trans Huayna Kapac</h1>
+        <div class="brand-subtitle">Logística y Transporte</div>
+        <div class="panel-label">PANEL DE CONTROL</div>
+    </div>
 
-    <main class="main-content">
-        <h1>TRANS<br>HUAYNA<br>KAPAC</h1>
-    </main>
+    <div class="menu-grid">
+        
+        <a href="carga.html" class="menu-item btn-carga">
+            <svg class="icon-svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>Registro de Carga</span>
+        </a>
+
+        <a href="camiones.html" class="menu-item btn-camiones">
+            <svg class="icon-svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <span>Control Camiones</span>
+        </a>
+
+        <a href="guias.html" class="menu-item btn-guias">
+            <svg class="icon-svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Historial Guías</span>
+        </a>
+
+        <a href="reportes.html" class="menu-item btn-reportes">
+            <svg class="icon-svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Reportes Generales</span>
+        </a>
+
+        <a href="balance.html" class="menu-item btn-balance">
+            <svg class="icon-svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            <span>Control de Gastos y Balances</span>
+        </a>
+
+    </div>
+
+    <div class="footer">
+        THK S.R.L. | BOLIVIA · 2026
+    </div>
 
 </body>
 </html>

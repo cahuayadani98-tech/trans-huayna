@@ -52,7 +52,10 @@
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
             signInWithEmailAndPassword(auth, email, pass)
-                .then(() => { window.location.href = 'dashboard.html'; })
+                .then(() => { 
+                    // CAMBIO AQUÍ: Ahora redirige a bienvenida.html
+                    window.location.href = 'bienvenida.html'; 
+                })
                 .catch((error) => { alert("Error: Datos incorrectos"); });
         });
     </script>
